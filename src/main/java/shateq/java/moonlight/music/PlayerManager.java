@@ -26,6 +26,13 @@ public class PlayerManager {
         AudioSourceManagers.registerLocalSource(this.audioManager);
     }
 
+    public static PlayerManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PlayerManager();
+        }
+        return INSTANCE;
+    }
+
     public Jukebox getJukebox(Guild guild) {
         return this.guilds.computeIfAbsent(guild.getIdLong(), (id) -> {
             final Jukebox jukebox = new Jukebox(this.audioManager);
@@ -58,12 +65,5 @@ public class PlayerManager {
             public void loadFailed(FriendlyException exception) {
             }
         });
-    }
-
-    public static PlayerManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new PlayerManager();
-        }
-        return INSTANCE;
     }
 }

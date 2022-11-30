@@ -27,7 +27,7 @@ public class ModuleCmd implements CommandAdapter {
         }
 
         MessageEmbed help = new EmbedBuilder().setColor(MoonlightBot.BAD).setTitle("• Moduły (" + modules.size() + ")").setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
-                .setDescription(msg + "\n🟢 Włączone\n🟡 Wyłączone\n🔴 Niedostępne\n🔵 Wbudowane").build();
+            .setDescription(msg + "\n🟢 Włączone\n🟡 Wyłączone\n🔴 Niedostępne\n🔵 Wbudowane").build();
         CommandHandler.commandEmbed(help, ctx.getEvent());
     }
 

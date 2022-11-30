@@ -77,8 +77,8 @@ public final class CommandHandler {
         try {
             // Do it
             final String[] split = e.getMessage().getContentRaw().trim()
-                    .replaceFirst("(?i)" + Pattern.quote(prefix), "")
-                    .split("\\s+");
+                .replaceFirst("(?i)" + Pattern.quote(prefix), "")
+                .split("\\s+");
 
             final CommandAdapter cmd = getCommand(split[0].toLowerCase());
             if (cmd != null) {

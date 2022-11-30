@@ -50,23 +50,23 @@ public class MoonlightBot {
         LOG.info("Process started!");
 
         jda = JDABuilder.createDefault(MoonlightBot.get("token"), GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES).setMemberCachePolicy(MemberCachePolicy.ALL)
-                .disableCache(EnumSet.of(CacheFlag.CLIENT_STATUS, CacheFlag.ACTIVITY, CacheFlag.EMOJI))
-                .setActivity(Activity.competing("🌕 " + get("prefix") + "pomoc"))
-                .addEventListeners(new ListenerAdapter() {
-                    // onReady
-                    @Override
-                    public void onReady(final @NotNull ReadyEvent e) {
-                        LOG.info("Logged in as {}!", e.getJDA().getSelfUser().getAsTag());
-                    }
-                }, new ListenerAdapter() {
-                    // onGuildJoin
-                    @Override
-                    public void onGuildJoin(@NotNull GuildJoinEvent e) {
-                        LOG.info("New guild appeared! - \"{}\"", e.getGuild().getName());
-                    }
-                })
-                .addEventListeners(new MoonlightBot.Listener())
-                .build();
+            .disableCache(EnumSet.of(CacheFlag.CLIENT_STATUS, CacheFlag.ACTIVITY, CacheFlag.EMOJI))
+            .setActivity(Activity.competing("🌕 " + get("prefix") + "pomoc"))
+            .addEventListeners(new ListenerAdapter() {
+                // onReady
+                @Override
+                public void onReady(final @NotNull ReadyEvent e) {
+                    LOG.info("Logged in as {}!", e.getJDA().getSelfUser().getAsTag());
+                }
+            }, new ListenerAdapter() {
+                // onGuildJoin
+                @Override
+                public void onGuildJoin(@NotNull GuildJoinEvent e) {
+                    LOG.info("New guild appeared! - \"{}\"", e.getGuild().getName());
+                }
+            })
+            .addEventListeners(new MoonlightBot.Listener())
+            .build();
 
         ModuleLauncher.init();
         CommandHandler.init();
@@ -99,8 +99,8 @@ public class MoonlightBot {
             if (msg.getMentions().getMentions(Message.MentionType.USER).contains(jda.getSelfUser())) {
                 enum Vowel {a, e, i, o, u, y}
                 e.getChannel()
-                        .sendMessage("P" + Vowel.values()[ThreadLocalRandom.current().nextInt(Vowel.values().length)] + "ng! 🏓")
-                        .setMessageReference(msg).queue();
+                    .sendMessage("P" + Vowel.values()[ThreadLocalRandom.current().nextInt(Vowel.values().length)] + "ng! 🏓")
+                    .setMessageReference(msg).queue();
             }
             if (msg.getContentRaw().startsWith(get("prefix"))) {
                 CommandHandler.genericCommand(e);

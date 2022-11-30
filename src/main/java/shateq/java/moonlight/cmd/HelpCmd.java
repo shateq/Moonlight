@@ -29,7 +29,7 @@ public class HelpCmd implements CommandAdapter {
             final String music = cookList(Category.Music);
 
             EmbedBuilder list = new EmbedBuilder().setColor(MoonlightBot.NORMAL).setTitle("• Pomoc (" + commands.size() + " komend)").setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
-                    .setDescription(blank).addField(Category.Games.title, games, false).addField(Category.Music.title, music, false);
+                .setDescription(blank).addField(Category.Games.title, games, false).addField(Category.Music.title, music, false);
 
             //if(Aki) {
             //    list.addField(Category.Akinator.title, cookList(Category.Akinator), false);
@@ -54,10 +54,10 @@ public class HelpCmd implements CommandAdapter {
 
         final List<String> c = cmd.getHelp();
         MessageEmbed embed = new EmbedBuilder().setColor(MoonlightBot.NORMAL)
-                .setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
-                .setTitle("• " + cmd.getName() + str)
-                .setDescription("> " + c.get(0) + "\n\n**Użycie:** `" + p + c.get(1) + "`.")
-                .build();
+            .setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
+            .setTitle("• " + cmd.getName() + str)
+            .setDescription("> " + c.get(0) + "\n\n**Użycie:** `" + p + c.get(1) + "`.")
+            .build();
         CommandHandler.commandEmbed(embed, ctx.getEvent());
     }
 
@@ -70,7 +70,7 @@ public class HelpCmd implements CommandAdapter {
         }
 
         group.stream().map(CommandAdapter::getName).forEach(
-                (it) -> list.append("`").append(p).append(it).append("`\n")
+            (it) -> list.append("`").append(p).append(it).append("`\n")
         );
         return list.toString();
     }
