@@ -1,6 +1,7 @@
 package shateq.java.moonlight;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.java.moonlight.mods.BoostMd;
@@ -10,7 +11,6 @@ import shateq.java.moonlight.mods.FishingMd;
 import shateq.java.moonlight.util.Module;
 import shateq.java.moonlight.util.Status;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -33,7 +33,7 @@ public final class ModuleLauncher {
     private static void add(final Module mod) {
         boolean exists = mods.stream().anyMatch((it) -> it.getId().equalsIgnoreCase(mod.getId()));
 
-        if(exists) {
+        if (exists) {
             throw new IllegalArgumentException("Duplication of module!");
         }
         mods.add(mod);
@@ -46,8 +46,8 @@ public final class ModuleLauncher {
 
     @Nullable
     public static Module getModule(final String id) {
-        for(Module m : mods) {
-            if(m.getId().equals(id)) {
+        for (Module m : mods) {
+            if (m.getId().equals(id)) {
                 return m;
             }
         }

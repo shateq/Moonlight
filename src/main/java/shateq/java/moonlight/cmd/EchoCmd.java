@@ -1,7 +1,7 @@
 package shateq.java.moonlight.cmd;
 
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import shateq.java.moonlight.CommandHandler;
 import shateq.java.moonlight.util.CommandAdapter;
@@ -12,7 +12,7 @@ import java.util.List;
 public class EchoCmd implements CommandAdapter {
     @Override
     public void run(@NotNull CommandContext ctx) {
-        if(ctx.getArgs().isEmpty()) {
+        if (ctx.getArgs().isEmpty()) {
             CommandHandler.missingArgs(getHelp().get(1), ctx.getEvent());
             return;
         }
@@ -22,7 +22,7 @@ public class EchoCmd implements CommandAdapter {
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return null;
     }
 

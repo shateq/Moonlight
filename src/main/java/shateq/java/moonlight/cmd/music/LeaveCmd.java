@@ -2,7 +2,7 @@ package shateq.java.moonlight.cmd.music;
 
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import shateq.java.moonlight.CommandHandler;
 import shateq.java.moonlight.util.CommandAdapter;
 import shateq.java.moonlight.util.CommandContext;
@@ -16,7 +16,7 @@ public class LeaveCmd implements CommandAdapter {
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        if(!selfVoiceState.inVoiceChannel()) {
+        if (!selfVoiceState.inAudioChannel()) {
             CommandHandler.commandReply("> **Komenda nie zadziała, ponieważ nie połączono mnie z kanałem głosowym.**", ctx.getEvent());
             return;
         }
@@ -27,7 +27,7 @@ public class LeaveCmd implements CommandAdapter {
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return null;
     }
 

@@ -1,1 +1,7 @@
-rootProject.name = 'Moonlight'
+//pluginManagement {
+//    repositories {
+//        mavenCentral()
+//    }
+//}
+
+rootProject.name = "Moonlight"

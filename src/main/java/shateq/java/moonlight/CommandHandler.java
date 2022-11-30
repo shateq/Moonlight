@@ -3,11 +3,9 @@ package shateq.java.moonlight;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.java.moonlight.cmd.*;
@@ -18,15 +16,13 @@ import shateq.java.moonlight.util.Category;
 import shateq.java.moonlight.util.CommandAdapter;
 import shateq.java.moonlight.util.CommandContext;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 public final class CommandHandler {
-    private static final String prefix = Main.get("prefix");
+    private static final String prefix = MoonlightBot.get("prefix");
     private static final Logger LOG = LoggerFactory.getLogger(CommandHandler.class);
 
     private static final Collection<CommandAdapter> cmd = new LinkedList<>();
@@ -52,7 +48,7 @@ public final class CommandHandler {
 
     private static void register(final CommandAdapter command, final Category category) {
         final boolean exists = cmd.stream().anyMatch((it) -> it.getName().equalsIgnoreCase(command.getName()));
-        if(exists) {
+        if (exists) {
             throw new IllegalArgumentException("Duplicated command name!");
         }
 
@@ -124,8 +120,8 @@ public final class CommandHandler {
     public static CommandAdapter getCommand(final @NotNull String data) {
         final String search = data.toLowerCase();
 
-        for(CommandAdapter c : cmd) {
-            if(c.getName().equals(search) || c.getAliases().contains(search)) {
+        for (CommandAdapter c : cmd) {
+            if (c.getName().equals(search) || c.getAliases().contains(search)) {
                 return c;
             }
         }
@@ -133,19 +129,19 @@ public final class CommandHandler {
     }
 
     // Command Utilities!
-    public static void missingArgs(final String help, final GuildMessageReceivedEvent e) {
-        commandReply("> Brak wszystkich argumentów.\n**Poprawne użycie:** `"+prefix+help+"`.", e);
+    public static void missingArgs(final String help, final MessageReceivedEvent e) {
+        commandReply("> Brak wszystkich argumentów.\n**Poprawne użycie:** `" + prefix + help + "`.", e);
     }
 
-    public static void missingPerms(final @NotNull Permission perm, final GuildMessageReceivedEvent e) {
-        commandReply("> Brakujące uprawnienia.\n**Kod:** `"+perm.getName()+"`.", e);
+    public static void missingPerms(final @NotNull Permission perm, final MessageReceivedEvent e) {
+        commandReply("> Brakujące uprawnienia.\n**Kod:** `" + perm.getName() + "`.", e);
     }
 
-    public static void commandReply(final CharSequence msg, final @NotNull GuildMessageReceivedEvent e){
-        e.getChannel().sendMessage(msg).reference(e.getMessage()).queue();
+    public static void commandReply(final CharSequence msg, final @NotNull MessageReceivedEvent e) {
+        e.getChannel().sendMessage(msg).setMessageReference(e.getMessage()).queue();
     }
 
-    public static void commandEmbed(final MessageEmbed msg, final @NotNull GuildMessageReceivedEvent e) {
-        e.getChannel().sendMessageEmbeds(msg).reference(e.getMessage()).queue();
+    public static void commandEmbed(final MessageEmbed msg, final @NotNull MessageReceivedEvent e) {
+        e.getChannel().sendMessageEmbeds(msg).setMessageReference(e.getMessage()).queue();
     }
 }

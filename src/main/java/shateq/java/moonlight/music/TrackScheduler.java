@@ -18,7 +18,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(final AudioTrack track) {
-        if(!this.player.startTrack(track, true)) {
+        if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }
     }
@@ -29,7 +29,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(final AudioPlayer audio, final AudioTrack track, final AudioTrackEndReason reason) {
-        if(reason.mayStartNext) {
+        if (reason.mayStartNext) {
             nextTrack();
         }
     }

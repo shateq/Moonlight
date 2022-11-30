@@ -18,10 +18,12 @@ public class Module extends ListenerAdapter implements ModuleSkeleton {
     public static String getName() {
         return name;
     }
+
     // Get ID
     public static String getId() {
         return id;
     }
+
     // Get STATUS
     public static Status getStatus() {
         return status;

@@ -2,7 +2,7 @@ package shateq.java.moonlight.cmd.music;
 
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import shateq.java.moonlight.CommandHandler;
 import shateq.java.moonlight.music.PlayerManager;
 import shateq.java.moonlight.util.CommandAdapter;
@@ -17,7 +17,7 @@ public class PlayCmd implements CommandAdapter {
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        if(!selfVoiceState.inVoiceChannel()) {
+        if (!selfVoiceState.inAudioChannel()) {
             CommandHandler.commandReply("> **Muszę być na kanale głosowym, by to zadziałało!**", ctx.getEvent());
             return;
         }
@@ -25,12 +25,12 @@ public class PlayCmd implements CommandAdapter {
         final Member member = ctx.getEvent().getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if(!memberVoiceState.inVoiceChannel()) {
+        if (!memberVoiceState.inAudioChannel()) {
             CommandHandler.commandReply("> **Musisz być na kanale głosowym, by to zadziałało!**", ctx.getEvent());
             return;
         }
 
-        if(!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
+        if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
             CommandHandler.commandReply("> **Nie jesteś, na tym samym kanale głosowym co ja!**", ctx.getEvent());
             return;
         }
@@ -40,7 +40,7 @@ public class PlayCmd implements CommandAdapter {
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return null;
     }
 

@@ -1,6 +1,6 @@
 package shateq.java.moonlight.cmd;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import shateq.java.moonlight.CommandHandler;
 import shateq.java.moonlight.util.CommandAdapter;
 import shateq.java.moonlight.util.CommandContext;
@@ -16,13 +16,13 @@ public class GoogleCmd implements CommandAdapter {
             CommandHandler.missingArgs(getHelp().get(1), ctx.getEvent());
             return;
         }
-		String args = String.join(" ", ctx.getArgs());
-		String url = "<https://letmegooglethat.com/?q=" + URLEncoder.encode(args, StandardCharsets.UTF_8)+">";
-		CommandHandler.commandReply(url, ctx.getEvent());
+        String args = String.join(" ", ctx.getArgs());
+        String url = "<https://letmegooglethat.com/?q=" + URLEncoder.encode(args, StandardCharsets.UTF_8) + ">";
+        CommandHandler.commandReply(url, ctx.getEvent());
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return null;
     }
 

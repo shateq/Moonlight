@@ -1,10 +1,11 @@
 package shateq.java.moonlight.mods;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shateq.java.moonlight.Main;
+import shateq.java.moonlight.MoonlightBot;
 import shateq.java.moonlight.util.Helpers;
 import shateq.java.moonlight.util.Module;
 
@@ -18,23 +19,24 @@ public class DetectionMd extends Module {
 
     @Override
     public void start() {
-        if(this.available()) {
-            Main.getJDA().getEventManager().register(this);
+        if (this.available()) {
+            MoonlightBot.getJDA().getEventManager().register(this);
         }
     }
 
     @Override
-    public void onGuildMessageReceived(final @NotNull GuildMessageReceivedEvent e) {
+    public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
         final Message msg = e.getMessage();
 
         if (Helpers.checkURL(msg.getContentDisplay())) {
             final Site found = matching(msg.getContentDisplay());
-            if(found == null) return;
+            if (found == null) return;
             switch (found) {
-                case YouTube -> msg.addReaction("yt:838741674598465586").queue();
-                case Spotify -> msg.addReaction("sp:838741674591125504").queue();
-                case Reddit -> msg.addReaction("rd:838741674628743209").queue();
-                case Discord -> msg.addReaction("dc:838735948124651550").queue();
+                case YouTube ->
+                        msg.addReaction(Emoji.fromCustom("yt", 838741674598465586L, false)); //msg.addReaction("yt:").queue();
+                case Spotify -> msg.addReaction(Emoji.fromCustom("sp", 838741674591125504L, false)).queue();
+                case Reddit -> msg.addReaction(Emoji.fromCustom("rd", 838741674628743209L, false)).queue();
+                case Discord -> msg.addReaction(Emoji.fromCustom("dc", 838735948124651550L, false)).queue();
             }
         }
     }
@@ -45,19 +47,19 @@ public class DetectionMd extends Module {
         final Matcher rd = Site.Reddit.pattern.matcher(link);
         final Matcher dc = Site.Discord.pattern.matcher(link);
 
-        if(yt.find()) {
+        if (yt.find()) {
             return Site.YouTube;
         }
-        if(sp.find()) {
+        if (sp.find()) {
             return Site.Spotify;
         }
-        if(rd.find()) {
+        if (rd.find()) {
             return Site.Reddit;
         }
-        if(dc.find()) {
+        if (dc.find()) {
             return Site.Discord;
         }
-            return null;
+        return null;
     }
 
     private enum Site {
@@ -67,6 +69,7 @@ public class DetectionMd extends Module {
         Discord(Pattern.compile("(?:https?:\\/\\/)?(discord(?:app)?\\.com)"));
 
         private final Pattern pattern;
+
         Site(final Pattern pattern) {
             this.pattern = pattern;
         }

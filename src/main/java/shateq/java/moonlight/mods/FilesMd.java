@@ -1,6 +1,6 @@
 package shateq.java.moonlight.mods;
 
-import shateq.java.moonlight.Main;
+import shateq.java.moonlight.MoonlightBot;
 import shateq.java.moonlight.util.Module;
 
 public class FilesMd extends Module {
@@ -10,8 +10,8 @@ public class FilesMd extends Module {
 
     @Override
     public void start() {
-        if(this.available()) {
-            Main.getJDA().getEventManager().register(this);
+        if (this.available()) {
+            MoonlightBot.getJDA().getEventManager().register(this);
         }
     }
 

@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack track) {
                 jukebox.scheduler.queue(track);
 
-                channel.sendMessage("> \uD83D\uDCFB **Dodano do kolejki..**\n`"+track.getInfo().title+"` - `"+track.getInfo().author+"` **("+track.getInfo().length+")**").queue();
+                channel.sendMessage("> \uD83D\uDCFB **Dodano do kolejki..**\n`" + track.getInfo().title + "` - `" + track.getInfo().author + "` **(" + track.getInfo().length + ")**").queue();
             }
 
             @Override
@@ -61,7 +61,7 @@ public class PlayerManager {
     }
 
     public static PlayerManager getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new PlayerManager();
         }
         return INSTANCE;
