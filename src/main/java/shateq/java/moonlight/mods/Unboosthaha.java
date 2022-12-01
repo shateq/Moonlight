@@ -18,7 +18,7 @@ public class Unboosthaha {
         String m = e.getMember().getAsMention();
         if (!e.getRoles().contains(nitro)) return;
 
-        TextChannel txt = e.getGuild().getTextChannelById(MoonlightBot.get("BOOST"));
+        TextChannel txt = e.getGuild().getTextChannelById(MoonlightBot.env("BOOST"));
         if (txt != null) {
             txt.sendMessage("> " + m + " już nie ulepsza serwera!").queue();
         }

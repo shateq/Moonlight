@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public final class CommandHandler {
-    private static final String prefix = MoonlightBot.get("prefix");
     private static final Logger LOG = LoggerFactory.getLogger(CommandHandler.class);
 
     private static final Collection<CommandAdapter> cmd = new LinkedList<>();
@@ -77,7 +76,7 @@ public final class CommandHandler {
         try {
             // Do it
             final String[] split = e.getMessage().getContentRaw().trim()
-                .replaceFirst("(?i)" + Pattern.quote(prefix), "")
+                .replaceFirst("(?i)" + Pattern.quote(MoonlightBot.Const.PREFIX), "")
                 .split("\\s+");
 
             final CommandAdapter cmd = getCommand(split[0].toLowerCase());
@@ -130,7 +129,7 @@ public final class CommandHandler {
 
     // Command Utilities!
     public static void missingArgs(final String help, final MessageReceivedEvent e) {
-        commandReply("> Brak wszystkich argumentów.\n**Poprawne użycie:** `" + prefix + help + "`.", e);
+        commandReply("> Brak wszystkich argumentów.\n**Poprawne użycie:** `" + MoonlightBot.Const.PREFIX + help + "`.", e);
     }
 
     public static void missingPerms(final @NotNull Permission perm, final MessageReceivedEvent e) {

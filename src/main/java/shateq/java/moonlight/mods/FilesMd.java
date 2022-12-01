@@ -11,7 +11,7 @@ public class FilesMd extends Module {
     @Override
     public void start() {
         if (this.available()) {
-            MoonlightBot.getJDA().getEventManager().register(this);
+            MoonlightBot.it().jda().getEventManager().register(this);
         }
     }
 

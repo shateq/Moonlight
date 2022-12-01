@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class HelpCmd implements CommandAdapter {
-    private final String p = MoonlightBot.get("prefix");
 
     @Override
     public void run(@NotNull CommandContext ctx) {
@@ -28,7 +27,7 @@ public class HelpCmd implements CommandAdapter {
             final String games = cookList(Category.Games);
             final String music = cookList(Category.Music);
 
-            EmbedBuilder list = new EmbedBuilder().setColor(MoonlightBot.NORMAL).setTitle("• Pomoc (" + commands.size() + " komend)").setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
+            EmbedBuilder list = new EmbedBuilder().setColor(MoonlightBot.Const.NORMAL).setTitle("• Pomoc (" + commands.size() + " komend)").setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
                 .setDescription(blank).addField(Category.Games.title, games, false).addField(Category.Music.title, music, false);
 
             //if(Aki) {
@@ -53,10 +52,10 @@ public class HelpCmd implements CommandAdapter {
         }
 
         final List<String> c = cmd.getHelp();
-        MessageEmbed embed = new EmbedBuilder().setColor(MoonlightBot.NORMAL)
+        MessageEmbed embed = new EmbedBuilder().setColor(MoonlightBot.Const.NORMAL)
             .setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
             .setTitle("• " + cmd.getName() + str)
-            .setDescription("> " + c.get(0) + "\n\n**Użycie:** `" + p + c.get(1) + "`.")
+            .setDescription("> " + c.get(0) + "\n\n**Użycie:** `" + MoonlightBot.Const.PREFIX + c.get(1) + "`.")
             .build();
         CommandHandler.commandEmbed(embed, ctx.getEvent());
     }
@@ -70,7 +69,7 @@ public class HelpCmd implements CommandAdapter {
         }
 
         group.stream().map(CommandAdapter::getName).forEach(
-            (it) -> list.append("`").append(p).append(it).append("`\n")
+            (it) -> list.append("`").append(MoonlightBot.Const.PREFIX).append(it).append("`\n")
         );
         return list.toString();
     }

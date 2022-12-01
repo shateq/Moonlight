@@ -18,6 +18,10 @@ public final class ModuleLauncher {
     private static final Collection<Module> mods = new LinkedList<>();
     private static final Logger LOG = LoggerFactory.getLogger(CommandHandler.class);
 
+    public ModuleLauncher() {
+
+    }
+
     // Initialization
     public static void init() {
         LOG.info("Loading modules..");
