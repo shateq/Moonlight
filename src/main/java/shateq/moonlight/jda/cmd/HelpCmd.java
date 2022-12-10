@@ -5,24 +5,24 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.jda.OrderGround;
+import shateq.moonlight.cmd.*;
 import shateq.moonlight.jda.MoonlightBot;
-import shateq.moonlight.util.Category;
-import shateq.moonlight.util.CommandAdapter;
-import shateq.moonlight.util.CommandContext;
+import shateq.moonlight.util.Replies;
 
 import java.util.Collection;
 import java.util.List;
 
-public class HelpCmd implements CommandAdapter {
+@OrderMeta.Name("help")
+@OrderMeta.Aliases({"h", "pomoc"})
+public class HelpCmd extends Command implements CommandWrapper {
 
     @Override
     public void run(@NotNull CommandContext ctx) {
-        final List<String> args = ctx.getArgs();
-        final User author = ctx.getEvent().getAuthor();
+        final List<String> args = ctx.args();
+        final User author = ctx.event().getAuthor();
 
         if (args.isEmpty()) {
-            final Collection<CommandAdapter> commands = OrderGround.showCommands();
+            final Collection<Command> commands = MoonlightBot.dispatcher().commands().values();
             final String blank = cookList(Category.Blank);
             final String games = cookList(Category.Games);
             final String music = cookList(Category.Music);
@@ -30,18 +30,14 @@ public class HelpCmd implements CommandAdapter {
             EmbedBuilder list = new EmbedBuilder().setColor(MoonlightBot.Const.NORMAL).setTitle("• Pomoc (" + commands.size() + " komend)").setAuthor(author.getAsTag(), null, author.getEffectiveAvatarUrl())
                 .setDescription(blank).addField(Category.Games.title, games, false).addField(Category.Music.title, music, false);
 
-            //if(Aki) {
-            //    list.addField(Category.Akinator.title, cookList(Category.Akinator), false);
-            //}
-
-            OrderGround.commandEmbed(list.build(), ctx.getEvent());
+            Replies.commandEmbed(list.build(), ctx.event());
             return;
         }
 
         final String query = args.get(0);
-        CommandAdapter cmd = OrderGround.getCommand(query);
+        CommandWrapper cmd = MoonlightBot.dispatcher().getCommand(query);
         if (cmd == null) {
-            OrderGround.commandReply("> Komenda `" + query + "` - nie została znaleziona.", ctx.getEvent());
+            Replies.commandReply("> Komenda `" + query + "` - nie została znaleziona.", ctx.event());
             return;
         }
         StringBuilder str = new StringBuilder();
@@ -57,25 +53,24 @@ public class HelpCmd implements CommandAdapter {
             .setTitle("• " + cmd.getName() + str)
             .setDescription("> " + c.get(0) + "\n\n**Użycie:** `" + MoonlightBot.Const.PREFIX + c.get(1) + "`.")
             .build();
-        OrderGround.commandEmbed(embed, ctx.getEvent());
+        Replies.commandEmbed(embed, ctx.event());
     }
 
     private @NotNull String cookList(final Category category) {
         StringBuilder list = new StringBuilder();
-        Collection<CommandAdapter> group = OrderGround.showCommands(category);
-        assert group != null;
+        Collection<Command> group = MoonlightBot.dispatcher().commands().values();
         if (group.size() == 0) {
             return "> Brak poleceń.";
         }
 
-        group.stream().map(CommandAdapter::getName).forEach(
-            (it) -> list.append("`").append(MoonlightBot.Const.PREFIX).append(it).append("`\n")
-        );
+//        group.stream().map(CommandWrapper::getName).forEach(
+//            (it) -> list.append("`").append(MoonlightBot.Const.PREFIX).append(it).append("`\n")
+//        );
         return list.toString();
     }
 
     @Override
-    public MessageReceivedEvent getEvent() {
+    public MessageReceivedEvent event() {
         return null;
     }
 

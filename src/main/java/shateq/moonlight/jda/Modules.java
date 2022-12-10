@@ -15,24 +15,21 @@ import java.util.Map;
 
 public final class Modules {
     private static final Map<String, Module> MODULES = new HashMap<>();
-    private static final Logger LOG = LoggerFactory.getLogger(Modules.class);
+    private static final Logger LOG = LoggerFactory.getLogger("Modules");
 
     public static Boost BOOST;
     public static Fishing FISHING;
     public static Files FILES;
     public static Detection DETECTION;
 
-    static {
+    public Modules() {
+        LOG.info("Loading modules...");
+
         add(FakeModule.built(new Identifier("Grunt", "core")));
         add(FakeModule.built(new Identifier("Muzyka", "music")));
         BOOST = new Boost(new Identifier("Ulepszenia", "boost"), Module.Status.WAITING);
         FISHING = new Fishing(new Identifier("Rybactwo", "fishing"), Module.Status.WAITING);
         DETECTION = new Detection(new Identifier("Detekcja linków", "detect"), Module.Status.OFF);
-
-    }
-
-    public Modules() {
-        LOG.info("Loading modules..");
     }
 
     private static void add(final Module mod) {

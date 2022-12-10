@@ -4,14 +4,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.jda.OrderGround;
 import shateq.moonlight.jda.MoonlightBot;
-import shateq.moonlight.util.CommandAdapter;
-import shateq.moonlight.util.CommandContext;
+import shateq.moonlight.cmd.CommandWrapper;
+import shateq.moonlight.cmd.CommandContext;
+import shateq.moonlight.util.Replies;
 
 import java.util.List;
 
-public class InformationCmd implements CommandAdapter {
+public class InformationCmd implements CommandWrapper {
     @Override
     public void run(@NotNull CommandContext ctx) {
         //String data = Helpers.humanDate(MoonlightBot.startedAt, "hh:mm:ss - dd.MM.yyyy");
@@ -26,11 +26,11 @@ public class InformationCmd implements CommandAdapter {
                 "> 📚 **Biblioteki**\n• [JDA](https://github.com/DV8FromTheWorld/JDA) \n" +
                 "• [LavaPlayer](https://github.com/sedmelluq/lavaplayer)")
             .build();
-        OrderGround.commandEmbed(embed, ctx.getEvent());
+        Replies.commandEmbed(embed, ctx.event());
     }
 
     @Override
-    public MessageReceivedEvent getEvent() {
+    public MessageReceivedEvent event() {
         return null;
     }
 

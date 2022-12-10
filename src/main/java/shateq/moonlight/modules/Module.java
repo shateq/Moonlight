@@ -15,8 +15,6 @@ public abstract class Module extends ListenerAdapter {
         this.status = status;
     }
 
-
-
     public boolean works() {
         return status.equals(Status.ON) || status.equals(Status.BUILT);
     }

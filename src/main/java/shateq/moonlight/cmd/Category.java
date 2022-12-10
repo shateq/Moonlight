@@ -1,4 +1,4 @@
-package shateq.moonlight.util;
+package shateq.moonlight.cmd;
 
 public enum Category {
     Blank(""), Music("Muzyka"), Games("Gry"), Akinator("Akinator");

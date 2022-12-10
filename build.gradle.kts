@@ -11,12 +11,12 @@ base.archivesName.set("${project.name}-jdk17")
 description = "Discord bot attempt 2021"
 
 repositories.mavenCentral()
+
 dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.1")
     implementation("club.minnced:discord-webhooks:0.8.2")
 
     implementation("org.jetbrains:annotations:23.0.0")
-    //jedis
     implementation("org.slf4j:slf4j-simple:2.0.5")
 //    implementation("com.sedmelluq:lavaplayer:1.3.77")
 }

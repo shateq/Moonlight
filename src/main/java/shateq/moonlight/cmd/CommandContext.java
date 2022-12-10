@@ -1,4 +1,4 @@
-package shateq.moonlight.util;
+package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -7,10 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CommandContext implements CommandAdapter {
-    private final MessageReceivedEvent event;
-    private final List<String> args;
-
+public record CommandContext(MessageReceivedEvent event, List<String> args) implements CommandWrapper {
     public CommandContext(@NotNull MessageReceivedEvent event, List<String> args) {
         Checks.notNull(event, "event");
         Checks.notNull(args, "args");
@@ -25,21 +22,12 @@ public class CommandContext implements CommandAdapter {
 
     @Override
     public Guild getGuild() {
-        return this.getEvent().getGuild();
-    }
-
-    @Override
-    public MessageReceivedEvent getEvent() {
-        return this.event;
+        return this.event().getGuild();
     }
 
     @Override
     public String getName() {
         return null;
-    }
-
-    public List<String> getArgs() {
-        return this.args;
     }
 
     public List<String> getHelp() {

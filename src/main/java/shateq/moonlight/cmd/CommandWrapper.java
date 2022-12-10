@@ -1,4 +1,4 @@
-package shateq.moonlight.util;
+package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -8,21 +8,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface CommandAdapter {
+public interface CommandWrapper {
     void run(@NotNull CommandContext ctx);
 
     default Guild getGuild() {
-        return this.getEvent().getGuild();
+        return this.event().getGuild();
     }
 
-    MessageReceivedEvent getEvent();
+    MessageReceivedEvent event();
 
     default JDA getJDA() {
-        return this.getEvent().getJDA();
+        return this.event().getJDA();
     }
 
     default TextChannel getChannel() {
-        return this.getEvent().getChannel().asTextChannel();
+        return this.event().getChannel().asTextChannel();
     }
 
     String getName();
