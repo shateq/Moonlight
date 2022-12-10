@@ -23,7 +23,7 @@ public final class MoonlightBot {
     //Fields
     private final Modules modules;
     private final OrderGround commands;
-    private JDA jda;
+    private final JDA jda;
 
     private MoonlightBot() throws Exception {
         inst = this;
@@ -54,7 +54,7 @@ public final class MoonlightBot {
     }
 
     public static void main(String[] args) {
-        log.info("Process started!");
+        log.warn("Started!");
 
         try {
             new MoonlightBot();
@@ -90,7 +90,6 @@ public final class MoonlightBot {
         public static final String PREFIX = "->";
         public static final String URL = "https://discord.com/api/oauth2/authorize?client_id=835915266587885629&permissions=8&scope=bot";
         public static final String GITHUB_URL = "https://github.com/shateq/Moonlight";
-        public static final String USER_AGENT = "Moonlight/@version@/JDA (" + GITHUB_URL + ")";
         public static String VERSION;
 
         static {

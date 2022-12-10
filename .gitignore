@@ -1,7 +1,4 @@
-.env
-
 run/
-.gradle
 .gradle/
 build/
 out/
@@ -20,6 +17,7 @@ bin/
 .classpath
 .project
 
+.env
 *.launch
 *.DS_Store
 ~*

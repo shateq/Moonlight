@@ -1,28 +1,27 @@
 plugins {
     java
-    kotlin("jvm") version "1.7.10"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("application")
+    application
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
 }
 
 version = "2.0.1"
 group = "shateq.java"
-base.archivesName.set("${project.name}-jdk17-$version")
-description = "Discord bot attempt"
+base.archivesName.set("${project.name}-jdk17")
+description = "Discord bot attempt 2021"
 
 repositories.mavenCentral()
 dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.1")
     implementation("club.minnced:discord-webhooks:0.8.2")
 
-    implementation("com.google.guava:guava:31.1-jre")
     implementation("org.jetbrains:annotations:23.0.0")
     //jedis
     implementation("org.slf4j:slf4j-simple:2.0.5")
-    implementation("com.sedmelluq:lavaplayer:1.3.77")
+//    implementation("com.sedmelluq:lavaplayer:1.3.77")
 }
 
-application.mainClass.set("shateq.java.moonlight.MoonlightBot")
+application.mainClass.set("shateq.moonlight.jda.MoonlightBot")
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 tasks {

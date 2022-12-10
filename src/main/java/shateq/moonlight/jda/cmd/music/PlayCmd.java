@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import shateq.moonlight.jda.OrderGround;
-import shateq.moonlight.music.PlayerManager;
 import shateq.moonlight.util.CommandAdapter;
 import shateq.moonlight.util.CommandContext;
 
@@ -35,7 +34,7 @@ public class PlayCmd implements CommandAdapter {
             return;
         }
 
-        PlayerManager.getInstance().loadTrack(ctx.getChannel(), "https://www.youtube.com/watch?v=GHMjD0Lp5DY");
+        //PlayerManager.getInstance().loadTrack(ctx.getChannel(), "https://www.youtube.com/watch?v=GHMjD0Lp5DY");
         OrderGround.commandReply("> **Fire!**", ctx.getEvent());
     }
 
