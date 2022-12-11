@@ -1,4 +1,4 @@
-//package shateq.moonlight.music;
+//package shateq.moonlight.modules.music;
 //
 //import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 //import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;

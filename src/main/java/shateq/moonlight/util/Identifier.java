@@ -1,3 +1,4 @@
 package shateq.moonlight.util;
 
-public record Identifier(String name, String id) {}
+public record Identifier(String name, String id) {
+}

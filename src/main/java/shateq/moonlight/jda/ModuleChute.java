@@ -9,20 +9,20 @@ import shateq.moonlight.modules.Module;
 import shateq.moonlight.modules.*;
 import shateq.moonlight.util.Identifier;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Modules {
+public final class ModuleChute {
+    private static final Logger LOG = LoggerFactory.getLogger("ModuleChute");
     private static final Map<String, Module> MODULES = new HashMap<>();
-    private static final Logger LOG = LoggerFactory.getLogger("Modules");
 
     public static Boost BOOST;
     public static Fishing FISHING;
     public static Files FILES;
     public static Detection DETECTION;
 
-    public Modules() {
+    // TODO: 11.12.2022 Refactor! 
+    public ModuleChute() {
         LOG.info("Loading modules...");
 
         add(FakeModule.built(new Identifier("Grunt", "core")));
@@ -46,17 +46,12 @@ public final class Modules {
     }
 
     @Contract(pure = true)
-    public @NotNull Collection<Module> showModules() {
-        return MODULES.values();
+    public @NotNull Map<String, Module> modules() {
+        return MODULES;
     }
 
     @Nullable
     public Module getModule(@NotNull String id) {
-        for (Module m : MODULES.values()) {
-            if (m.id.equals(id)) {
-                return m;
-            }
-        }
-        return null;
+        return MODULES.get(id);
     }
 }

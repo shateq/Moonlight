@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shateq.moonlight.dispatcher.Dispatcher;
 
 import java.io.IOException;
 import java.util.EnumSet;
@@ -19,9 +20,9 @@ public final class MoonlightBot {
     public static final Logger log = LoggerFactory.getLogger("Moonlight Main");
     private static MoonlightBot inst;
     //Fields
-    private final Modules modules;
-    private final Dispatcher dispatcher;
-    private final JDA jda;
+    private final ModuleChute moduleChute;
+    public final Dispatcher dispatcher;
+    public final JDA jda;
 
     private MoonlightBot() throws Exception {
         inst = this;
@@ -40,7 +41,7 @@ public final class MoonlightBot {
             .addEventListeners(new ListeningWire())
             .build().awaitReady();
 
-        modules = new Modules();
+        moduleChute = new ModuleChute();
         dispatcher = new Dispatcher();
     }
 
@@ -60,11 +61,11 @@ public final class MoonlightBot {
     }
 
     public static String env(@NotNull String key) {
-        return System.getProperty(key);
+        return System.getenv(key);
     }
 
-    public static Modules modules() {
-        return it().modules;
+    public static ModuleChute modules() {
+        return it().moduleChute;
     }
 
     public static Dispatcher dispatcher() {

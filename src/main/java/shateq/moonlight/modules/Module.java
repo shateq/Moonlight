@@ -11,7 +11,7 @@ public abstract class Module extends ListenerAdapter {
 
     public Module(@NotNull Identifier id, Status status) {
         this.name = id.name();
-        this.id = id.name();
+        this.id = id.id();
         this.status = status;
     }
 

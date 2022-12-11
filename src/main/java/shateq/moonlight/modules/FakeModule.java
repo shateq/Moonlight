@@ -13,4 +13,8 @@ public class FakeModule extends Module {
     public static @NotNull Module built(Identifier id) {
         return new FakeModule(id, Status.BUILT);
     }
+
+    public static @NotNull Module off(Identifier id) {
+        return new FakeModule(id, Status.OFF);
+    }
 }

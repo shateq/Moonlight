@@ -1,7 +1,6 @@
 package shateq.moonlight.jda;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -10,6 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.util.Alphabet;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -24,14 +24,13 @@ public final class ListeningWire extends ListenerAdapter {
 
         if (msg.getMentions().getUsers().contains(event.getJDA().getSelfUser())) {
             var pong = "P" + Alphabet.Vowel.values()[ThreadLocalRandom.current().nextInt(Alphabet.Vowel.values().length)] + "ng!";
-
             event.getChannel()
-                .sendMessage(pong)
+                .sendMessage(pong + " Try typing `"+ MoonlightBot.Const.PREFIX +"h`")
                 .setMessageReference(msg).queue();
             return;
         }
 
-        if (msg.getContentRaw().startsWith(MoonlightBot.Const.PREFIX)) {
+        if (msg.getContentRaw().trim().startsWith(MoonlightBot.Const.PREFIX)) {
             Dispatcher.execute(event);
         }
     }
@@ -47,10 +46,5 @@ public final class ListeningWire extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-    }
-
-    @Override
-    public void onGuildJoin(@NotNull GuildJoinEvent e) {
-        LOG.info("New guild appeared! - \"{}\"", e.getGuild().getName());
     }
 }

@@ -1,21 +1,19 @@
-package shateq.moonlight.jda.cmd.music;
+package shateq.moonlight.cmd.musc;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
-import shateq.moonlight.cmd.CommandWrapper;
-import shateq.moonlight.cmd.CommandContext;
+import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.dispatcher.Command;
+import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.util.Replies;
 
-import java.util.List;
-
 @SuppressWarnings("ConstantConditions")
-public class JoinCmd implements CommandWrapper {
+public class JoinCmd implements Command {
     @Override
-    public void run(CommandContext ctx) {
-        final Member self = ctx.getGuild().getSelfMember();
+    public void execute(@NotNull GuildContext ctx) {
+        final Member self = ctx.event().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         if (selfVoiceState.inAudioChannel()) {
@@ -36,28 +34,8 @@ public class JoinCmd implements CommandWrapper {
             return;
         }
 
-        final AudioManager audioManager = ctx.getGuild().getAudioManager();
+        final AudioManager audioManager = ctx.event().getGuild().getAudioManager();
         audioManager.openAudioConnection(memberVoiceState.getChannel());
         Replies.commandReply("> \uD83C\uDFA7 **Łączenie z " + memberVoiceState.getChannel().getAsMention() + "**..", ctx.event());
-    }
-
-    @Override
-    public MessageReceivedEvent event() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return "join";
-    }
-
-    @Override
-    public List<String> getHelp() {
-        return List.of("Przywołuje bota do twojego kanału", "join");
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return List.of("summon");
     }
 }
