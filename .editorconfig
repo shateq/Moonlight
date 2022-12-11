@@ -5,10 +5,13 @@ charset = utf-8
 end_of_line = lf
 indent_size = 4
 indent_style = space
-insert_final_newline = false
-max_line_length = off
 tab_width = 4
+max_line_length = 160
+insert_final_newline = true
 
-[{*.yaml,*.yml,*.json,*.xml}]
+[*.kts]
+indent_style = tab
+
+[{*.toml,*.yml,*.json,*.xml}]
 indent_size = 2
 

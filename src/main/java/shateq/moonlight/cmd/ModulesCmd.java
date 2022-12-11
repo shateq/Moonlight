@@ -1,10 +1,10 @@
 package shateq.moonlight.cmd;
 
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
-import shateq.moonlight.jda.MoonlightBot;
 import shateq.moonlight.modules.Module;
 import shateq.moonlight.util.Replies;
 
@@ -14,7 +14,7 @@ import shateq.moonlight.util.Replies;
 public class ModulesCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
-        var modules = MoonlightBot.modules().modules();
+        var modules = MoonlightBot.moduleChute().modules();
 
         StringBuilder msg = new StringBuilder();
         for (Module md : modules.values()) {

@@ -1,11 +1,11 @@
 package shateq.moonlight.cmd;
 
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
-import shateq.moonlight.jda.MoonlightBot;
 import shateq.moonlight.util.Replies;
 
 @Order("help")

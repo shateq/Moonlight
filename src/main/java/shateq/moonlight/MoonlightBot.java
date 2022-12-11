@@ -1,4 +1,4 @@
-package shateq.moonlight.jda;
+package shateq.moonlight;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -17,10 +17,10 @@ import java.util.EnumSet;
 import java.util.jar.Manifest;
 
 public final class MoonlightBot {
-    public static final Logger log = LoggerFactory.getLogger("Moonlight Main");
+    public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
     private static MoonlightBot inst;
     //Fields
-    private final ModuleChute moduleChute;
+    public final ModuleChute moduleChute;
     public final Dispatcher dispatcher;
     public final JDA jda;
 
@@ -41,17 +41,17 @@ public final class MoonlightBot {
             .addEventListeners(new ListeningWire())
             .build().awaitReady();
 
-        moduleChute = new ModuleChute();
         dispatcher = new Dispatcher();
+        moduleChute = new ModuleChute();
     }
 
     public static void main(String[] args) {
-        log.warn("Started!");
+        LOGGER.warn("Started!");
 
         try {
             new MoonlightBot();
         } catch (Exception e) {
-            log.error(String.valueOf(e));
+            LOGGER.error(String.valueOf(e));
             System.exit(1);
         }
     }
@@ -64,7 +64,7 @@ public final class MoonlightBot {
         return System.getenv(key);
     }
 
-    public static ModuleChute modules() {
+    public static ModuleChute moduleChute() {
         return it().moduleChute;
     }
 
@@ -72,8 +72,8 @@ public final class MoonlightBot {
         return it().dispatcher;
     }
 
-    public JDA jda() {
-        return jda;
+    public static JDA jda() {
+        return it().jda;
     }
 
     public static final class Const {

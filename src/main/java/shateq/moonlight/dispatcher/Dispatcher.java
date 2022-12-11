@@ -8,37 +8,45 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.cmd.HelpCmd;
+import shateq.moonlight.cmd.InfoCmd;
 import shateq.moonlight.cmd.ModulesCmd;
 import shateq.moonlight.cmd.PingCmd;
-import shateq.moonlight.jda.MoonlightBot;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * Command execution coordination
+ */
 public final class Dispatcher {
-    private static final Logger LOG = LoggerFactory.getLogger("Commands");
-    private static final Map<String, Command> commands = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger("CommandDispatcher");
+    private static final Map<String, Command> COMMANDS = new HashMap<>();
     private static final Map<String, String> aliases = new HashMap<>(); //alias point to name
 
     public Dispatcher() {
-        LOG.info("Loading commands...");
+        log.info("Loading COMMANDS...");
 
         register(PingCmd.class);
         register(ModulesCmd.class);
         register(new HelpCmd());
-        LOG.info("{} is the amount of commands registered.", commands.size());
+        register(new InfoCmd());
+        log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
-
     /*public Map<String, SlashCommandReference> slashCommands() {
         return Collections.unmodifiableMap(slashCommands);
     }*/
 
+    /**
+     * Process a command
+     *
+     * @param e Processing context
+     */
     public static void execute(@NotNull MessageReceivedEvent e) {
         String message = e.getMessage().getContentRaw().trim();
 
-        String[] arguments = message.replaceFirst("(?i)" + Pattern.quote(MoonlightBot.Const.PREFIX), "")
-            .split("\\s+");
+        String[] arguments = message.replaceFirst("(?i)" + Pattern.quote(MoonlightBot.Const.PREFIX), "").split("\\s+");
 
         Command cmd = getCommand(arguments[0]);
         if (cmd == null) {
@@ -49,15 +57,38 @@ public final class Dispatcher {
         GuildContext context = new GuildContext(args, e, e.getAuthor());
 
         SelfUser self = e.getJDA().getSelfUser();
-
+        //TODO checks
         try {
             cmd.execute(context);
         } catch (Exception ex) {
             e.getChannel().sendMessage("💥").queue();
-            LOG.error(ex.toString());
+            log.error(ex.toString());
         }
     }
 
+    /**
+     * @param name Command's key
+     * @return Command from COMMANDS list
+     */
+    @Nullable
+    public static Command getCommand(@NotNull String name) {
+        String search = name.toLowerCase(Locale.ROOT);
+
+        var perName = COMMANDS.get(search);
+        if (perName != null) {
+            return perName;
+        }
+        String aliasName = aliases.get(search);
+        return COMMANDS.get(aliasName);
+    }
+
+    /**
+     * Instantiate a class
+     *
+     * @param clazz Class with zero-argument constructor
+     * @param <T>   Object
+     * @return New Instance
+     */
     public static <T> @NotNull T newOne(Class<T> clazz) {
         try {
             return clazz.getDeclaredConstructor().newInstance();
@@ -66,41 +97,45 @@ public final class Dispatcher {
         }
     }
 
-    @Nullable
-    public static Command getCommand(@NotNull String name) {
-        String search = name.toLowerCase(Locale.ROOT);
-
-        var perName = commands.get(search);
-        if (perName != null) {
-            return perName;
-        }
-
-        String aliasName = aliases.get(search);
-        return commands.get(aliasName);
-    }
-
+    /**
+     * @param clazz Command class
+     * @return Command from COMMANDS list
+     */
     @Nullable
     public <T extends Command> Command getCommand(@NotNull Class<T> clazz) {
         var name = clazz.getDeclaredAnnotation(Order.class);
-        return commands.get(name.value());
+        return COMMANDS.get(name.value());
     }
 
+    /**
+     * @return Name-command map
+     */
     @Contract(pure = true)
     public @NotNull @UnmodifiableView Map<String, Command> commands() {
-        return Collections.unmodifiableMap(commands);
+        return Collections.unmodifiableMap(COMMANDS);
     }
 
+    /**
+     * Registers command by its class
+     *
+     * @param clazz Command class
+     */
     public <T extends Command> void register(Class<T> clazz) {
         this.register(newOne(clazz));
     }
 
+    /**
+     * Registers command by its instance
+     *
+     * @param command Command object
+     */
     public void register(@NotNull Command command) {
         Class<? extends Command> clazz = command.getClass();
         //Annotation[] ann = clazz.getDeclaredAnnotations();
         var name = clazz.getDeclaredAnnotation(Order.class);
         var aliasList = clazz.getDeclaredAnnotation(Order.Aliases.class);
 
-        commands.putIfAbsent(name.value(), command);
+        COMMANDS.putIfAbsent(name.value(), command);
         if (aliasList != null) {
             for (String value : aliasList.value()) {
                 aliases.putIfAbsent(value, name.value());

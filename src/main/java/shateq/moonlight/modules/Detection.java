@@ -24,8 +24,7 @@ public class Detection extends Module {
             final Site found = matching(msg.getContentDisplay());
             if (found == null) return;
             switch (found) {
-                case YouTube ->
-                    msg.addReaction(Emoji.fromCustom("yt", 838741674598465586L, false)); //msg.addReaction("yt:").queue();
+                case YouTube -> msg.addReaction(Emoji.fromCustom("yt", 838741674598465586L, false)); //msg.addReaction("yt:").queue();
                 case Spotify -> msg.addReaction(Emoji.fromCustom("sp", 838741674591125504L, false)).queue();
                 case Reddit -> msg.addReaction(Emoji.fromCustom("rd", 838741674628743209L, false)).queue();
                 case Discord -> msg.addReaction(Emoji.fromCustom("dc", 838735948124651550L, false)).queue();

@@ -2,12 +2,15 @@ package shateq.moonlight.modules;
 
 import shateq.moonlight.util.Identifier;
 
-public class Fishing extends Module {
-    public Fishing(Identifier id, Status status) {
+public class FishingMod extends Module {
+    public FishingMod(Identifier id, Status status) {
         super(id, status);
+        System.out.println("FISHING");
+        System.out.println("FISHING");
+        System.out.println("FISHING");
     }
 
-    private enum Fish {
+    protected enum Fish {
         Fish("🐟"), Puffer("🐡"), Shark("🦈"), Exotic("🐠"), Crab("🦀"), Paper("🧻"), Ball("⚽"), Scroll("📜"), Boot("👞"), Nothing("❔");
 
         final String loot;

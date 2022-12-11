@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.jda.MoonlightBot;
+import shateq.moonlight.MoonlightBot;
 
 public class Replies {
     public static @NotNull EmbedBuilder authoredEmbed(@NotNull User author, boolean normal) {
