@@ -8,7 +8,7 @@ import shateq.moonlight.util.Util;
 
 @Order("ping")
 @Order.Explanation("Pong!")
-@Order.Rank(Command.Category.Blank)
+@Order.Rank()
 public class PingCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {

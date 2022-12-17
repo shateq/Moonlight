@@ -13,6 +13,7 @@ import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.util.Outer;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.EnumSet;
 import java.util.jar.Manifest;
 
@@ -46,7 +47,8 @@ public final class MoonlightBot {
     }
 
     public static void main(String[] args) {
-        LOGGER.warn("Started!");
+        LOGGER.info("Runtime version: {}", Runtime.version().toString());
+        LOGGER.info("OS: {}, {}", ManagementFactory.getOperatingSystemMXBean().getName(), ManagementFactory.getOperatingSystemMXBean().getArch());
 
         try {
             new MoonlightBot();
@@ -61,15 +63,15 @@ public final class MoonlightBot {
     }
 
     public static ModuleChute moduleChute() {
-        return it().moduleChute;
+        return inst.moduleChute;
     }
 
     public static Dispatcher dispatcher() {
-        return it().dispatcher;
+        return inst.dispatcher;
     }
 
     public static JDA jda() {
-        return it().jda;
+        return inst.jda;
     }
 
     public static final class Const {

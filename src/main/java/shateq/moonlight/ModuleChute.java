@@ -8,36 +8,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.cmd.funky.PlayCmd;
 import shateq.moonlight.cmd.funky.StopCmd;
-import shateq.moonlight.modules.Module;
-import shateq.moonlight.modules.*;
+import shateq.moonlight.mod.Module;
+import shateq.moonlight.mod.*;
 import shateq.moonlight.util.Identifier;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static shateq.moonlight.mod.FakeModule.nothing;
 
 /**
  * Module registry and accessor
  */
 public final class ModuleChute {
-    private static final Logger log = LoggerFactory.getLogger("ModuleChute");
+    public static final Logger coverage = LoggerFactory.getLogger("ModuleChute");
     private static final Map<String, Module> MODULES = new HashMap<>();
 
     public ModuleChute() {
-        log.info("Loading mods...");
+        coverage.info("Loading mods...");
+        var fishing = new FishingMod(new Identifier("Rybactwo", "fishing"), Module.Status.WAITING);
+        var boost = new Boost(new Identifier("Ulepszenia", "boost"), Module.Status.WAITING);
+        var detection = new Detection(new Identifier("Detekcja linków", "detect"), Module.Status.OFF);
 
-        setOff(FakeModule.built(new Identifier("Grunt", "core"), () -> {
-        }));
+        List<Module> mods = List.of(
+            FakeModule.built(new Identifier("Grunt", "core"), nothing()),
+            FakeModule.special(new Identifier("Muzyka", "music"), () -> {
+                MoonlightBot.dispatcher().register(PlayCmd.class);
+                MoonlightBot.dispatcher().register(StopCmd.class);
+            }),
+            boost,
+            fishing,
+            detection
+        );
 
-        setOff(new FakeModule(new Identifier("Muzyka", "music"), Module.Status.SPECIAL, () -> {
-            MoonlightBot.dispatcher().register(PlayCmd.class);
-            MoonlightBot.dispatcher().register(StopCmd.class);
-        }));
-
-        setOff(new FishingMod(new Identifier("Rybactwo", "fishing"), Module.Status.SPECIAL));
-        setOff(new Boost(new Identifier("Ulepszenia", "boost"), Module.Status.WAITING));
-        setOff(new Detection(new Identifier("Detekcja linków", "detect"), Module.Status.OFF));
-        log.info("Registered {} mods.", MODULES.size());
+        for (Module mod : mods) {
+            setOff(mod);
+        }
+        coverage.info("Registered {} mods.", MODULES.size());
     }
 
     /**
@@ -47,6 +56,7 @@ public final class ModuleChute {
      */
     public void setOff(Module mod) {
         MODULES.putIfAbsent(mod.id, mod);
+        if (mod.works()) mod.init();
     }
 
     /**

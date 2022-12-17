@@ -1,4 +1,4 @@
-package shateq.moonlight.modules;
+package shateq.moonlight.mod;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.emoji.Emoji;

@@ -1,7 +1,8 @@
-package shateq.moonlight.modules;
+package shateq.moonlight.mod;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.ModuleChute;
 import shateq.moonlight.util.Identifier;
 
 /**
@@ -19,7 +20,8 @@ public abstract class Module extends ListenerAdapter {
     }
 
     public void init() {
-        if (this.status.equals(Status.OFF)) return;
+        if (!works()) return;
+        ModuleChute.coverage.info(id + " works!");
     }
 
     public boolean works() {
@@ -27,11 +29,11 @@ public abstract class Module extends ListenerAdapter {
     }
 
     public enum Status {
-        ON("🟢"), OFF("🔴"), WAITING("🟡"), BUILT("🔵"), SPECIAL("🟠");
+        ON("🟢"), BUILT("🔵"), OFF("🔴"), SPECIAL("🟠"), WAITING("🟡");
 
         public final String mark;
 
-        Status(final String mark) {
+        Status(String mark) {
             this.mark = mark;
         }
     }

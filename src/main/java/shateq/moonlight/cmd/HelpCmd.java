@@ -1,20 +1,29 @@
 package shateq.moonlight.cmd;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.dispatcher.Command;
-import shateq.moonlight.dispatcher.Dispatcher;
-import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.*;
 import shateq.moonlight.util.Util;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Order("help")
 @Order.Aliases({"h", "pomoc"})
 @Order.Explanation("Check commands")
 public class HelpCmd implements Command {
+    @Contract(pure = true)
+    public static @NotNull String code(String string) {
+        return "```" +
+            string +
+            "```\n";
+    }
+
     @Override
     public void execute(@NotNull GuildContext c) {
-        if (c.args().isEmpty()) {
+        if (c.args() == null || c.args().isEmpty()) {
             sortedView(c);
         } else {
             explainedView(c);
@@ -24,10 +33,9 @@ public class HelpCmd implements Command {
     private void explainedView(@NotNull GuildContext c) {
         Command cmd = Dispatcher.getCommand(c.args().get(0));
         if (cmd == null) {
-            Util.Replies.simply("> Brak wyników.", c.event()).queue();
+            Util.Replies.quote("Brak wyników.", c.event()).queue();
             return;
         }
-
         String name = Command.name(cmd);
 
         StringBuilder str = new StringBuilder();
@@ -41,41 +49,36 @@ public class HelpCmd implements Command {
         }
 
         String explanation = Command.explanation(cmd);
-        var embed = Util.Replies.authoredEmbed(c.sender(), true)
+        var embed = Util.Replies.coloredEmbed(true)
             .setTitle("• " + name + str)
-            .setDescription(explanation)
+            .setDescription(code("example") + explanation)
             .build();
+
         Util.Replies.embed(embed, c.event()).queue();
     }
 
     private void sortedView(@NotNull GuildContext c) {
-        var commands = MoonlightBot.dispatcher().commands();
-
-        String blank = cookList(Category.Blank);
-        String games = cookList(Category.Games);
-        String music = cookList(Category.Music);
-
-        var list = Util.Replies.authoredEmbed(c.sender(), true)
-            .setTitle("• Pomoc (" + commands.size() + ")")
-            .setDescription(blank)
-            .addField(Category.Games.title, games, false)
-            .addField(Category.Music.title, music, false)
-            .build();
-
-        Util.Replies.embed(list, c.event()).queue();
-    }
-
-    private @NotNull String cookList(Category category) {
-        StringBuilder list = new StringBuilder();
-        var group = MoonlightBot.dispatcher().commands().values();
-
-        if (group.size() == 0) {
-            return "No commands";
+        var commands = MoonlightBot.dispatcher().commands().values();
+        if (commands.size() == 0) {
+            Util.Replies.simply("Nie zarejestrowano komend.", c.event());
+            return;
         }
 
-        group.stream().map(Command::name).forEach(
-            it -> list.append("`").append(it).append("`")
-        );
-        return list.toString();
+        var embed = Util.Replies.coloredEmbed(true)
+            .setTitle("• Pomoc (" + commands.size() + ")");
+
+        Arrays.stream(Category.values()).forEach(category -> {
+            StringBuilder builder = new StringBuilder();
+            Set<Command> group = new HashSet<>();
+
+            commands.forEach(it -> {
+                if (Command.category(it).equals(category)) group.add(it);
+            });
+
+            group.forEach(command -> builder.append("`").append(Command.name(command)).append("` "));
+            embed.addField(category.title, builder.toString(), false);
+        });
+
+        Util.Replies.embed(embed.build(), c.event()).queue();
     }
 }

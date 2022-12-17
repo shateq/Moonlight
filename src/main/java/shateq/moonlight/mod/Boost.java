@@ -1,4 +1,4 @@
-package shateq.moonlight.modules;
+package shateq.moonlight.mod;
 
 import shateq.moonlight.util.Identifier;
 

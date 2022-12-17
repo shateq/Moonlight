@@ -13,7 +13,7 @@ import java.util.Date;
 @Order("info")
 @Order.Aliases("explain")
 @Order.Explanation("Provide some information")
-@Order.Rank(Command.Category.Blank)
+@Order.Rank()
 public class InfoCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
@@ -21,14 +21,12 @@ public class InfoCmd implements Command {
 
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
         var embed = Util.Replies.authoredEmbed(c.jda().getSelfUser(), true)
-            .setDescription("Dzień dobry! Jestem tu by dodać trochę funkcji i uczynić serwer ciekawszym. " +
-                "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub]("+ MoonlightBot.Const.GITHUB_URL +")\n" +
+            .setDescription("Dzień dobry! Jestem tu by zaimplementować autorskie wymysły. " +
+                "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Const.GITHUB_URL + ")\n\n" +
                 "• Wpisz `" + MoonlightBot.Const.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
-                "• Użyj `" + MoonlightBot.Const.PREFIX + "modules`, by otrzymać listę modułów.\n" +
-                "• **Zużycie pamięci:** " + (int) memory + " MB\n\n" +
-                "> 📚 **Biblioteki**\n" +
-                "• [JDA](https://github.com/DV8FromTheWorld/JDA) \n" +
-                "• [LavaPlayer](https://github.com/sedmelluq/lavaplayer)")
+                "• Użyj `" + MoonlightBot.Const.PREFIX + "modules`, by otrzymać listę modułów.\n\n" +
+                "Zużycie pamięci: " + (int) memory + " MB"
+            )
             .setFooter(data)
             .build();
         Util.Replies.embed(embed, c.event()).queue();

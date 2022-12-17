@@ -19,6 +19,11 @@ class Util {
                 .setColor(if (normal) MoonlightBot.Const.NORMAL else MoonlightBot.Const.BAD)
         }
 
+        fun coloredEmbed(normal: Boolean): EmbedBuilder {
+            return EmbedBuilder()
+                .setColor(if (normal) MoonlightBot.Const.NORMAL else MoonlightBot.Const.BAD)
+        }
+
         @Contract("_, _ -> new")
         fun quote(message: CharSequence, e: MessageReceivedEvent): MessageCreateAction {
             return e.channel.sendMessage("> $message").setMessageReference(e.message)

@@ -5,11 +5,11 @@ import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
-import shateq.moonlight.modules.Module;
+import shateq.moonlight.mod.Module;
 import shateq.moonlight.util.Util;
 
 @Order("modules")
-@Order.Aliases("module")
+@Order.Aliases({"module", "mods"})
 @Order.Explanation("List modules")
 public class ModulesCmd implements Command {
     @Override
