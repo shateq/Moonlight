@@ -13,6 +13,7 @@ import shateq.moonlight.cmd.HelpCmd;
 import shateq.moonlight.cmd.InfoCmd;
 import shateq.moonlight.cmd.ModulesCmd;
 import shateq.moonlight.cmd.PingCmd;
+import shateq.moonlight.util.Outer;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -83,21 +84,6 @@ public final class Dispatcher {
     }
 
     /**
-     * Instantiate a class
-     *
-     * @param clazz Class with zero-argument constructor
-     * @param <T>   Object
-     * @return New Instance
-     */
-    public static <T> @NotNull T newOne(Class<T> clazz) {
-        try {
-            return clazz.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Unable to instantiate " + clazz, e);
-        }
-    }
-
-    /**
      * @param clazz Command class
      * @return Command from COMMANDS list
      */
@@ -121,7 +107,7 @@ public final class Dispatcher {
      * @param clazz Command class
      */
     public <T extends Command> void register(Class<T> clazz) {
-        this.register(newOne(clazz));
+        this.register(Outer.newOne(clazz));
     }
 
     /**

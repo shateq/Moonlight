@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
+/**
+ * Command abstraction
+ */
 public interface Command {
     @Contract(pure = true)
     static @Nullable String name(@NotNull Command cmd) {

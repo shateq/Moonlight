@@ -12,16 +12,17 @@ description = "Discord bot attempt 2021"
 
 repositories {
 	mavenCentral()
-	maven("https://jitpack.io")
+	maven("https://m2.dv8tion.net/releases")
+	//maven("https://jitpack.io")
 }
 
 dependencies {
 	implementation("net.dv8tion:JDA:5.0.0-beta.1")
 	implementation("club.minnced:discord-webhooks:0.8.2")
+	implementation("com.sedmelluq:lavaplayer:1.3.77")
 
-	implementation("org.jetbrains:annotations:23.0.0")
+	implementation("org.jetbrains:annotations:23.1.0")
 	implementation("org.slf4j:slf4j-simple:2.0.5")
-	//implementation("com.sedmelluq:lavaplayer:1.3.77")
 }
 
 application.mainClass.set("shateq.moonlight.MoonlightBot")

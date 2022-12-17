@@ -12,6 +12,6 @@ import shateq.moonlight.util.Replies;
 public class PingCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
-        c.jda().getRestPing().queue(ping -> Replies.commandReply("> **Ping:** `" + ping + " ms`\n> **Ping API:** `" + c.jda().getGatewayPing() + " ms`", c.event()));
+        c.jda().getRestPing().queue(ping -> Replies.simply("> **Ping:** `" + ping + " ms`\n> **Ping API:** `" + c.jda().getGatewayPing() + " ms`", c.event()).queue());
     }
 }

@@ -24,6 +24,6 @@ public class ModulesCmd implements Command {
         var help = Replies.authoredEmbed(c.sender(), true).setTitle("• Moduły (" + modules.size() + ")")
             .setDescription(msg + "\n🟢 Włączone\n🟡 Wyłączone\n🔴 Niedostępne\n🔵 Wbudowane")
             .build();
-        Replies.commandEmbed(help, c.event());
+        Replies.embed(help, c.event()).queue();
     }
 }

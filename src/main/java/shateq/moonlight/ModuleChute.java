@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shateq.moonlight.cmd.funky.PlayCmd;
+import shateq.moonlight.cmd.funky.StopCmd;
 import shateq.moonlight.modules.Module;
 import shateq.moonlight.modules.*;
 import shateq.moonlight.util.Identifier;
@@ -24,8 +26,13 @@ public final class ModuleChute {
     public ModuleChute() {
         log.info("Loading mods...");
 
-        setOff(FakeModule.built(new Identifier("Grunt", "core")));
-        setOff(FakeModule.off(new Identifier("Muzyka", "music")));
+        setOff(FakeModule.built(new Identifier("Grunt", "core"), () -> {
+        }));
+
+        setOff(new FakeModule(new Identifier("Muzyka", "music"), Module.Status.SPECIAL, () -> {
+            MoonlightBot.dispatcher().register(PlayCmd.class);
+            MoonlightBot.dispatcher().register(StopCmd.class);
+        }));
 
         setOff(new FishingMod(new Identifier("Rybactwo", "fishing"), Module.Status.SPECIAL));
         setOff(new Boost(new Identifier("Ulepszenia", "boost"), Module.Status.WAITING));
@@ -35,6 +42,7 @@ public final class ModuleChute {
 
     /**
      * Prepare module for its dependents
+     *
      * @param mod Module
      */
     public void setOff(Module mod) {
@@ -43,6 +51,7 @@ public final class ModuleChute {
 
     /**
      * Module list
+     *
      * @return Id-module map
      */
     @Contract(pure = true)

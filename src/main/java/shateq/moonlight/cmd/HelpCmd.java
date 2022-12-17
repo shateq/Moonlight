@@ -24,7 +24,7 @@ public class HelpCmd implements Command {
     private void explainedView(@NotNull GuildContext c) {
         Command cmd = Dispatcher.getCommand(c.args().get(0));
         if (cmd == null) {
-            Replies.commandReply("> Brak wyników.", c.event());
+            Replies.simply("> Brak wyników.", c.event()).queue();
             return;
         }
 
@@ -45,7 +45,7 @@ public class HelpCmd implements Command {
             .setTitle("• " + name + str)
             .setDescription(explanation)
             .build();
-        Replies.commandEmbed(embed, c.event());
+        Replies.embed(embed, c.event()).queue();
     }
 
     private void sortedView(@NotNull GuildContext c) {
@@ -62,7 +62,7 @@ public class HelpCmd implements Command {
             .addField(Category.Music.title, music, false)
             .build();
 
-        Replies.commandEmbed(list, c.event());
+        Replies.embed(list, c.event()).queue();
     }
 
     private @NotNull String cookList(Category category) {

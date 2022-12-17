@@ -5,22 +5,28 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shateq.moonlight.util.Helpers;
 import shateq.moonlight.util.Identifier;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Detection extends Module {
+    private static final Pattern url = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)");
+
     public Detection(Identifier id, Status status) {
         super(id, status);
+    }
+
+    public static boolean checkURL(String s) {
+        Matcher match = url.matcher(s);
+        return match.find();
     }
 
     @Override
     public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
         final Message msg = e.getMessage();
 
-        if (Helpers.checkURL(msg.getContentDisplay())) {
+        if (checkURL(msg.getContentDisplay())) {
             final Site found = matching(msg.getContentDisplay());
             if (found == null) return;
             switch (found) {

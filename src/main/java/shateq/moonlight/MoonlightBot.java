@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.dispatcher.Dispatcher;
+import shateq.moonlight.util.Outer;
 
 import java.io.IOException;
 import java.util.EnumSet;
@@ -29,9 +29,9 @@ public final class MoonlightBot {
         EnumSet<GatewayIntent> intents =
             EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.SCHEDULED_EVENTS);
         EnumSet<CacheFlag> cache = EnumSet.of(CacheFlag.CLIENT_STATUS, CacheFlag.ACTIVITY, CacheFlag.EMOJI,
-            CacheFlag.STICKER, CacheFlag.VOICE_STATE);
+            CacheFlag.STICKER, CacheFlag.FORUM_TAGS);
 
-        jda = JDABuilder.createDefault(MoonlightBot.env("bot_token"), intents)
+        jda = JDABuilder.createDefault(Outer.env("bot_token"), intents)
             .setAutoReconnect(true)
             .setChunkingFilter(ChunkingFilter.ALL)
             .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
@@ -58,10 +58,6 @@ public final class MoonlightBot {
 
     public static MoonlightBot it() {
         return inst;
-    }
-
-    public static String env(@NotNull String key) {
-        return System.getenv(key);
     }
 
     public static ModuleChute moduleChute() {

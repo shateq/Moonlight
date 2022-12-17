@@ -6,10 +6,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import shateq.moonlight.dispatcher.Dispatcher;
-import shateq.moonlight.util.Alphabet;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,15 +14,15 @@ import java.util.concurrent.ThreadLocalRandom;
  * General listener
  */
 public final class ListeningWire extends ListenerAdapter {
-    private static final Logger log = LoggerFactory.getLogger("Listeners");
-
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getAuthor().isBot() || event.isWebhookMessage()) return;
         final Message msg = event.getMessage();
 
         if (msg.getMentions().getUsers().contains(event.getJDA().getSelfUser())) {
-            var pong = "P" + Alphabet.Vowel.values()[ThreadLocalRandom.current().nextInt(Alphabet.Vowel.values().length)] + "ng!";
+            char[] vowels =  new char[] {'a', 'e', 'i', 'o', 'u', 'y'};
+
+            var pong = "P" + vowels[ThreadLocalRandom.current().nextInt(vowels.length)] + "ng!";
             event.getChannel()
                 .sendMessage(pong + " Try typing `" + MoonlightBot.Const.PREFIX + "h`")
                 .setMessageReference(msg).queue();
