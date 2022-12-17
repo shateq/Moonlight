@@ -6,7 +6,7 @@ import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
 import shateq.moonlight.util.Outer;
-import shateq.moonlight.util.Replies;
+import shateq.moonlight.util.Util;
 
 import java.util.Date;
 
@@ -20,16 +20,17 @@ public class InfoCmd implements Command {
         String data = Outer.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
 
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-        var embed = Replies.authoredEmbed(c.jda().getSelfUser(), true)
+        var embed = Util.Replies.authoredEmbed(c.jda().getSelfUser(), true)
             .setDescription("Dzień dobry! Jestem tu by dodać trochę funkcji i uczynić serwer ciekawszym. " +
-                "szymon9932 napisał mój kod w języku **Java**.\n" +
+                "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub]("+ MoonlightBot.Const.GITHUB_URL +")\n" +
                 "• Wpisz `" + MoonlightBot.Const.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
                 "• Użyj `" + MoonlightBot.Const.PREFIX + "modules`, by otrzymać listę modułów.\n" +
                 "• **Zużycie pamięci:** " + (int) memory + " MB\n\n" +
-                "> 📚 **Biblioteki**\n• [JDA](https://github.com/DV8FromTheWorld/JDA) \n" +
+                "> 📚 **Biblioteki**\n" +
+                "• [JDA](https://github.com/DV8FromTheWorld/JDA) \n" +
                 "• [LavaPlayer](https://github.com/sedmelluq/lavaplayer)")
             .setFooter(data)
             .build();
-        Replies.embed(embed, c.event()).queue();
+        Util.Replies.embed(embed, c.event()).queue();
     }
 }

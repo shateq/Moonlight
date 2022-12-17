@@ -4,11 +4,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Utilities of the utilities
  */
 public final class Outer {
+    public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)");
+
+    /**
+     * @param string String to be searched
+     * @return true if string complains the URL pattern
+     */
+    public static boolean complainsURL(String string) {
+        return urlPattern.matcher(string).find();
+    }
 
     /**
      * Get an environment variable value.

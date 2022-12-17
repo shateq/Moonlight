@@ -1,6 +1,6 @@
 package shateq.moonlight.dispatcher;
 
-import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ public final class Dispatcher {
         List<String> args = List.of(arguments).subList(1, arguments.length);
         GuildContext context = new GuildContext(args, e, e.getAuthor());
 
-        SelfUser self = e.getJDA().getSelfUser();
+        Member self = e.getGuild().getSelfMember();
         //TODO checks
         try {
             cmd.execute(context);

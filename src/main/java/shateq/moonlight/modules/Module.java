@@ -13,8 +13,8 @@ public abstract class Module extends ListenerAdapter {
     public final Status status;
 
     public Module(@NotNull Identifier id, Status status) {
-        this.name = id.name();
-        this.id = id.id();
+        this.name = id.getName();
+        this.id = id.getId();
         this.status = status;
     }
 

@@ -6,7 +6,7 @@ import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
-import shateq.moonlight.util.Replies;
+import shateq.moonlight.util.Util;
 
 @Order("help")
 @Order.Aliases({"h", "pomoc"})
@@ -24,7 +24,7 @@ public class HelpCmd implements Command {
     private void explainedView(@NotNull GuildContext c) {
         Command cmd = Dispatcher.getCommand(c.args().get(0));
         if (cmd == null) {
-            Replies.simply("> Brak wyników.", c.event()).queue();
+            Util.Replies.simply("> Brak wyników.", c.event()).queue();
             return;
         }
 
@@ -41,11 +41,11 @@ public class HelpCmd implements Command {
         }
 
         String explanation = Command.explanation(cmd);
-        var embed = Replies.authoredEmbed(c.sender(), true)
+        var embed = Util.Replies.authoredEmbed(c.sender(), true)
             .setTitle("• " + name + str)
             .setDescription(explanation)
             .build();
-        Replies.embed(embed, c.event()).queue();
+        Util.Replies.embed(embed, c.event()).queue();
     }
 
     private void sortedView(@NotNull GuildContext c) {
@@ -55,14 +55,14 @@ public class HelpCmd implements Command {
         String games = cookList(Category.Games);
         String music = cookList(Category.Music);
 
-        var list = Replies.authoredEmbed(c.sender(), true)
+        var list = Util.Replies.authoredEmbed(c.sender(), true)
             .setTitle("• Pomoc (" + commands.size() + ")")
             .setDescription(blank)
             .addField(Category.Games.title, games, false)
             .addField(Category.Music.title, music, false)
             .build();
 
-        Replies.embed(list, c.event()).queue();
+        Util.Replies.embed(list, c.event()).queue();
     }
 
     private @NotNull String cookList(Category category) {

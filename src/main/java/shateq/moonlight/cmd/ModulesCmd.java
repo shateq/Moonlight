@@ -6,7 +6,7 @@ import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
 import shateq.moonlight.modules.Module;
-import shateq.moonlight.util.Replies;
+import shateq.moonlight.util.Util;
 
 @Order("modules")
 @Order.Aliases("module")
@@ -21,9 +21,9 @@ public class ModulesCmd implements Command {
             msg.append("`" + md.id + "` " + md.status.mark + " " + md.name + "\n");
         }
 
-        var help = Replies.authoredEmbed(c.sender(), true).setTitle("• Moduły (" + modules.size() + ")")
+        var help = Util.Replies.authoredEmbed(c.sender(), true).setTitle("• Moduły (" + modules.size() + ")")
             .setDescription(msg + "\n🟢 Włączone\n🟡 Wyłączone\n🔴 Niedostępne\n🔵 Wbudowane")
             .build();
-        Replies.embed(help, c.event()).queue();
+        Util.Replies.embed(help, c.event()).queue();
     }
 }

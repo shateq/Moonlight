@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
 	implementation("net.dv8tion:JDA:5.0.0-beta.1")
-	implementation("club.minnced:discord-webhooks:0.8.2")
+	//implementation("club.minnced:discord-webhooks:0.8.2")
 	implementation("com.sedmelluq:lavaplayer:1.3.77")
 
 	implementation("org.jetbrains:annotations:23.1.0")
@@ -46,7 +46,6 @@ tasks {
 			"Implementation-Version" to project.version
 		)
 	}
-
 	wrapper {
 		gradleVersion = "7.6"
 	}
