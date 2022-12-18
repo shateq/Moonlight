@@ -9,8 +9,7 @@ import shateq.moonlight.util.Identifier;
  * Module abstraction, ListenerAdapter
  */
 public abstract class Module extends ListenerAdapter {
-    public final String name;
-    public final String id;
+    public final String name, id;
     public final Status status;
 
     public Module(@NotNull Identifier id, Status status) {
@@ -29,12 +28,15 @@ public abstract class Module extends ListenerAdapter {
     }
 
     public enum Status {
-        ON("🟢"), BUILT("🔵"), OFF("🔴"), SPECIAL("🟠"), WAITING("🟡");
+        ON("🟢", "Włączone"), BUILT("🔵", "Wbudowane"),
+        OFF("🔴", "Wyłaczone"), WAITING("🟡", "Oczekiwane"),
+        SPECIAL("🟠", "Specjalne");
 
-        public final String mark;
+        public final String mark, legend;
 
-        Status(String mark) {
+        Status(String mark, String legend) {
             this.mark = mark;
+            this.legend = legend;
         }
     }
 }

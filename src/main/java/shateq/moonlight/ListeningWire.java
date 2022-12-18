@@ -17,7 +17,7 @@ public final class ListeningWire extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getAuthor().isBot() || event.isWebhookMessage()) return;
-        final Message msg = event.getMessage();
+        Message msg = event.getMessage();
 
         if (msg.getMentions().getUsers().contains(event.getJDA().getSelfUser())) {
             char[] vowels =  new char[] {'a', 'e', 'i', 'o', 'u', 'y'};

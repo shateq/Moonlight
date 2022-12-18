@@ -17,7 +17,7 @@ public @interface Order {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @interface Rank {
-        Category value() default Category.Blank;
+        Category value() default Category.General;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

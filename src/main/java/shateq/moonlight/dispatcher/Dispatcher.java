@@ -46,7 +46,6 @@ public final class Dispatcher {
      */
     public static void execute(@NotNull MessageReceivedEvent e) {
         String message = e.getMessage().getContentRaw().trim();
-
         String[] arguments = message.replaceFirst("(?i)" + Pattern.quote(MoonlightBot.Const.PREFIX), "").split("\\s+");
 
         Command cmd = getCommand(arguments[0]);

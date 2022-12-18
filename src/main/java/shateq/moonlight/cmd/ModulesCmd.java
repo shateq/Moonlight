@@ -15,14 +15,19 @@ public class ModulesCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
         var modules = MoonlightBot.moduleChute().modules();
+        StringBuilder msg = new StringBuilder(), legend = new StringBuilder();
 
-        StringBuilder msg = new StringBuilder();
         for (Module md : modules.values()) {
-            msg.append("`" + md.id + "` " + md.status.mark + " " + md.name + "\n");
+            msg.append("`").append(md.id).append("` ").append(md.status.mark).append(" ").append(md.name).append("\n");
+        }
+
+        for (Module.Status status : Module.Status.values()) {
+            legend.append(status.mark).append(" - ").append(status.legend).append("\n");
         }
 
         var help = Util.Replies.authoredEmbed(c.sender(), true).setTitle("• Moduły (" + modules.size() + ")")
-            .setDescription(msg + "\n🟢 Włączone\n🟡 Wyłączone\n🔴 Niedostępne\n🔵 Wbudowane")
+            .setDescription(msg)
+            .addField("Legenda", legend.toString(), false)
             .build();
         Util.Replies.embed(help, c.event()).queue();
     }

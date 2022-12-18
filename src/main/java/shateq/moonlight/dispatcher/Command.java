@@ -13,14 +13,14 @@ import java.util.List;
 public interface Command {
     @Contract(pure = true)
     static @Nullable String name(@NotNull Command cmd) {
-        var name = cmd.getClass().getDeclaredAnnotation(Order.class);
-        if (name != null) return name.value();
+        var order = cmd.getClass().getDeclaredAnnotation(Order.class);
+        if (order != null) return order.value();
         return null;
     }
 
     static @NotNull Category category(@NotNull Command cmd) {
         var rank = cmd.getClass().getDeclaredAnnotation(Order.Rank.class);
-        return rank != null ? rank.value() : Category.Blank;
+        return rank != null ? rank.value() : Category.General;
     }
 
     static @Nullable String explanation(@NotNull Command cmd) {

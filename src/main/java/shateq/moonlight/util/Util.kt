@@ -15,13 +15,17 @@ class Util {
     companion object Replies {
         fun authoredEmbed(author: User, normal: Boolean): EmbedBuilder {
             return EmbedBuilder()
+                .dye(normal)
                 .setAuthor(author.asTag, null, author.effectiveAvatarUrl)
-                .setColor(if (normal) MoonlightBot.Const.NORMAL else MoonlightBot.Const.BAD)
+
+        }
+
+        fun EmbedBuilder.dye(normal: Boolean): EmbedBuilder {
+            return this.setColor(if (normal) MoonlightBot.Const.NORMAL else MoonlightBot.Const.BAD)
         }
 
         fun coloredEmbed(normal: Boolean): EmbedBuilder {
-            return EmbedBuilder()
-                .setColor(if (normal) MoonlightBot.Const.NORMAL else MoonlightBot.Const.BAD)
+            return EmbedBuilder().dye(normal)
         }
 
         @Contract("_, _ -> new")

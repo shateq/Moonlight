@@ -16,18 +16,15 @@ import java.util.Set;
 public class HelpCmd implements Command {
     @Contract(pure = true)
     public static @NotNull String code(String string) {
-        return "```" +
-            string +
-            "```\n";
+        return "```" + string + "```\n";
     }
 
     @Override
     public void execute(@NotNull GuildContext c) {
-        if (c.args() == null || c.args().isEmpty()) {
+        if (c.args() == null || c.args().isEmpty())
             sortedView(c);
-        } else {
+        else
             explainedView(c);
-        }
     }
 
     private void explainedView(@NotNull GuildContext c) {
@@ -36,7 +33,7 @@ public class HelpCmd implements Command {
             Util.Replies.quote("Brak wyników.", c.event()).queue();
             return;
         }
-        String name = Command.name(cmd);
+        String name = Command.name(cmd), explanation = Command.explanation(cmd);
 
         StringBuilder str = new StringBuilder();
         var aliases = Command.aliases(cmd);
@@ -48,12 +45,7 @@ public class HelpCmd implements Command {
             }
         }
 
-        String explanation = Command.explanation(cmd);
-        var embed = Util.Replies.coloredEmbed(true)
-            .setTitle("• " + name + str)
-            .setDescription(code("example") + explanation)
-            .build();
-
+        var embed = Util.Replies.coloredEmbed(true).setTitle("• " + name + str).setDescription(code("example") + explanation).build();
         Util.Replies.embed(embed, c.event()).queue();
     }
 
@@ -63,9 +55,7 @@ public class HelpCmd implements Command {
             Util.Replies.simply("Nie zarejestrowano komend.", c.event());
             return;
         }
-
-        var embed = Util.Replies.coloredEmbed(true)
-            .setTitle("• Pomoc (" + commands.size() + ")");
+        var embed = Util.Replies.coloredEmbed(true).setTitle("• Pomoc (" + commands.size() + ")");
 
         Arrays.stream(Category.values()).forEach(category -> {
             StringBuilder builder = new StringBuilder();

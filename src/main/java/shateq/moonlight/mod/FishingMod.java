@@ -24,7 +24,10 @@ public class FishingMod extends Module {
     }
 
     enum Fish {
-        Fish("🐟"), Puffer("🐡"), Shark("🦈"), Exotic("🐠"), Crab("🦀"), Paper("🧻"), Ball("⚽"), Scroll("📜"), Boot("👞"), Nothing("❔");
+        Fish("🐟"), Puffer("🐡"), Shark("🦈"),
+        Exotic("🐠"), Crab("🦀"), Paper("🧻"),
+        Ball("⚽"), Scroll("📜"), Boot("👞"),
+        Nothing("❔");
 
         final String loot;
 

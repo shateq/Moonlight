@@ -17,8 +17,8 @@ public class Detection extends Module {
     }
 
     @Override
-    public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
-        final Message msg = e.getMessage();
+    public void onMessageReceived(@NotNull MessageReceivedEvent e) {
+        Message msg = e.getMessage();
 
         if (Outer.complainsURL(msg.getContentDisplay())) {
             final Site found = matching(msg.getContentDisplay());
@@ -32,11 +32,9 @@ public class Detection extends Module {
         }
     }
 
-    private @Nullable Site matching(final String link) {
-        final Matcher yt = Site.YouTube.pattern.matcher(link);
-        final Matcher sp = Site.Spotify.pattern.matcher(link);
-        final Matcher rd = Site.Reddit.pattern.matcher(link);
-        final Matcher dc = Site.Discord.pattern.matcher(link);
+    private @Nullable Site matching(String link) {
+        Matcher yt = Site.YouTube.pattern.matcher(link), sp = Site.Spotify.pattern.matcher(link),
+            rd = Site.Reddit.pattern.matcher(link), dc = Site.Discord.pattern.matcher(link);
 
         if (yt.find()) {
             return Site.YouTube;
@@ -59,7 +57,7 @@ public class Detection extends Module {
         Reddit(Pattern.compile("(?:https?:\\/\\/)?(?:www\\.)?(redd(it.com|.it))")),
         Discord(Pattern.compile("(?:https?:\\/\\/)?(discord(?:app)?\\.com)"));
 
-        private final Pattern pattern;
+        public final Pattern pattern;
 
         Site(final Pattern pattern) {
             this.pattern = pattern;

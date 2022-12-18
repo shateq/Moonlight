@@ -15,10 +15,16 @@ import shateq.moonlight.util.Outer;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.jar.Manifest;
+
+import static net.dv8tion.jda.api.requests.GatewayIntent.SCHEDULED_EVENTS;
+import static net.dv8tion.jda.api.requests.GatewayIntent.*;
+import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public final class MoonlightBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
+    public static Locale LOCALE = Locale.UK;
     private static MoonlightBot inst;
     //Fields
     public final ModuleChute moduleChute;
@@ -28,9 +34,9 @@ public final class MoonlightBot {
     private MoonlightBot() throws Exception {
         inst = this;
         EnumSet<GatewayIntent> intents =
-            EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.SCHEDULED_EVENTS);
-        EnumSet<CacheFlag> cache = EnumSet.of(CacheFlag.CLIENT_STATUS, CacheFlag.ACTIVITY, CacheFlag.EMOJI,
-            CacheFlag.STICKER, CacheFlag.FORUM_TAGS);
+            EnumSet.of(GUILD_MEMBERS, MESSAGE_CONTENT, GUILD_MESSAGES, SCHEDULED_EVENTS);
+        EnumSet<CacheFlag> cache =
+            EnumSet.of(ACTIVITY, CLIENT_STATUS, EMOJI, FORUM_TAGS, ONLINE_STATUS, STICKER, ROLE_TAGS);
 
         jda = JDABuilder.createDefault(Outer.env("bot_token"), intents)
             .setAutoReconnect(true)
@@ -49,7 +55,7 @@ public final class MoonlightBot {
     public static void main(String[] args) {
         LOGGER.info("Runtime version: {}", Runtime.version().toString());
         LOGGER.info("OS: {}, {}", ManagementFactory.getOperatingSystemMXBean().getName(), ManagementFactory.getOperatingSystemMXBean().getArch());
-
+        LOGGER.info(LOCALE.toString());
         try {
             new MoonlightBot();
         } catch (Exception e) {
@@ -75,10 +81,8 @@ public final class MoonlightBot {
     }
 
     public static final class Const {
-        public static final int NORMAL = 0xfffda6; // Casual color
-        public static final int BAD = 0xff776b; // Bad color
-        public static final String PREFIX = "->";
-        public static final String GITHUB_URL = "https://github.com/shateq/Moonlight";
+        public static final int NORMAL = 0xfffda6, BAD = 0xff776b; //Casual colors
+        public static final String PREFIX = "->", GITHUB_URL = "https://github.com/shateq/Moonlight";
         public static String VERSION;
 
         static {
