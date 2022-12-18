@@ -6,6 +6,7 @@ import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
 import shateq.moonlight.mod.Module;
+import shateq.moonlight.mod.ModuleStatus;
 import shateq.moonlight.util.Util;
 
 @Order("modules")
@@ -18,11 +19,11 @@ public class ModulesCmd implements Command {
         StringBuilder msg = new StringBuilder(), legend = new StringBuilder();
 
         for (Module md : modules.values()) {
-            msg.append("`").append(md.id).append("` ").append(md.status.mark).append(" ").append(md.name).append("\n");
+            msg.append("`").append(md.id).append("` ").append(md.status.mark()).append(" ").append(md.name).append("\n");
         }
 
-        for (Module.Status status : Module.Status.values()) {
-            legend.append(status.mark).append(" - ").append(status.legend).append("\n");
+        for (ModuleStatus status : ModuleStatus.values()) {
+            legend.append(status.mark()).append(" - ").append(status.legend()).append("\n");
         }
 
         var help = Util.Replies.authoredEmbed(c.sender(), true).setTitle("• Moduły (" + modules.size() + ")")

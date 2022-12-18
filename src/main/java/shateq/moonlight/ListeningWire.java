@@ -1,6 +1,7 @@
 package shateq.moonlight;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -29,9 +30,16 @@ public final class ListeningWire extends ListenerAdapter {
             return;
         }
 
-        if (msg.getContentRaw().trim().startsWith(MoonlightBot.Const.PREFIX)) {
-            Dispatcher.execute(event);
+        if (event.isFromGuild()) {
+            if (msg.getContentRaw().trim().startsWith(MoonlightBot.Const.PREFIX)) {
+                Dispatcher.execute(event);
+            }
         }
+    }
+
+    @Override
+    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+        //db action
     }
 
     @Override

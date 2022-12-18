@@ -13,7 +13,6 @@ import java.util.Date;
 @Order("info")
 @Order.Aliases("explain")
 @Order.Explanation("Provide some information")
-@Order.Rank()
 public class InfoCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {

@@ -3,6 +3,7 @@ package shateq.moonlight;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -24,17 +25,17 @@ import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public final class MoonlightBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
-    public static Locale LOCALE = Locale.UK;
+    public static Locale LOCALE = Locale.US;
     private static MoonlightBot inst;
     //Fields
     public final ModuleChute moduleChute;
     public final Dispatcher dispatcher;
     public final JDA jda;
 
-    private MoonlightBot() throws Exception {
+    private MoonlightBot(ListenerAdapter listener) throws Exception {
         inst = this;
         EnumSet<GatewayIntent> intents =
-            EnumSet.of(GUILD_MEMBERS, MESSAGE_CONTENT, GUILD_MESSAGES, SCHEDULED_EVENTS);
+            EnumSet.of(GUILD_MEMBERS, GUILD_VOICE_STATES, GUILD_MESSAGES, MESSAGE_CONTENT, SCHEDULED_EVENTS);
         EnumSet<CacheFlag> cache =
             EnumSet.of(ACTIVITY, CLIENT_STATUS, EMOJI, FORUM_TAGS, ONLINE_STATUS, STICKER, ROLE_TAGS);
 
@@ -45,7 +46,7 @@ public final class MoonlightBot {
             .disableCache(cache)
 
             .setActivity(Activity.competing("Ping me!"))
-            .addEventListeners(new ListeningWire())
+            .addEventListeners(listener)
             .build().awaitReady();
 
         dispatcher = new Dispatcher();
@@ -57,10 +58,9 @@ public final class MoonlightBot {
         LOGGER.info("OS: {}, {}", ManagementFactory.getOperatingSystemMXBean().getName(), ManagementFactory.getOperatingSystemMXBean().getArch());
         LOGGER.info(LOCALE.toString());
         try {
-            new MoonlightBot();
+            new MoonlightBot(new ListeningWire());
         } catch (Exception e) {
             LOGGER.error(String.valueOf(e));
-            System.exit(1);
         }
     }
 

@@ -36,6 +36,7 @@ public interface Command {
     }
 
     static @Nullable @Unmodifiable List<String> aliases(@NotNull Command cmd) {
+        cmd.getClass().getDeclaredAnnotation(Order.Aliases.class).value();
         var aliases = cmd.getClass().getDeclaredAnnotation(Order.Aliases.class);
         if (aliases != null) return List.of(aliases.value());
         return null;

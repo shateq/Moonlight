@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Detection extends Module {
-    public Detection(Identifier id, Status status) {
+    public Detection(Identifier id, ModuleStatus status) {
         super(id, status);
     }
 

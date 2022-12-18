@@ -5,7 +5,7 @@ import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.util.Identifier;
 
 public class FishingMod extends Module {
-    public FishingMod(Identifier id, Status status) {
+    public FishingMod(Identifier id, ModuleStatus status) {
         super(id, status);
         System.out.println("FISHING");
         System.out.println("FISHING");

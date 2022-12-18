@@ -10,9 +10,9 @@ import shateq.moonlight.util.Identifier;
  */
 public abstract class Module extends ListenerAdapter {
     public final String name, id;
-    public final Status status;
+    public final ModuleStatus status;
 
-    public Module(@NotNull Identifier id, Status status) {
+    public Module(@NotNull Identifier id, ModuleStatus status) {
         this.name = id.getName();
         this.id = id.getId();
         this.status = status;
@@ -24,19 +24,7 @@ public abstract class Module extends ListenerAdapter {
     }
 
     public boolean works() {
-        return status.equals(Status.ON) || status.equals(Status.BUILT);
+        return status.equals(ModuleStatus.ON) || status.equals(ModuleStatus.BUILT);
     }
 
-    public enum Status {
-        ON("🟢", "Włączone"), BUILT("🔵", "Wbudowane"),
-        OFF("🔴", "Wyłaczone"), WAITING("🟡", "Oczekiwane"),
-        SPECIAL("🟠", "Specjalne");
-
-        public final String mark, legend;
-
-        Status(String mark, String legend) {
-            this.mark = mark;
-            this.legend = legend;
-        }
-    }
 }

@@ -18,14 +18,14 @@ repositories {
 
 dependencies {
 	implementation("net.dv8tion:JDA:5.0.0-beta.1")
-	//implementation("club.minnced:discord-webhooks:0.8.2")
-	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.1") //lavaplayer
+	implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
+	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.1")
 
-	implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")
-	implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
-
-	//implementation("redis.clients:jedis:4.3.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	implementation("org.jetbrains:annotations:23.1.0")
+	//implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")
+	//implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+	//implementation("redis.clients:jedis:4.3.1")
 	implementation("org.slf4j:slf4j-simple:2.0.5")
 }
 
@@ -43,14 +43,9 @@ tasks {
 	}
 	shadowJar {
 		minimize()
-	}
-	jar {
 		manifest.attributes(
 			"Implementation-Title" to project.name,
 			"Implementation-Version" to project.version
 		)
-	}
-	wrapper {
-		gradleVersion = "7.6"
 	}
 }
