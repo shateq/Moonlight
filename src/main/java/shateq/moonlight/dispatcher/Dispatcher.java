@@ -13,7 +13,8 @@ import shateq.moonlight.cmd.HelpCmd;
 import shateq.moonlight.cmd.InfoCmd;
 import shateq.moonlight.cmd.ModulesCmd;
 import shateq.moonlight.cmd.PingCmd;
-import shateq.moonlight.util.Outer;
+import shateq.moonlight.util.Messages;
+import shateq.moonlight.util.Orbit;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -35,34 +36,43 @@ public final class Dispatcher {
         register(new InfoCmd());
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
-    /*public Map<String, SlashCommandReference> slashCommands() {
-        return Collections.unmodifiableMap(slashCommands);
-    }*/
 
     /**
      * Process a command
      *
-     * @param e Processing context
+     * @param event ReceivedEvent
      */
-    public static void execute(@NotNull MessageReceivedEvent e) {
-        String message = e.getMessage().getContentRaw().trim();
-        String[] arguments = message.replaceFirst("(?i)" + Pattern.quote(MoonlightBot.Const.PREFIX), "").split("\\s+");
+    public static void process(@NotNull MessageReceivedEvent event) {
+        String label = event.getMessage().getContentRaw().trim();
+
+        var quote = Pattern.quote(MoonlightBot.Const.PREFIX);
+        String[] arguments = label.replaceFirst("(?i)" + quote, "")
+            .trim().split("\\s+");
 
         Command cmd = getCommand(arguments[0]);
-        if (cmd == null) {
-            return;
+        if (cmd != null) {
+            execute(cmd, Arrays.copyOfRange(arguments, 1, arguments.length), event);
+        } else {
+            //TODO fuzzy
+            String name = arguments[0];
+            Messages.Replies.just("Nieprawidłowe polecenie, brak wyników dla `" + name + "`.", event);
         }
+    }
 
-        List<String> args = List.of(arguments).subList(1, arguments.length);
-        GuildContext context = new GuildContext(args, e, e.getAuthor());
+    /**
+     * Execute and pass context
+     *
+     * @param event Context root
+     */
+    public static void execute(Command cmd, String[] args, @NotNull MessageReceivedEvent event) {
+        GuildContext context = new GuildContext(args, event, event.getAuthor());
 
-        Member self = e.getGuild().getSelfMember();
-        //TODO checks
+        Member self = event.getGuild().getSelfMember();
         try {
             cmd.execute(context);
-        } catch (Exception ex) {
-            e.getChannel().sendMessage("💥").queue();
-            log.error(ex.toString());
+        } catch (Exception e) {
+            event.getChannel().sendMessage("💀").queue();
+            log.error(e.toString());
         }
     }
 
@@ -106,7 +116,7 @@ public final class Dispatcher {
      * @param clazz Command class
      */
     public <T extends Command> void register(Class<T> clazz) {
-        this.register(Outer.newOne(clazz));
+        this.register(Orbit.newOne(clazz));
     }
 
     /**

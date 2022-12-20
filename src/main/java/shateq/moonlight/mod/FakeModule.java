@@ -11,11 +11,6 @@ public final class FakeModule extends Module {
     }
 
     @Contract("_, _ -> new")
-    public static @NotNull Module special(Identifier id, Runnable arrow) {
-        return new FakeModule(id, ModuleStatus.SPECIAL, arrow);
-    }
-
-    @Contract("_, _ -> new")
     public static @NotNull Module built(Identifier id, @NotNull Runnable arrow) {
         return new FakeModule(id, ModuleStatus.BUILT, arrow);
     }

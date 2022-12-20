@@ -5,7 +5,7 @@ import shateq.moonlight.dispatcher.Category;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
 import shateq.moonlight.music.MusicCommand;
-import shateq.moonlight.util.Util;
+import shateq.moonlight.util.Messages;
 
 @Order("playlist")
 @Order.Aliases("tracks")
@@ -14,6 +14,6 @@ import shateq.moonlight.util.Util;
 public class PlaylistCmd implements MusicCommand {
     @Override
     public void execute(@NotNull GuildContext c) {
-        Util.Replies.quote("Not yet", c.event());
+        Messages.Replies.quote("Not yet", c.event());
     }
 }

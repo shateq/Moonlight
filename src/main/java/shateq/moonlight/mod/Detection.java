@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import shateq.moonlight.util.Identifier;
-import shateq.moonlight.util.Outer;
+import shateq.moonlight.util.Orbit;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +20,7 @@ public class Detection extends Module {
     public void onMessageReceived(@NotNull MessageReceivedEvent e) {
         Message msg = e.getMessage();
 
-        if (Outer.complainsURL(msg.getContentDisplay())) {
+        if (Orbit.complainsURL(msg.getContentDisplay())) {
             final Site found = matching(msg.getContentDisplay());
             if (found == null) return;
             switch (found) {

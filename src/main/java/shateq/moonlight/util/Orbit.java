@@ -9,8 +9,9 @@ import java.util.regex.Pattern;
 /**
  * Utilities of the utilities
  */
-public final class Outer {
-    public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)");
+public final class Orbit {
+    public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)"),
+        discordTag = Pattern.compile("/([a-zA-Z])+(#)\\d\\d\\d\\d$/g");
 
     /**
      * @param string String to be searched

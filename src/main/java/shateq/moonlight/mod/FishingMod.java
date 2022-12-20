@@ -7,9 +7,6 @@ import shateq.moonlight.util.Identifier;
 public class FishingMod extends Module {
     public FishingMod(Identifier id, ModuleStatus status) {
         super(id, status);
-        System.out.println("FISHING");
-        System.out.println("FISHING");
-        System.out.println("FISHING");
     }
 
     @Override
@@ -20,6 +17,7 @@ public class FishingMod extends Module {
     @Override
     public void init() {
         super.init();
+        System.out.println("FISHING");
         MoonlightBot.jda().addEventListener(this);
     }
 

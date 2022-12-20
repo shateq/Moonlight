@@ -11,12 +11,10 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.dispatcher.Dispatcher;
-import shateq.moonlight.util.Outer;
+import shateq.moonlight.util.Orbit;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.util.EnumSet;
-import java.util.Locale;
 import java.util.jar.Manifest;
 
 import static net.dv8tion.jda.api.requests.GatewayIntent.SCHEDULED_EVENTS;
@@ -25,7 +23,6 @@ import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public final class MoonlightBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
-    public static Locale LOCALE = Locale.US;
     private static MoonlightBot inst;
     //Fields
     public final ModuleChute moduleChute;
@@ -35,17 +32,15 @@ public final class MoonlightBot {
     private MoonlightBot(ListenerAdapter listener) throws Exception {
         inst = this;
         EnumSet<GatewayIntent> intents =
-            EnumSet.of(GUILD_MEMBERS, GUILD_VOICE_STATES, GUILD_MESSAGES, MESSAGE_CONTENT, SCHEDULED_EVENTS);
+            EnumSet.of(GUILD_MEMBERS, GUILD_VOICE_STATES, MESSAGE_CONTENT, GUILD_MESSAGES, SCHEDULED_EVENTS);
         EnumSet<CacheFlag> cache =
             EnumSet.of(ACTIVITY, CLIENT_STATUS, EMOJI, FORUM_TAGS, ONLINE_STATUS, STICKER, ROLE_TAGS);
 
-        jda = JDABuilder.createDefault(Outer.env("bot_token"), intents)
+        jda = JDABuilder.createDefault(System.getProperty("bot_token"), intents).setActivity(Activity.competing("Ping me!"))
             .setAutoReconnect(true)
             .setChunkingFilter(ChunkingFilter.ALL)
             .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
             .disableCache(cache)
-
-            .setActivity(Activity.competing("Ping me!"))
             .addEventListeners(listener)
             .build().awaitReady();
 
@@ -55,12 +50,13 @@ public final class MoonlightBot {
 
     public static void main(String[] args) {
         LOGGER.info("Runtime version: {}", Runtime.version().toString());
-        LOGGER.info("OS: {}, {}", ManagementFactory.getOperatingSystemMXBean().getName(), ManagementFactory.getOperatingSystemMXBean().getArch());
-        LOGGER.info(LOCALE.toString());
+
+        if (Orbit.env("bot_token") != null) System.setProperty("bot_token", Orbit.env("bot_token"));
+
         try {
             new MoonlightBot(new ListeningWire());
         } catch (Exception e) {
-            LOGGER.error(String.valueOf(e));
+            LOGGER.error(e.toString());
         }
     }
 
@@ -78,6 +74,10 @@ public final class MoonlightBot {
 
     public static JDA jda() {
         return inst.jda;
+    }
+
+    public static void shutdown() {
+        inst.jda.shutdown();
     }
 
     public static final class Const {

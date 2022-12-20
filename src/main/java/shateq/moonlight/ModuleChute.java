@@ -34,7 +34,7 @@ public final class ModuleChute {
 
         List<Module> mods = List.of(
             FakeModule.built(new Identifier("Grunt", "core"), nothing()),
-            FakeModule.special(new Identifier("Muzyka", "music"), () -> {
+            FakeModule.built(new Identifier("Muzyka", "music"), () -> {
                 MoonlightBot.dispatcher().register(PlayCmd.class);
                 MoonlightBot.dispatcher().register(StopCmd.class);
             }),

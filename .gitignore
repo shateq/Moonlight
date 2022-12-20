@@ -17,7 +17,7 @@ bin/
 .classpath
 .project
 
-.env
+token.txt
 *.launch
 *.DS_Store
 ~*

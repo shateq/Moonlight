@@ -5,8 +5,8 @@ import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
-import shateq.moonlight.util.Outer;
-import shateq.moonlight.util.Util;
+import shateq.moonlight.util.Orbit;
+import shateq.moonlight.util.Messages;
 
 import java.util.Date;
 
@@ -16,10 +16,10 @@ import java.util.Date;
 public class InfoCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
-        String data = Outer.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
+        String data = Orbit.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
 
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-        var embed = Util.Replies.authoredEmbed(c.jda().getSelfUser(), true)
+        var embed = Messages.Replies.authoredEmbed(c.jda().getSelfUser(), true)
             .setDescription("Dzień dobry! Jestem tu by zaimplementować autorskie wymysły. " +
                 "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Const.GITHUB_URL + ")\n\n" +
                 "• Wpisz `" + MoonlightBot.Const.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
@@ -28,6 +28,6 @@ public class InfoCmd implements Command {
             )
             .setFooter(data)
             .build();
-        Util.Replies.embed(embed, c.event()).queue();
+        Messages.Replies.embed(embed, c.event()).queue();
     }
 }

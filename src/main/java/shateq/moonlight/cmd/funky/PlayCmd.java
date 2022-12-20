@@ -8,7 +8,7 @@ import shateq.moonlight.dispatcher.Category;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.Order;
 import shateq.moonlight.music.MusicCommand;
-import shateq.moonlight.util.Util;
+import shateq.moonlight.util.Messages;
 
 @Order("play")
 @Order.Aliases("join")
@@ -26,7 +26,7 @@ public class PlayCmd implements MusicCommand {
         }
 
         if (!this.connectionEquals(c)) {
-            Util.Replies.quote("Kanały głosowe nie pokrywają się...", c.event());
+            Messages.Replies.quote("Kanały głosowe nie pokrywają się...", c.event());
             return;
         }
 
@@ -38,6 +38,6 @@ public class PlayCmd implements MusicCommand {
 
         //YAAAAAAAAAAAAAAA
         //PlayerManager.getInstance().loadTrack(ctx.getChannel(), "https://www.youtube.com/watch?v=GHMjD0Lp5DY");
-        Util.Replies.simply("Fire!", c.event()).queue();
+        Messages.Replies.just("Fire!", c.event()).queue();
     }
 }

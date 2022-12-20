@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.*;
-import shateq.moonlight.util.Util;
+import shateq.moonlight.util.Messages;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,16 +21,16 @@ public class HelpCmd implements Command {
 
     @Override
     public void execute(@NotNull GuildContext c) {
-        if (c.args() == null || c.args().isEmpty())
+        if (c.args() == null || c.args().length == 0)
             sortedView(c);
         else
             explainedView(c);
     }
 
     private void explainedView(@NotNull GuildContext c) {
-        Command cmd = Dispatcher.getCommand(c.args().get(0));
+        Command cmd = Dispatcher.getCommand(c.args()[0]);
         if (cmd == null) {
-            Util.Replies.quote("Brak wyników.", c.event()).queue();
+            Messages.Replies.quote("Brak wyników.", c.event()).queue();
             return;
         }
         String name = Command.name(cmd), explanation = Command.explanation(cmd);
@@ -45,17 +45,17 @@ public class HelpCmd implements Command {
             }
         }
 
-        var embed = Util.Replies.coloredEmbed(true).setTitle("• " + name + str).setDescription(code("example") + explanation).build();
-        Util.Replies.embed(embed, c.event()).queue();
+        var embed = Messages.Replies.coloredEmbed(true).setTitle("• " + name + str).setDescription(code("example") + explanation).build();
+        Messages.Replies.embed(embed, c.event()).queue();
     }
 
     private void sortedView(@NotNull GuildContext c) {
         var commands = MoonlightBot.dispatcher().commands().values();
         if (commands.size() == 0) {
-            Util.Replies.simply("Nie zarejestrowano komend.", c.event());
+            Messages.Replies.just("Nie zarejestrowano komend.", c.event());
             return;
         }
-        var embed = Util.Replies.coloredEmbed(true).setTitle("• Pomoc (" + commands.size() + ")");
+        var embed = Messages.Replies.coloredEmbed(true).setTitle("• Pomoc (" + commands.size() + ")");
 
         Arrays.stream(Category.values()).forEach(category -> {
             StringBuilder builder = new StringBuilder();
@@ -69,6 +69,6 @@ public class HelpCmd implements Command {
             embed.addField(category.title, builder.toString(), false);
         });
 
-        Util.Replies.embed(embed.build(), c.event()).queue();
+        Messages.Replies.embed(embed.build(), c.event()).queue();
     }
 }

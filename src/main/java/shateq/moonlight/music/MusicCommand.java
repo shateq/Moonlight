@@ -3,7 +3,7 @@ package shateq.moonlight.music;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.dispatcher.Command;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.util.Util;
+import shateq.moonlight.util.Messages;
 
 public interface MusicCommand extends Command {
     default boolean connectionEquals(@NotNull GuildContext c) {
@@ -17,7 +17,7 @@ public interface MusicCommand extends Command {
     default boolean selfConnected(@NotNull GuildContext c) {
         var self = c.guild().getSelfMember().getVoiceState();
         if (self != null && !self.inAudioChannel()) {
-            Util.Replies.quote("Muszę być na kanale głosowym, by to zadziałało!", c.event()).queue();
+            Messages.Replies.quote("Muszę być na kanale głosowym, by to zadziałało!", c.event()).queue();
             return false;
         }
         return true;
@@ -26,7 +26,7 @@ public interface MusicCommand extends Command {
     default boolean memberConnected(@NotNull GuildContext c) {
         var member = c.member().getVoiceState();
         if (member != null && !member.inAudioChannel()) {
-            Util.Replies.quote("Nie znam kanału do którego jesteś połączony(-a).", c.event()).queue();
+            Messages.Replies.quote("Nie znam kanału do którego jesteś połączony(-a).", c.event()).queue();
             return false;
         }
         return true;

@@ -1,5 +1,8 @@
 package shateq.moonlight.dispatcher;
 
+/**
+ * Command drawers
+ */
 public enum Category {
     General("Generalne"), Slash("Slash"),
     Music("Muzyka"), Fun("Gry");
