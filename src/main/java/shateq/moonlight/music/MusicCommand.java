@@ -1,7 +1,7 @@
 package shateq.moonlight.music;
 
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.dispatcher.Command;
+import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.util.Messages;
 

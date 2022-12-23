@@ -3,15 +3,14 @@ package shateq.moonlight.cmd.funky;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.dispatcher.Category;
+import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.music.MusicCommand;
 
-@Order("stop")
+@Order(value = "stop", group = Category.Music)
 @Order.Aliases("leave")
 @Order.Explanation("Stop music player")
-@Order.Rank(Category.Music)
 public class StopCmd implements MusicCommand {
     @Override
     public void execute(@NotNull GuildContext c) {

@@ -1,14 +1,13 @@
 package shateq.moonlight.cmd;
 
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.dispatcher.Command;
+import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Messages;
 
 @Order("ping")
 @Order.Explanation("Pong!")
-@Order.Rank()
 public class PingCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {

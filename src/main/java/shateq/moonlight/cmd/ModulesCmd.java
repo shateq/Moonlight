@@ -2,15 +2,15 @@ package shateq.moonlight.cmd;
 
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.dispatcher.Command;
+import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.mod.Module;
 import shateq.moonlight.mod.ModuleStatus;
 import shateq.moonlight.util.Messages;
 
 @Order("modules")
-@Order.Aliases({"module", "mods"})
+@Order.Aliases({"module", "mods", "mod"})
 @Order.Explanation("List modules")
 public class ModulesCmd implements Command {
     @Override
@@ -27,11 +27,10 @@ public class ModulesCmd implements Command {
 
         StringBuilder msg = new StringBuilder();
         for (Module md : modules.values()) {
-            var id = md.id;
+            String id = md.id;
             if (id.length() < len) {
                 id += " ".repeat(len - id.length());
             }
-
             msg.append("`").append(id).append("` ").append(md.status.mark()).append(" ").append(md.name).append("\n");
         }
 

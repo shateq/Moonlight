@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction
 import org.jetbrains.annotations.Contract
+import org.slf4j.helpers.CheckReturnValue
 import shateq.moonlight.MoonlightBot
 
 /**
@@ -25,18 +26,22 @@ class Messages {
             EmbedBuilder().dye(normal)
 
         @Contract("_, _ -> new")
+        @CheckReturnValue
         fun reference(output: CharSequence, e: MessageReceivedEvent): MessageCreateAction =
             e.channel.sendMessage(output).setMessageReference(e.message)
 
         @Contract("_, _ -> new")
+        @CheckReturnValue
         fun quote(output: CharSequence, e: MessageReceivedEvent): MessageCreateAction =
             e.channel.sendMessage("> $output").setMessageReference(e.message)
 
         @Contract("_, _ -> new")
+        @CheckReturnValue
         fun just(message: CharSequence, e: MessageReceivedEvent): MessageCreateAction =
             e.channel.sendMessage(message)
 
         @Contract("_, _ -> new")
+        @CheckReturnValue
         fun embed(outputEmbed: MessageEmbed, e: MessageReceivedEvent): MessageCreateAction =
             e.channel.sendMessageEmbeds(outputEmbed).setMessageReference(e.message)
     }

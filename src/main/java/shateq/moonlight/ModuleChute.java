@@ -28,7 +28,7 @@ public final class ModuleChute {
 
     public ModuleChute() {
         coverage.info("Loading mods...");
-        var fishing = new FishingMod(new Identifier("Rybactwo", "fishing"), ModuleStatus.WAITING);
+        var fishing = new FishingMod(new Identifier("Rybactwo", "fishing"), ModuleStatus.ON);
         var boost = new Boost(new Identifier("Ulepszenia", "boost"), ModuleStatus.WAITING);
         var detection = new Detection(new Identifier("Detekcja linków", "detect"), ModuleStatus.OFF);
 

@@ -18,7 +18,7 @@ class ListeningWire : ListenerAdapter() {
         if (message.mentions.users.contains(event.jda.selfUser)) {
             val vowels = charArrayOf('a', 'e', 'i', 'o', 'u', 'y')
             val pong = "P" + vowels[ThreadLocalRandom.current().nextInt(vowels.size)] + "ng!"
-            Messages.reference("$pong Try typing `${MoonlightBot.Const.PREFIX}`", event).queue()
+            Messages.reference("$pong Try typing `${MoonlightBot.Const.PREFIX} h`", event).queue()
             return
         }
 

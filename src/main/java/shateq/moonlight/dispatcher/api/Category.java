@@ -1,14 +1,15 @@
-package shateq.moonlight.dispatcher;
+package shateq.moonlight.dispatcher.api;
 
 /**
  * Command drawers
  */
 public enum Category {
-    General("Generalne"), Slash("Slash"),
-    Music("Muzyka"), Fun("Gry");
+    General("Generalne"),
+    Music("Muzyka"),
+    Slash("Slash*"), //extend
+    Fishing("Rybactwo") ;
 
     public final String title;
-
     Category(final String title) {
         this.title = title;
     }

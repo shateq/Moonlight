@@ -1,5 +1,6 @@
 package shateq.moonlight.dispatcher;
 
+import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.Contract;
@@ -9,10 +10,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.cmd.HelpCmd;
-import shateq.moonlight.cmd.InfoCmd;
-import shateq.moonlight.cmd.ModulesCmd;
-import shateq.moonlight.cmd.PingCmd;
+import shateq.moonlight.cmd.*;
+import shateq.moonlight.dispatcher.api.ArgumentException;
+import shateq.moonlight.dispatcher.api.Command;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Messages;
 import shateq.moonlight.util.Orbit;
 
@@ -29,11 +30,11 @@ public final class Dispatcher {
 
     public Dispatcher() {
         log.info("Loading COMMANDS...");
-
         register(PingCmd.class);
         register(ModulesCmd.class);
         register(new HelpCmd());
         register(new InfoCmd());
+        register(new DateCmd());
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
 
@@ -44,18 +45,18 @@ public final class Dispatcher {
      */
     public static void process(@NotNull MessageReceivedEvent event) {
         String label = event.getMessage().getContentRaw().trim();
+        if (!label.startsWith(MoonlightBot.Const.PREFIX)) return; // PREFIX FIRST
 
         var quote = Pattern.quote(MoonlightBot.Const.PREFIX);
         String[] arguments = label.replaceFirst("(?i)" + quote, "")
             .trim().split("\\s+");
 
-        Command cmd = getCommand(arguments[0]);
+        String name = arguments[0];
+        Command cmd = getCommand(name);
         if (cmd != null) {
             execute(cmd, Arrays.copyOfRange(arguments, 1, arguments.length), event);
         } else {
-            //TODO fuzzy
-            String name = arguments[0];
-            Messages.Replies.just("Nieprawidłowe polecenie, brak wyników dla `" + name + "`.", event);
+            Messages.Replies.just("`" + name + "` : brak wyników. Użyj sobie `->h`.", event).queue();
         }
     }
 
@@ -70,10 +71,23 @@ public final class Dispatcher {
         Member self = event.getGuild().getSelfMember();
         try {
             cmd.execute(context);
+        } catch (NotImplementedError ie) {
+            Messages.Replies.reference("Operacja nie została zaimplementowana!", event).queue();
+        } catch (ArgumentException ae) {
+            Messages.Replies.just(ae.getMessage(), event).queue();
         } catch (Exception e) {
-            event.getChannel().sendMessage("💀").queue();
+            Messages.Replies.just("💀", event).queue();
             log.error(e.toString());
         }
+    }
+
+    /**
+     * Use the static {@code execute}, no need to specify new empty string array
+     *
+     * @param event Context root
+     */
+    public static void executeNoArgs(Command cmd, @NotNull MessageReceivedEvent event) {
+        execute(cmd, new String[]{}, event);
     }
 
     /**
@@ -82,13 +96,13 @@ public final class Dispatcher {
      */
     @Nullable
     public static Command getCommand(@NotNull String name) {
-        String search = name.toLowerCase(Locale.ROOT);
+        String search = name.toLowerCase(Locale.ROOT), aliasName;
 
         var perName = COMMANDS.get(search);
         if (perName != null) {
             return perName;
         }
-        String aliasName = aliases.get(search);
+        aliasName = aliases.get(search);
         return COMMANDS.get(aliasName);
     }
 

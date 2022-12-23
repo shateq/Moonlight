@@ -1,7 +1,13 @@
 package shateq.moonlight.mod;
 
+import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.events.GenericEvent;
+import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
+import shateq.moonlight.dispatcher.GuildContext;
+import shateq.moonlight.dispatcher.api.Category;
+import shateq.moonlight.dispatcher.api.Command;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Identifier;
 
 public class FishingMod extends Module {
@@ -10,15 +16,9 @@ public class FishingMod extends Module {
     }
 
     @Override
-    public void onGenericEvent(GenericEvent event) {
-        System.out.println("generic event");
-    }
-
-    @Override
     public void init() {
         super.init();
-        System.out.println("FISHING");
-        MoonlightBot.jda().addEventListener(this);
+        MoonlightBot.dispatcher().register(new FishingCmd());
     }
 
     enum Fish {
@@ -28,9 +28,16 @@ public class FishingMod extends Module {
         Nothing("❔");
 
         final String loot;
-
         Fish(String loot) {
             this.loot = loot;
+        }
+    }
+
+    @Order(value = "fish", group = Category.Fishing)
+    static class FishingCmd implements Command {
+        @Override
+        public void execute(@NotNull GuildContext c) throws Exception {
+            throw new NotImplementedError();
         }
     }
 }

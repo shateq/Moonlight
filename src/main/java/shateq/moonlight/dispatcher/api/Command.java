@@ -1,9 +1,10 @@
-package shateq.moonlight.dispatcher;
+package shateq.moonlight.dispatcher.api;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import shateq.moonlight.dispatcher.GuildContext;
 
 import java.util.List;
 
@@ -12,15 +13,20 @@ import java.util.List;
  */
 public interface Command {
     @Contract(pure = true)
+    static @Nullable Order orders(@NotNull Command cmd) {
+        return cmd.getClass().getDeclaredAnnotation(Order.class);
+    }
+
     static @Nullable String name(@NotNull Command cmd) {
-        var order = cmd.getClass().getDeclaredAnnotation(Order.class);
+        var order = orders(cmd);
         if (order != null) return order.value();
         return null;
     }
 
-    static @NotNull Category category(@NotNull Command cmd) {
-        var rank = cmd.getClass().getDeclaredAnnotation(Order.Rank.class);
-        return rank != null ? rank.value() : Category.General;
+    static @Nullable Category group(@NotNull Command cmd) {
+        var order = orders(cmd);
+        if (order != null) return order.group();
+        return null;
     }
 
     static @Nullable String explanation(@NotNull Command cmd) {

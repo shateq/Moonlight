@@ -4,16 +4,15 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.dispatcher.Category;
+import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.music.MusicCommand;
 import shateq.moonlight.util.Messages;
 
-@Order("play")
+@Order(value = "play", group = Category.Music)
 @Order.Aliases("join")
 @Order.Explanation("Start music player")
-@Order.Rank(Category.Music)
 public class PlayCmd implements MusicCommand {
     @Override
     public void execute(@NotNull GuildContext c) {

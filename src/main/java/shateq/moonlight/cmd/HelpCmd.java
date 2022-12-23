@@ -3,11 +3,16 @@ package shateq.moonlight.cmd;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.dispatcher.*;
+import shateq.moonlight.dispatcher.Dispatcher;
+import shateq.moonlight.dispatcher.GuildContext;
+import shateq.moonlight.dispatcher.api.Category;
+import shateq.moonlight.dispatcher.api.Command;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Messages;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Order("help")
@@ -52,7 +57,7 @@ public class HelpCmd implements Command {
     private void sortedView(@NotNull GuildContext c) {
         var commands = MoonlightBot.dispatcher().commands().values();
         if (commands.size() == 0) {
-            Messages.Replies.just("Nie zarejestrowano komend.", c.event());
+            Messages.Replies.just("Nie zarejestrowano komend.", c.event()).queue();
             return;
         }
         var embed = Messages.Replies.coloredEmbed(true).setTitle("• Pomoc (" + commands.size() + ")");
@@ -62,11 +67,13 @@ public class HelpCmd implements Command {
             Set<Command> group = new HashSet<>();
 
             commands.forEach(it -> {
-                if (Command.category(it).equals(category)) group.add(it);
+                if (Objects.equals(Command.group(it), category))
+                    group.add(it);
             });
 
             group.forEach(command -> builder.append("`").append(Command.name(command)).append("` "));
-            embed.addField(category.title, builder.toString(), false);
+            if (!builder.isEmpty())
+                embed.addField(category.title, builder.toString(), false);
         });
 
         Messages.Replies.embed(embed.build(), c.event()).queue();

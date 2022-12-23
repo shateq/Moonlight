@@ -2,9 +2,9 @@ package shateq.moonlight.cmd;
 
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.dispatcher.Command;
+import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.GuildContext;
-import shateq.moonlight.dispatcher.Order;
+import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Orbit;
 import shateq.moonlight.util.Messages;
 
@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Order("info")
 @Order.Aliases("explain")
-@Order.Explanation("Provide some information")
+@Order.Explanation("Some information")
 public class InfoCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {
