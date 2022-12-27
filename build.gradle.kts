@@ -21,6 +21,7 @@ dependencies {
 	implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
 	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.1")
 
+	implementation("io.projectreactor:reactor-core:3.5.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	implementation("org.jetbrains:annotations:23.1.0")
 	//implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")

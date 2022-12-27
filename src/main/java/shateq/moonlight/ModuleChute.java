@@ -31,6 +31,7 @@ public final class ModuleChute {
         var fishing = new FishingMod(new Identifier("Rybactwo", "fishing"), ModuleStatus.ON);
         var boost = new Boost(new Identifier("Ulepszenia", "boost"), ModuleStatus.WAITING);
         var detection = new Detection(new Identifier("Detekcja linków", "detect"), ModuleStatus.OFF);
+        var polish = new Detection(new Identifier("Polska Literatura", "lit"), ModuleStatus.OFF);
 
         List<Module> mods = List.of(
             FakeModule.built(new Identifier("Grunt", "core"), nothing()),
@@ -40,7 +41,8 @@ public final class ModuleChute {
             }),
             boost,
             fishing,
-            detection
+            detection,
+            polish
         );
 
         for (Module mod : mods) {

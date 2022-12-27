@@ -1,11 +1,17 @@
 package shateq.moonlight
 
+import dev.minn.jda.ktx.messages.send
+import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import reactor.core.publisher.Mono
+import shateq.moonlight.cmd.HejCmd
 import shateq.moonlight.dispatcher.Dispatcher
 import shateq.moonlight.util.Messages
+import java.time.Duration
 import java.util.concurrent.ThreadLocalRandom
 
 class ListeningWire : ListenerAdapter() {
@@ -28,10 +34,31 @@ class ListeningWire : ListenerAdapter() {
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        // db action
+        //event.guild.idLong //db action
     }
 
-    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        // slash commander
+    override fun onGuildJoin(event: GuildJoinEvent) {
+        val guild = event.guild
+        val mono = Mono.create<Unit> {
+            sayHelloOnJoin(guild)
+        }
+        mono.delaySubscription(Duration.ofSeconds(10))
+            .subscribe()
+    }
+
+    private fun sayHelloOnJoin(guild: Guild) {
+        var channel: TextChannel? = guild.systemChannel ?: guild.defaultChannel?.asTextChannel()
+        if (channel == null || !channel.canTalk()) {
+            guild.textChannels.forEach { tc ->
+                if (tc.canTalk()) {
+                    channel = tc
+                    return@forEach
+                }
+            }
+        }
+
+        channel?.send(
+            HejCmd().hello(guild)
+        )?.queue()
     }
 }

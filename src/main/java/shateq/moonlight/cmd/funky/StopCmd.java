@@ -1,5 +1,6 @@
 package shateq.moonlight.cmd.funky;
 
+import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +8,7 @@ import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.music.MusicCommand;
+import shateq.moonlight.util.Messages;
 
 @Order(value = "stop", group = Category.Music)
 @Order.Aliases("leave")
@@ -23,5 +25,6 @@ public class StopCmd implements MusicCommand {
 
         final Member member = c.event().getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
+        throw new NotImplementedError();
     }
 }

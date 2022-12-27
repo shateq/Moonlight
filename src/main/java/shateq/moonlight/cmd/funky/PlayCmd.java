@@ -1,5 +1,6 @@
 package shateq.moonlight.cmd.funky;
 
+import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -38,5 +39,6 @@ public class PlayCmd implements MusicCommand {
         //YAAAAAAAAAAAAAAA
         //PlayerManager.getInstance().loadTrack(ctx.getChannel(), "https://www.youtube.com/watch?v=GHMjD0Lp5DY");
         Messages.Replies.just("Fire!", c.event()).queue();
+        throw new NotImplementedError();
     }
 }

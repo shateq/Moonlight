@@ -33,14 +33,14 @@ public final class MoonlightBot {
         inst = this;
         EnumSet<GatewayIntent> intents =
             EnumSet.of(GUILD_MEMBERS, GUILD_VOICE_STATES, MESSAGE_CONTENT, GUILD_MESSAGES, SCHEDULED_EVENTS);
-        EnumSet<CacheFlag> cache =
+        EnumSet<CacheFlag> disabledCache =
             EnumSet.of(ACTIVITY, CLIENT_STATUS, EMOJI, FORUM_TAGS, ONLINE_STATUS, STICKER, ROLE_TAGS);
 
         jda = JDABuilder.createDefault(System.getProperty("bot_token"), intents).setActivity(Activity.competing("Ping me!"))
             .setAutoReconnect(true)
             .setChunkingFilter(ChunkingFilter.ALL)
             .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
-            .disableCache(cache)
+            .disableCache(disabledCache)
             .addEventListeners(listener)
             .build().awaitReady();
 

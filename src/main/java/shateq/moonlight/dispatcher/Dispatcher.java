@@ -34,7 +34,7 @@ public final class Dispatcher {
         register(ModulesCmd.class);
         register(new HelpCmd());
         register(new InfoCmd());
-        register(new DateCmd());
+        register(new HejCmd());
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
 
