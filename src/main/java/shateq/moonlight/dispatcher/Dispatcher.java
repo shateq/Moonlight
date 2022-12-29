@@ -2,7 +2,10 @@ package shateq.moonlight.dispatcher;
 
 import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +33,30 @@ public final class Dispatcher {
 
     public Dispatcher() {
         log.info("Loading COMMANDS...");
-        register(PingCmd.class);
-        register(ModulesCmd.class);
-        register(new HelpCmd());
-        register(new InfoCmd());
-        register(new HejCmd());
+
+        MoonlightBot.jda().updateCommands().addCommands(
+            Commands.slash("welp", "Reply back with options.")
+                .addOption(OptionType.BOOLEAN, "panic", "Whether to panic", false)
+        ).queue();
+
+        List.of(
+            new PingCmd(),
+            new ModulesCmd(),
+            new HelpCmd(),
+            new InfoCmd(),
+            new HejCmd()
+        ).forEach(this::register);
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
+    }
+
+    /**
+     * Receive a slash command
+     * @param event Slash Command Interaction
+     */
+    public static void slash(@NotNull SlashCommandInteractionEvent event) {
+        if (event.getInteraction().getName().equals("welp")) {
+            event.getInteraction().reply("Here is it!").setEphemeral(true).queue();
+        }
     }
 
     /**

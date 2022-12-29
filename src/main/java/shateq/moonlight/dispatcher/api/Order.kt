@@ -6,7 +6,6 @@ package shateq.moonlight.dispatcher.api
 @Target(AnnotationTarget.CLASS)
 @MustBeDocumented
 annotation class Order(val value: String, val group: Category = Category.General) {
-
     @Target(AnnotationTarget.CLASS)
     annotation class Aliases(val value: Array<String>)
 

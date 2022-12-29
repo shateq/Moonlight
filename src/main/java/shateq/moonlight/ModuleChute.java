@@ -33,7 +33,7 @@ public final class ModuleChute {
         var detection = new Detection(new Identifier("Detekcja linków", "detect"), ModuleStatus.OFF);
         var polish = new Detection(new Identifier("Polska Literatura", "lit"), ModuleStatus.OFF);
 
-        List<Module> mods = List.of(
+        List.of(
             FakeModule.built(new Identifier("Grunt", "core"), nothing()),
             FakeModule.built(new Identifier("Muzyka", "music"), () -> {
                 MoonlightBot.dispatcher().register(PlayCmd.class);
@@ -43,11 +43,7 @@ public final class ModuleChute {
             fishing,
             detection,
             polish
-        );
-
-        for (Module mod : mods) {
-            setOff(mod);
-        }
+        ).forEach(this::setOff);
         coverage.info("Registered {} mods.", MODULES.size());
     }
 

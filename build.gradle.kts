@@ -12,16 +12,21 @@ description = "Discord bot attempt 2021"
 
 repositories {
 	mavenCentral()
+	mavenLocal() //may be useful
 	maven("https://m2.dv8tion.net/releases")
 	maven("https://jitpack.io")
 }
 
 dependencies {
-	implementation("net.dv8tion:JDA:5.0.0-beta.1")
+	implementation("net.dv8tion:JDA:5.0.0-beta.1") {
+		exclude(module = "opus-java")
+	}
 	implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
 	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.1")
 
+	implementation("com.github.MinnDevelopment:jda-reactor:1.6.0")
 	implementation("io.projectreactor:reactor-core:3.5.1")
+
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	implementation("org.jetbrains:annotations:23.1.0")
 	//implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")

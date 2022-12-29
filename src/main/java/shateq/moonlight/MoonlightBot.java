@@ -24,7 +24,7 @@ import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 public final class MoonlightBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
     private static MoonlightBot inst;
-    //Fields
+
     public final ModuleChute moduleChute;
     public final Dispatcher dispatcher;
     public final JDA jda;
@@ -38,21 +38,21 @@ public final class MoonlightBot {
 
         jda = JDABuilder.createDefault(System.getProperty("bot_token"), intents).setActivity(Activity.competing("Ping me!"))
             .setAutoReconnect(true)
-            .setChunkingFilter(ChunkingFilter.ALL)
+            .setChunkingFilter(ChunkingFilter.NONE)
             .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
             .disableCache(disabledCache)
             .addEventListeners(listener)
             .build().awaitReady();
-
+        //should every guild have their own moduleChute?
         dispatcher = new Dispatcher();
         moduleChute = new ModuleChute();
     }
 
     public static void main(String[] args) {
         LOGGER.info("Runtime version: {}", Runtime.version().toString());
-
         if (Orbit.env("bot_token") != null) System.setProperty("bot_token", Orbit.env("bot_token"));
 
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> LOGGER.error("Uncaught exception in thread {}", t.getName(), e));
         try {
             new MoonlightBot(new ListeningWire());
         } catch (Exception e) {
@@ -76,8 +76,10 @@ public final class MoonlightBot {
         return inst.jda;
     }
 
-    public static void shutdown() {
-        inst.jda.shutdown();
+    public static void shutdown(int code) {
+        inst.jda.getRegisteredListeners().forEach(inst.jda::removeEventListener);
+        inst.jda.shutdownNow();
+        System.exit(code);
     }
 
     public static final class Const {
