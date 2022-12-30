@@ -1,10 +1,12 @@
 package shateq.moonlight.dispatcher.api;
 
+import kotlin.NotImplementedError;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import shateq.moonlight.dispatcher.GuildContext;
+import shateq.moonlight.dispatcher.SlashContext;
 
 import java.util.List;
 
@@ -30,8 +32,8 @@ public interface Command {
     }
 
     static @Nullable String explanation(@NotNull Command cmd) {
-        var explain = cmd.getClass().getDeclaredAnnotation(Order.Explanation.class);
-        if (explain != null) return explain.value();
+        var order = orders(cmd);
+        if (order != null) return order.note();
         return null;
     }
 
@@ -42,7 +44,6 @@ public interface Command {
     }
 
     static @Nullable @Unmodifiable List<String> aliases(@NotNull Command cmd) {
-        cmd.getClass().getDeclaredAnnotation(Order.Aliases.class).value();
         var aliases = cmd.getClass().getDeclaredAnnotation(Order.Aliases.class);
         if (aliases != null) return List.of(aliases.value());
         return null;
@@ -52,6 +53,9 @@ public interface Command {
         return cmd.getClass().getDeclaredAnnotation(Order.Hidden.class) != null;
     }
 
-    // TODO annotation
     void execute(@NotNull GuildContext c) throws Exception;
+
+    default void slash(@NotNull SlashContext c) throws Exception {
+        throw new NotImplementedError();
+    }
 }

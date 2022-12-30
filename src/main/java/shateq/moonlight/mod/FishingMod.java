@@ -1,7 +1,6 @@
 package shateq.moonlight.mod;
 
 import kotlin.NotImplementedError;
-import net.dv8tion.jda.api.events.GenericEvent;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.GuildContext;

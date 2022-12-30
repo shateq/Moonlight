@@ -1,10 +1,10 @@
 package shateq.moonlight.dispatcher;
 
 import kotlin.NotImplementedError;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -29,15 +29,19 @@ import java.util.regex.Pattern;
 public final class Dispatcher {
     private static final Logger log = LoggerFactory.getLogger("CommandDispatcher");
     private static final Map<String, Command> COMMANDS = new HashMap<>();
-    private static final Map<String, String> aliases = new HashMap<>(); //alias point to name
+    private static final Map<String, String> aliases = new HashMap<>(); //alias points to name
+    private static final List<CommandData> COMMAND_DATA = new ArrayList<>();
 
     public Dispatcher() {
         log.info("Loading COMMANDS...");
 
-        MoonlightBot.jda().updateCommands().addCommands(
-            Commands.slash("welp", "Reply back with options.")
-                .addOption(OptionType.BOOLEAN, "panic", "Whether to panic", false)
-        ).queue();
+        MoonlightBot.jda().updateCommands()
+            .addCommands(COMMAND_DATA)
+            .addCommands(
+                Commands.slash("welp", "Reply back with options.")
+                    .addOption(OptionType.BOOLEAN, "panic", "Whether to panic", false)
+            )
+            .queue();
 
         List.of(
             new PingCmd(),
@@ -51,6 +55,7 @@ public final class Dispatcher {
 
     /**
      * Receive a slash command
+     *
      * @param event Slash Command Interaction
      */
     public static void slash(@NotNull SlashCommandInteractionEvent event) {
@@ -73,6 +78,8 @@ public final class Dispatcher {
             .trim().split("\\s+");
 
         String name = arguments[0];
+        if (name.isBlank()) return; //no annoying 'this'
+
         Command cmd = getCommand(name);
         if (cmd != null) {
             execute(cmd, Arrays.copyOfRange(arguments, 1, arguments.length), event);
@@ -88,16 +95,18 @@ public final class Dispatcher {
      */
     public static void execute(Command cmd, String[] args, @NotNull MessageReceivedEvent event) {
         GuildContext context = new GuildContext(args, event, event.getAuthor());
-
-        Member self = event.getGuild().getSelfMember();
+        //Member self = event.getGuild().getSelfMember();
         try {
             cmd.execute(context);
         } catch (NotImplementedError ie) {
-            Messages.Replies.reference("Operacja nie została zaimplementowana!", event).queue();
+            var out = "Operacja nie została zaimplementowana! ";
+            if (ie.getMessage() != null) out += ie.getMessage();
+
+            Messages.Replies.reference(out, event).queue();
         } catch (ArgumentException ae) {
             Messages.Replies.just(ae.getMessage(), event).queue();
         } catch (Exception e) {
-            Messages.Replies.just("💀", event).queue();
+            Messages.Replies.skull(event);
             log.error(e.toString());
         }
     }
@@ -146,8 +155,6 @@ public final class Dispatcher {
     }
 
     /**
-     * Registers command by its class
-     *
      * @param clazz Command class
      */
     public <T extends Command> void register(Class<T> clazz) {
@@ -155,14 +162,17 @@ public final class Dispatcher {
     }
 
     /**
-     * Registers command by its instance
+     * Registers passed instance
      *
      * @param command Command object
      */
     public void register(@NotNull Command command) {
         Class<? extends Command> clazz = command.getClass();
-        //Annotation[] ann = clazz.getDeclaredAnnotations();
         var name = clazz.getDeclaredAnnotation(Order.class);
+        if (name == null) {
+            log.error("Command {} could not be registered. MISSING ANNOTATION METADATA!", command);
+            return;
+        }
         var aliasList = clazz.getDeclaredAnnotation(Order.Aliases.class);
 
         COMMANDS.putIfAbsent(name.value(), command);

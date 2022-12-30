@@ -15,9 +15,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Order("help")
+@Order(value = "help", note = "Peek all of the commands.")
 @Order.Aliases({"h", "pomoc"})
-@Order.Explanation("Check commands")
 public class HelpCmd implements Command {
     @Contract(pure = true)
     public static @NotNull String code(String string) {
@@ -43,8 +42,7 @@ public class HelpCmd implements Command {
         StringBuilder str = new StringBuilder();
         var aliases = Command.aliases(cmd);
 
-        assert aliases != null;
-        if (!aliases.isEmpty()) {
+        if (aliases != null && !aliases.isEmpty()) {
             for (String a : aliases) {
                 str.append(" /").append(a);
             }

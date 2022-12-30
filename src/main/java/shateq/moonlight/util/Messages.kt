@@ -3,6 +3,7 @@ package shateq.moonlight.util
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction
 import org.jetbrains.annotations.Contract
@@ -25,6 +26,8 @@ class Messages {
         fun coloredEmbed(normal: Boolean): EmbedBuilder =
             EmbedBuilder().dye(normal)
 
+        fun skull(event: MessageReceivedEvent) = just("💀", event).queue()
+
         @Contract("_, _ -> new")
         @CheckReturnValue
         fun reference(output: CharSequence, e: MessageReceivedEvent): MessageCreateAction =
@@ -34,6 +37,11 @@ class Messages {
         @CheckReturnValue
         fun quote(output: CharSequence, e: MessageReceivedEvent): MessageCreateAction =
             e.channel.sendMessage("> $output").setMessageReference(e.message)
+
+        @Contract("_, _ -> new")
+        @CheckReturnValue
+        fun quote(output: CharSequence, ch: TextChannel): MessageCreateAction =
+            ch.sendMessage("> $output")
 
         @Contract("_, _ -> new")
         @CheckReturnValue

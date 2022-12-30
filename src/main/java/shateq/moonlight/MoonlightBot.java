@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.dispatcher.Dispatcher;
+import shateq.moonlight.music.JukeboxManager;
 import shateq.moonlight.util.Orbit;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public final class MoonlightBot {
     public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
     private static MoonlightBot inst;
 
+    public final JukeboxManager jukeboxManager;
     public final ModuleChute moduleChute;
     public final Dispatcher dispatcher;
     public final JDA jda;
@@ -41,11 +43,13 @@ public final class MoonlightBot {
             .setChunkingFilter(ChunkingFilter.NONE)
             .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
             .disableCache(disabledCache)
+            .enableCache(EnumSet.of(VOICE_STATE))
             .addEventListeners(listener)
             .build().awaitReady();
         //should every guild have their own moduleChute?
         dispatcher = new Dispatcher();
         moduleChute = new ModuleChute();
+        jukeboxManager = new JukeboxManager();
     }
 
     public static void main(String[] args) {
@@ -74,6 +78,10 @@ public final class MoonlightBot {
 
     public static JDA jda() {
         return inst.jda;
+    }
+
+    public static JukeboxManager jukebox() {
+        return inst.jukeboxManager;
     }
 
     public static void shutdown(int code) {

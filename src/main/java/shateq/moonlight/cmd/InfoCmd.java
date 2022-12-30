@@ -10,9 +10,8 @@ import shateq.moonlight.util.Messages;
 
 import java.util.Date;
 
-@Order("info")
+@Order(value = "info", note = "A piece of information.")
 @Order.Aliases("explain")
-@Order.Explanation("Some information")
 public class InfoCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {

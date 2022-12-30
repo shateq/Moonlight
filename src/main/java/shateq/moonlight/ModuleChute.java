@@ -6,16 +6,14 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shateq.moonlight.cmd.funky.PlayCmd;
-import shateq.moonlight.cmd.funky.StopCmd;
 import shateq.moonlight.mod.Module;
 import shateq.moonlight.mod.*;
+import shateq.moonlight.music.Play;
+import shateq.moonlight.music.Playlist;
+import shateq.moonlight.music.Stop;
 import shateq.moonlight.util.Identifier;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static shateq.moonlight.mod.FakeModule.nothing;
 
@@ -35,10 +33,12 @@ public final class ModuleChute {
 
         List.of(
             FakeModule.built(new Identifier("Grunt", "core"), nothing()),
-            FakeModule.built(new Identifier("Muzyka", "music"), () -> {
-                MoonlightBot.dispatcher().register(PlayCmd.class);
-                MoonlightBot.dispatcher().register(StopCmd.class);
-            }),
+            FakeModule.built(new Identifier("Muzyka", "music"),
+                () -> Set.of(
+                    Play.class,
+                    Stop.class,
+                    Playlist.class
+                ).forEach(MoonlightBot.dispatcher()::register)),
             boost,
             fishing,
             detection,

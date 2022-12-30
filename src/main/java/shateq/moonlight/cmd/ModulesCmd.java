@@ -9,9 +9,8 @@ import shateq.moonlight.mod.Module;
 import shateq.moonlight.mod.ModuleStatus;
 import shateq.moonlight.util.Messages;
 
-@Order("modules")
+@Order(value = "modules", note = "List of modules.")
 @Order.Aliases({"module", "mods", "mod"})
-@Order.Explanation("List modules")
 public class ModulesCmd implements Command {
     @Override
     public void execute(@NotNull GuildContext c) {

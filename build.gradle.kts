@@ -22,12 +22,11 @@ dependencies {
 		exclude(module = "opus-java")
 	}
 	implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
-	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.1")
+	implementation("com.github.walkyst:lavaplayer-fork:1.3.99.2")
 
 	implementation("com.github.MinnDevelopment:jda-reactor:1.6.0")
 	implementation("io.projectreactor:reactor-core:3.5.1")
 
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	implementation("org.jetbrains:annotations:23.1.0")
 	//implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")
 	//implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
@@ -41,7 +40,6 @@ java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 tasks {
 	processResources {
 		filteringCharset = "UTF-8"
-		inputs.property("version", project.version)
 	}
 	withType<JavaCompile> {
 		options.encoding = "UTF-8"

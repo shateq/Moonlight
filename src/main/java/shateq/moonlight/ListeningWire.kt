@@ -38,7 +38,8 @@ class ListeningWire : ListenerAdapter() {
         val mono = Mono.create<Unit> {
             sayHelloOnJoin(guild)
         }
-        mono.delaySubscription(Duration.ofSeconds(10)).subscribe()
+        mono.delaySubscription(Duration.ofSeconds(10))
+            .subscribe()
     }
 
     private fun sayHelloOnJoin(guild: Guild) {
