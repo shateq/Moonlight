@@ -12,9 +12,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Guild-message command context
  */
-public record GuildContext(String[] args, MessageReceivedEvent event, User sender) {
+public record GuildContext(MessageReceivedEvent event, String[] args) {
     public @NotNull Guild guild() {
         return event.getGuild();
+    }
+
+    public @NotNull User sender() {
+        return event.getAuthor();
     }
 
     public Member member() {

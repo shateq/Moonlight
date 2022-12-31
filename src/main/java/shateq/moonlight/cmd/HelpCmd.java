@@ -1,43 +1,66 @@
 package shateq.moonlight.cmd;
 
-import org.jetbrains.annotations.Contract;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
+import shateq.moonlight.dispatcher.SlashContext;
 import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Messages;
+import shateq.moonlight.util.Orbit;
+import shateq.moonlight.util.Reply;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Order(value = "help", note = "Peek all of the commands.")
 @Order.Aliases({"h", "pomoc"})
 public class HelpCmd implements Command {
-    @Contract(pure = true)
-    public static @NotNull String code(String string) {
-        return "```" + string + "```\n";
-    }
-
     @Override
     public void execute(@NotNull GuildContext c) {
         if (c.args() == null || c.args().length == 0)
-            sortedView(c);
+            sortedView(
+                () -> Reply.A.just("Nie zarejestrowano żadnych komend.", c.event()).queue(),
+                embed -> Reply.A.embed(embed, c.event()).queue()
+            );
         else
-            explainedView(c);
+            detailedView(
+                c.args()[0],
+                () -> Reply.A.quote("Brak wyników.", c.event()).queue(),
+                embed -> Reply.A.embed(embed, c.event()).queue()
+            );
     }
 
-    private void explainedView(@NotNull GuildContext c) {
-        Command cmd = Dispatcher.getCommand(c.args()[0]);
+    @Override
+    public void slash(@NotNull SlashContext c) {
+        if (c.options().isEmpty() || c.options().size() == 0)
+            sortedView(
+                () -> c.event().reply("Nie zarejestrowano żadnych komend.").queue(),
+                embed -> c.event().replyEmbeds(embed).queue()
+            );
+        else if (c.event().getOption("search") == null) return;
+        detailedView(
+            c.event().getOption("search").getAsString(),
+            () -> c.event().reply("Brak wyników.").queue(),
+            embed -> c.event().replyEmbeds(embed).queue()
+        );
+    }
+
+    private void detailedView(String search, Runnable noData, @NotNull Consumer<MessageEmbed> send) {
+        Command cmd = Dispatcher.getCommand(search);
         if (cmd == null) {
-            Messages.Replies.quote("Brak wyników.", c.event()).queue();
+            noData.run();
             return;
         }
-        String name = Command.name(cmd), explanation = Command.explanation(cmd);
+
+        String name = Command.name(cmd),
+            explanation = Command.explanation(cmd),
+            group = Objects.requireNonNull(Command.group(cmd)).title;
 
         StringBuilder str = new StringBuilder();
         var aliases = Command.aliases(cmd);
@@ -47,24 +70,30 @@ public class HelpCmd implements Command {
                 str.append(" /").append(a);
             }
         }
+        var embed = Reply.A.coloredEmbed(true)
+            .setTitle("• " + name + str)
+            .setDescription(Orbit.code("example") + explanation)
+            .setFooter(group)
+            .build();
 
-        var embed = Messages.Replies.coloredEmbed(true).setTitle("• " + name + str).setDescription(code("example") + explanation).build();
-        Messages.Replies.embed(embed, c.event()).queue();
+        send.accept(embed);
     }
 
-    private void sortedView(@NotNull GuildContext c) {
+    private void sortedView(Runnable noData, @NotNull Consumer<MessageEmbed> send) {
         var commands = MoonlightBot.dispatcher().commands().values();
         if (commands.size() == 0) {
-            Messages.Replies.just("Nie zarejestrowano komend.", c.event()).queue();
+            noData.run();
             return;
         }
-        var embed = Messages.Replies.coloredEmbed(true).setTitle("• Pomoc (" + commands.size() + ")");
+        var embed = Reply.A.coloredEmbed(true)
+            .setTitle("• Pomoc (" + commands.stream().filter(it -> !Command.hidden(it)).toList().size() + ")");
 
         Arrays.stream(Category.values()).forEach(category -> {
             StringBuilder builder = new StringBuilder();
             Set<Command> group = new HashSet<>();
 
             commands.forEach(it -> {
+                if (Command.hidden(it)) return;
                 if (Objects.equals(Command.group(it), category))
                     group.add(it);
             });
@@ -73,7 +102,6 @@ public class HelpCmd implements Command {
             if (!builder.isEmpty())
                 embed.addField(category.title, builder.toString(), false);
         });
-
-        Messages.Replies.embed(embed.build(), c.event()).queue();
+        send.accept(embed.build());
     }
 }

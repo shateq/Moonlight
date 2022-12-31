@@ -35,7 +35,7 @@ public class FishingMod extends Module {
     @Order(value = "fish", group = Category.Fishing)
     static class FishingCmd implements Command {
         @Override
-        public void execute(@NotNull GuildContext c) throws Exception {
+        public void execute(@NotNull GuildContext c) {
             throw new NotImplementedError();
         }
     }

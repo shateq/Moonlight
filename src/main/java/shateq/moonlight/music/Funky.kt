@@ -4,7 +4,7 @@ import shateq.moonlight.MoonlightBot
 import shateq.moonlight.dispatcher.GuildContext
 import shateq.moonlight.dispatcher.api.Category
 import shateq.moonlight.dispatcher.api.Order
-import shateq.moonlight.util.Messages.Replies.just
+import shateq.moonlight.util.Reply.A.just
 
 /*
 join [id]v  - Joins a voice channel that has the provided name
@@ -47,15 +47,17 @@ class Playlist : MusicCommand {
     }
 }
 
-@Order(value = "stop", group = Category.Music, "Stop the music player.")
+@Order("stop", Category.Music, "Stop the music player.")
 @Order.Aliases(["leave"])
 class Stop : MusicCommand {
     override fun execute(c: GuildContext) {
         val self = c.event().guild.selfMember
         val selfVoiceState = self.voiceState
+
         if (selfConnected(c)) {
             return
         }
+
         val member = c.event().member
         val memberVoiceState = member!!.voiceState
 
@@ -63,24 +65,29 @@ class Stop : MusicCommand {
     }
 }
 
+@Order("skip", Category.Music, "Skip current or to the track.")
 class Skip : MusicCommand {
     override fun execute(c: GuildContext) {
         TODO("Not yet implemented")
     }
 }
 
+@Order("pause", Category.Music, "Pause the track.")
 class Pause : MusicCommand {
     override fun execute(c: GuildContext) {
         TODO()
     }
 }
 
+@Order("repeat", Category.Music, "Repeat current track or start da capo!")
 class Repeat : MusicCommand {
     override fun execute(c: GuildContext) {
         TODO("W trakcie")
     }
 }
 
+@Order("reset", Category.Music, "Destroy current playlist, clear etc.")
+@Order.Aliases(["destroy"])
 class Destroy : MusicCommand {
     override fun execute(c: GuildContext) {
         TODO("That one is a banger")

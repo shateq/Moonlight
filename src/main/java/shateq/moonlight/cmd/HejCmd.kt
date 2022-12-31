@@ -9,6 +9,7 @@ import shateq.moonlight.dispatcher.api.Order
 
 @Order("hej", note = "List powitalny.")
 @Order.Aliases(["hei", "moi"])
+@Order.Hidden //usage
 class HejCmd : Command {
     override fun execute(c: GuildContext) {
         c.event.channel.send(hello(c.guild())).queue()
@@ -16,7 +17,13 @@ class HejCmd : Command {
 
     fun hello(guild: Guild): String {
         val perms = guild.selfMember.permissions.contains(Permission.ADMINISTRATOR)
-        return "> Jestli to ${guild.name}?!\nSerdeczne życzenia zdrowia i pomyślności.\n" +
-            "**Spełnianie wymagań?** `$perms`. (Aplikacja wymaga uprawnień ADMINISTRATORA do poprawnego działania.)"
+        val lang = guild.locale.nativeName
+        return """
+            > Jestli to ${guild.name}?! Życzenia zdrowia i pomyślności.
+            Język tego serwera to być może $lang.
+            
+            Pewnie się dogadamy, `->modules`.
+            **Czy aplikacja będzie poprawnie działać?** `$perms` (Aplikacja wymaga uprawnień ADMINISTRATORA)"
+        """.trimIndent()
     }
 }

@@ -13,8 +13,9 @@ import shateq.moonlight.MoonlightBot
 /**
  * Common methods across the project
  */
-class Messages {
-    companion object Replies {
+class Reply {
+    // TODO REFACTOR
+    companion object A {
         fun authoredEmbed(author: User, normal: Boolean): EmbedBuilder =
             EmbedBuilder()
                 .dye(normal)

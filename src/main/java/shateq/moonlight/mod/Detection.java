@@ -59,7 +59,7 @@ public class Detection extends Module {
 
         public final Pattern pattern;
 
-        Site(final Pattern pattern) {
+        Site(Pattern pattern) {
             this.pattern = pattern;
         }
     }

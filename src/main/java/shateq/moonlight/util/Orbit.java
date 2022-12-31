@@ -1,5 +1,6 @@
 package shateq.moonlight.util;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +20,14 @@ public final class Orbit {
      */
     public static boolean complainsURL(String string) {
         return urlPattern.matcher(string).find();
+    }
+
+    /**
+     * @param string String to be searched
+     * @return true if string contains Discord Tag
+     */
+    public static boolean complainsDiscordTag(String string) {
+        return discordTag.matcher(string).find();
     }
 
     /**
@@ -56,5 +65,14 @@ public final class Orbit {
     public static @NotNull String simpleDateFormat(Date date, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
+    }
+
+    /**
+     * @param string Content
+     * @return Wrapped String
+     */
+    @Contract(pure = true)
+    public static @NotNull String code(String string) {
+        return "```" + string + "```\n";
     }
 }

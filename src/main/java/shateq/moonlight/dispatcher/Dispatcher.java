@@ -17,7 +17,7 @@ import shateq.moonlight.cmd.*;
 import shateq.moonlight.dispatcher.api.ArgumentException;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Messages;
+import shateq.moonlight.util.Reply;
 import shateq.moonlight.util.Orbit;
 
 import java.util.*;
@@ -34,22 +34,14 @@ public final class Dispatcher {
 
     public Dispatcher() {
         log.info("Loading COMMANDS...");
+        List.of(new PingCmd(), new ModulesCmd(), new HelpCmd(), new InfoCmd(), new HejCmd()).forEach(this::register);
 
-        MoonlightBot.jda().updateCommands()
-            .addCommands(COMMAND_DATA)
-            .addCommands(
-                Commands.slash("welp", "Reply back with options.")
-                    .addOption(OptionType.BOOLEAN, "panic", "Whether to panic", false)
-            )
-            .queue();
-
-        List.of(
-            new PingCmd(),
-            new ModulesCmd(),
-            new HelpCmd(),
-            new InfoCmd(),
-            new HejCmd()
-        ).forEach(this::register);
+        MoonlightBot.jda().updateCommands().addCommands(COMMAND_DATA).addCommands(
+            Commands.slash("help", "Peek other commands")
+                .addOption(OptionType.STRING, "search", "Search for a command to be detailed.")
+                .setGuildOnly(true),
+            Commands.slash("info", "Some information.").setGuildOnly(true)
+        ).complete();
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
 
@@ -59,9 +51,23 @@ public final class Dispatcher {
      * @param event Slash Command Interaction
      */
     public static void slash(@NotNull SlashCommandInteractionEvent event) {
-        if (event.getInteraction().getName().equals("welp")) {
-            event.getInteraction().reply("Here is it!").setEphemeral(true).queue();
-        }
+        if (!event.isFromGuild()) return;
+        var cmd = getCommand(event.getName());
+
+        // TODO simplify
+        if (cmd != null)
+            try {
+                SlashContext context = new SlashContext(event);
+                cmd.slash(context);
+            } catch (NotImplementedError ie) {
+                var out = "Operacja nie została zaimplementowana! ";
+                if (ie.getMessage() != null) out += ie.getMessage();
+
+                event.getInteraction().reply(out).queue();
+            } catch (Exception e) {
+                event.getInteraction().reply("💀").queue();
+                log.error(e.toString());
+            }
     }
 
     /**
@@ -74,8 +80,7 @@ public final class Dispatcher {
         if (!label.startsWith(MoonlightBot.Const.PREFIX)) return; // PREFIX FIRST
 
         var quote = Pattern.quote(MoonlightBot.Const.PREFIX);
-        String[] arguments = label.replaceFirst("(?i)" + quote, "")
-            .trim().split("\\s+");
+        String[] arguments = label.replaceFirst("(?i)" + quote, "").trim().split("\\s+");
 
         String name = arguments[0];
         if (name.isBlank()) return; //no annoying 'this'
@@ -84,7 +89,7 @@ public final class Dispatcher {
         if (cmd != null) {
             execute(cmd, Arrays.copyOfRange(arguments, 1, arguments.length), event);
         } else {
-            Messages.Replies.just("`" + name + "` : brak wyników. Użyj sobie `->h`.", event).queue();
+            Reply.A.just("`" + name + "` : brak wyników. Użyj sobie `->h`.", event).queue();
         }
     }
 
@@ -94,19 +99,19 @@ public final class Dispatcher {
      * @param event Context root
      */
     public static void execute(Command cmd, String[] args, @NotNull MessageReceivedEvent event) {
-        GuildContext context = new GuildContext(args, event, event.getAuthor());
-        //Member self = event.getGuild().getSelfMember();
+        GuildContext context = new GuildContext(event, args);
         try {
-            cmd.execute(context);
+            cmd.execute(context); //the thing
         } catch (NotImplementedError ie) {
             var out = "Operacja nie została zaimplementowana! ";
-            if (ie.getMessage() != null) out += ie.getMessage();
+            if (ie.getMessage() != null)
+                out += ie.getMessage();
 
-            Messages.Replies.reference(out, event).queue();
+            Reply.A.reference(out, event).queue();
         } catch (ArgumentException ae) {
-            Messages.Replies.just(ae.getMessage(), event).queue();
+            Reply.A.just(ae.getMessage(), event).queue();
         } catch (Exception e) {
-            Messages.Replies.skull(event);
+            Reply.A.skull(event);
             log.error(e.toString());
         }
     }
@@ -146,6 +151,10 @@ public final class Dispatcher {
         return COMMANDS.get(name.value());
     }
 
+    public @NotNull @UnmodifiableView List<net.dv8tion.jda.api.interactions.commands.Command> interactions() {
+        return MoonlightBot.jda().retrieveCommands().complete();
+    }
+
     /**
      * @return Name-command map
      */
@@ -173,6 +182,7 @@ public final class Dispatcher {
             log.error("Command {} could not be registered. MISSING ANNOTATION METADATA!", command);
             return;
         }
+
         var aliasList = clazz.getDeclaredAnnotation(Order.Aliases.class);
 
         COMMANDS.putIfAbsent(name.value(), command);
