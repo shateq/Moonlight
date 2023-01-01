@@ -37,6 +37,6 @@ public class InfoCmd implements Command {
 
     @Override
     public void slash(@NotNull SlashContext c) {
-        c.interaction().replyEmbeds(information()).queue();
+        c.source().replyEmbeds(information()).queue();
     }
 }

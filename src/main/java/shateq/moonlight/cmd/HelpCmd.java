@@ -29,7 +29,7 @@ public class HelpCmd implements Command {
                 embed -> Reply.A.embed(embed, c.event()).queue()
             );
         else
-            detailedView(
+            detailedView( //TODO THIS IS SO BAD
                 c.args()[0],
                 () -> Reply.A.quote("Brak wyników.", c.event()).queue(),
                 embed -> Reply.A.embed(embed, c.event()).queue()
@@ -38,6 +38,7 @@ public class HelpCmd implements Command {
 
     @Override
     public void slash(@NotNull SlashContext c) {
+        // TODO IT IS ALSO SO BAD
         if (c.options().isEmpty() || c.options().size() == 0)
             sortedView(
                 () -> c.event().reply("Nie zarejestrowano żadnych komend.").queue(),
@@ -60,7 +61,7 @@ public class HelpCmd implements Command {
 
         String name = Command.name(cmd),
             explanation = Command.explanation(cmd),
-            group = Objects.requireNonNull(Command.group(cmd)).title;
+            group = Objects.requireNonNull(Command.group(cmd)).getTitle();
 
         StringBuilder str = new StringBuilder();
         var aliases = Command.aliases(cmd);
@@ -100,7 +101,7 @@ public class HelpCmd implements Command {
 
             group.forEach(command -> builder.append("`").append(Command.name(command)).append("` "));
             if (!builder.isEmpty())
-                embed.addField(category.title, builder.toString(), false);
+                embed.addField(category.getTitle(), builder.toString(), false);
         });
         send.accept(embed.build());
     }

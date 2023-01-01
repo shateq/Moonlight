@@ -27,11 +27,11 @@ class ListeningWire : ListenerAdapter() {
         }
 
         if (event.isFromGuild) {
-            Dispatcher.process(event)
+            Dispatcher.processText(event)
         }
     }
 
-    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = Dispatcher.slash(event)
+    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = Dispatcher.processSlash(event)
 
     override fun onGuildJoin(event: GuildJoinEvent) {
         val guild = event.guild

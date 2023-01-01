@@ -57,6 +57,7 @@ public final class MoonlightBot {
         if (Orbit.env("bot_token") != null) System.setProperty("bot_token", Orbit.env("bot_token"));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> LOGGER.error("Uncaught exception in thread {}", t.getName(), e));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(0)));
         try {
             new MoonlightBot(new ListeningWire());
         } catch (Exception e) {

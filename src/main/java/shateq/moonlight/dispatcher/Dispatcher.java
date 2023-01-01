@@ -16,9 +16,10 @@ import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.cmd.*;
 import shateq.moonlight.dispatcher.api.ArgumentException;
 import shateq.moonlight.dispatcher.api.Command;
+import shateq.moonlight.dispatcher.api.CommandContext;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Reply;
 import shateq.moonlight.util.Orbit;
+import shateq.moonlight.util.Reply;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -46,15 +47,15 @@ public final class Dispatcher {
     }
 
     /**
-     * Receive a slash command
+     * Process interaction
      *
      * @param event Slash Command Interaction
      */
-    public static void slash(@NotNull SlashCommandInteractionEvent event) {
+    public static void processSlash(@NotNull SlashCommandInteractionEvent event) {
         if (!event.isFromGuild()) return;
+
         var cmd = getCommand(event.getName());
 
-        // TODO simplify
         if (cmd != null)
             try {
                 SlashContext context = new SlashContext(event);
@@ -71,58 +72,48 @@ public final class Dispatcher {
     }
 
     /**
-     * Process a command
+     * Process text
      *
-     * @param event ReceivedEvent
+     * @param event MessageReceivedEvent from the event listener
      */
-    public static void process(@NotNull MessageReceivedEvent event) {
+    public static void processText(@NotNull MessageReceivedEvent event) {
         String label = event.getMessage().getContentRaw().trim();
-        if (!label.startsWith(MoonlightBot.Const.PREFIX)) return; // PREFIX FIRST
+        if (!label.startsWith(MoonlightBot.Const.PREFIX)) return; //PREFIX FIRST
 
         var quote = Pattern.quote(MoonlightBot.Const.PREFIX);
         String[] arguments = label.replaceFirst("(?i)" + quote, "").trim().split("\\s+");
 
         String name = arguments[0];
-        if (name.isBlank()) return; //no annoying 'this'
+        if (name.isBlank()) return; //no annoying 'that'
 
         Command cmd = getCommand(name);
         if (cmd != null) {
-            execute(cmd, Arrays.copyOfRange(arguments, 1, arguments.length), event);
+            var guildContext = new GuildContext(event, Arrays.copyOfRange(arguments, 1, arguments.length));
+            execute(cmd, guildContext);
         } else {
             Reply.A.just("`" + name + "` : brak wyników. Użyj sobie `->h`.", event).queue();
         }
     }
 
-    /**
-     * Execute and pass context
-     *
-     * @param event Context root
-     */
-    public static void execute(Command cmd, String[] args, @NotNull MessageReceivedEvent event) {
-        GuildContext context = new GuildContext(event, args);
+    public static void execute(Command cmd, CommandContext<?, ?> context) {
         try {
-            cmd.execute(context); //the thing
+            if (context instanceof GuildContext guild) {
+                cmd.execute(guild); //the thing
+            } else if (context instanceof SlashContext slash) {
+                cmd.slash(slash);
+            }
         } catch (NotImplementedError ie) {
             var out = "Operacja nie została zaimplementowana! ";
             if (ie.getMessage() != null)
                 out += ie.getMessage();
-
-            Reply.A.reference(out, event).queue();
+            // HOW TO FEEDBACK IF 2 CONTEXT?
+            //Reply.A.reference(out, context.event()).queue();
         } catch (ArgumentException ae) {
-            Reply.A.just(ae.getMessage(), event).queue();
+            //Reply.A.just(ae.getMessage(), event).queue();
         } catch (Exception e) {
-            Reply.A.skull(event);
+            //Reply.A.skull(event);
             log.error(e.toString());
         }
-    }
-
-    /**
-     * Use the static {@code execute}, no need to specify new empty string array
-     *
-     * @param event Context root
-     */
-    public static void executeNoArgs(Command cmd, @NotNull MessageReceivedEvent event) {
-        execute(cmd, new String[]{}, event);
     }
 
     /**

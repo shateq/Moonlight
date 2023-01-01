@@ -16,8 +16,7 @@ public final class FakeModule extends Module {
     }
 
     public static @NotNull Module off(Identifier id) {
-        return new FakeModule(id, ModuleStatus.OFF, () -> {
-        });
+        return new FakeModule(id, ModuleStatus.OFF, nothing());
     }
 
     @Contract(pure = true)

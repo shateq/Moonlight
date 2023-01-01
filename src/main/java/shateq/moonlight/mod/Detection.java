@@ -1,14 +1,13 @@
 package shateq.moonlight.mod;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import shateq.moonlight.util.Identifier;
 import shateq.moonlight.util.Orbit;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Detection extends Module {
@@ -19,48 +18,42 @@ public class Detection extends Module {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent e) {
         Message msg = e.getMessage();
-
         if (Orbit.complainsURL(msg.getContentDisplay())) {
-            final Site found = matching(msg.getContentDisplay());
-            if (found == null) return;
-            switch (found) {
-                case YouTube -> msg.addReaction(Emoji.fromCustom("yt", 838741674598465586L, false)); //msg.addReaction("yt:").queue();
-                case Spotify -> msg.addReaction(Emoji.fromCustom("sp", 838741674591125504L, false)).queue();
-                case Reddit -> msg.addReaction(Emoji.fromCustom("rd", 838741674628743209L, false)).queue();
-                case Discord -> msg.addReaction(Emoji.fromCustom("dc", 838735948124651550L, false)).queue();
-            }
+            Site target = match(msg.getContentDisplay());
+            if (target == Site.Other) return;
+
+            target.react(msg);
         }
     }
 
-    private @Nullable Site matching(String link) {
-        Matcher yt = Site.YouTube.pattern.matcher(link), sp = Site.Spotify.pattern.matcher(link),
-            rd = Site.Reddit.pattern.matcher(link), dc = Site.Discord.pattern.matcher(link);
-
-        if (yt.find()) {
-            return Site.YouTube;
-        }
-        if (sp.find()) {
-            return Site.Spotify;
-        }
-        if (rd.find()) {
-            return Site.Reddit;
-        }
-        if (dc.find()) {
-            return Site.Discord;
-        }
-        return null;
+    private @NotNull Site match(String link) {
+        for (Site site : Site.values())
+            if (site.getPattern().matcher(link).find())
+                return site;
+        return Site.Other;
     }
 
-    enum Site {
-        YouTube(Pattern.compile("(?:https?:\\/\\/)?(?:(?:www\\.?)?youtube\\.com)|(?:youtu\\.be(\\/.*)?)")),
-        Spotify(Pattern.compile("(?:https?:\\/\\/)?(open.|play.)spotify.com")),
-        Reddit(Pattern.compile("(?:https?:\\/\\/)?(?:www\\.)?(redd(it.com|.it))")),
-        Discord(Pattern.compile("(?:https?:\\/\\/)?(discord(?:app)?\\.com)"));
+    public enum Site {
+        YouTube(Pattern.compile("(?:https?:\\/\\/)?(?:(?:www\\.?)?youtube\\.com)|(?:youtu\\.be(\\/.*)?)"), Emoji.fromCustom("yt", 838741674598465586L, false)),
+        Spotify(Pattern.compile("(?:https?:\\/\\/)?(open.|play.)spotify.com"), Emoji.fromCustom("sp", 838741674591125504L, false)),
+        Reddit(Pattern.compile("(?:https?:\\/\\/)?(?:www\\.)?(redd(it.com|.it))"), Emoji.fromCustom("rd", 838741674628743209L, false)),
+        Discord(Pattern.compile("(?:https?:\\/\\/)?(discord(?:app)?\\.com)"), Emoji.fromCustom("dc", 838735948124651550L, false)),
+        Other(null, null);
 
-        public final Pattern pattern;
+        private final Pattern pattern;
+        private final CustomEmoji emoji;
 
-        Site(Pattern pattern) {
+        Site(Pattern pattern, CustomEmoji emoji) {
             this.pattern = pattern;
+            this.emoji = emoji;
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+
+        public void react(@NotNull Message msg) {
+            msg.addReaction(this.emoji).queue();
         }
     }
 }

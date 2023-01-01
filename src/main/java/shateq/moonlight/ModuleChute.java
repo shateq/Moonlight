@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.mod.Module;
 import shateq.moonlight.mod.*;
-import shateq.moonlight.music.Play;
-import shateq.moonlight.music.Playlist;
-import shateq.moonlight.music.Stop;
+import shateq.moonlight.music.*;
 import shateq.moonlight.util.Identifier;
 
 import java.util.*;
@@ -35,9 +33,10 @@ public final class ModuleChute {
             FakeModule.built(new Identifier("Grunt", "core"), nothing()),
             FakeModule.built(new Identifier("Muzyka", "music"),
                 () -> Set.of(
-                    Play.class,
-                    Stop.class,
-                    Playlist.class
+                    Play.class, Stop.class,
+                    Pause.class, Playlist.class,
+                    Skip.class, Repeat.class,
+                    Destroy.class
                 ).forEach(MoonlightBot.dispatcher()::register)),
             boost,
             fishing,

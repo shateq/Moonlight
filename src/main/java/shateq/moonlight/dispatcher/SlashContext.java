@@ -7,28 +7,33 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.dispatcher.api.CommandContext;
 
 import java.util.List;
 import java.util.Objects;
 
-public record SlashContext(SlashCommandInteractionEvent event) {
+public record SlashContext(SlashCommandInteractionEvent event) implements CommandContext<SlashCommandInteraction, SlashCommandInteractionEvent> {
+    @Override
+    public @NotNull JDA jda() {
+        return event.getJDA();
+    }
+
+    @Override
     public @NotNull Guild guild() {
         return Objects.requireNonNull(event.getGuild());
     }
 
+    @Override
+    public @NotNull SlashCommandInteraction source() {
+        return event.getInteraction();
+    }
+
+    @Override
     public @NotNull User sender() {
         return event.getUser();
     }
 
     public @NotNull List<OptionMapping> options() {
         return event.getOptions();
-    }
-
-    public @NotNull SlashCommandInteraction interaction() {
-        return event.getInteraction();
-    }
-
-    public @NotNull JDA jda() {
-        return event.getJDA();
     }
 }

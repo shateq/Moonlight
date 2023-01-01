@@ -15,7 +15,7 @@ import static net.dv8tion.jda.api.interactions.DiscordLocale.*;
  * Localization per guild {@see net.dv8tion.jda.api.interactions.DiscordLocale}
  */
 public class L10n {
-    public static DiscordLocale FALLBACK = ENGLISH_US;
+    public static final DiscordLocale FALLBACK = ENGLISH_US;
 
     @Contract(pure = true)
     public static @NotNull String literal(String key, DiscordLocale locale) {

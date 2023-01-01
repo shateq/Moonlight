@@ -11,8 +11,7 @@ import java.util.regex.Pattern;
  * Utilities of the utilities
  */
 public final class Orbit {
-    public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)"),
-        discordTag = Pattern.compile("/([a-zA-Z])+(#)\\d\\d\\d\\d$/g");
+    public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)");
 
     /**
      * @param string String to be searched
@@ -20,14 +19,6 @@ public final class Orbit {
      */
     public static boolean complainsURL(String string) {
         return urlPattern.matcher(string).find();
-    }
-
-    /**
-     * @param string String to be searched
-     * @return true if string contains Discord Tag
-     */
-    public static boolean complainsDiscordTag(String string) {
-        return discordTag.matcher(string).find();
     }
 
     /**
@@ -53,6 +44,14 @@ public final class Orbit {
         } catch (Exception e) {
             throw new IllegalArgumentException("Unable to instantiate " + clazz, e);
         }
+    }
+
+    /**
+     * @return Empty String array
+     */
+    @Contract(value = " -> new", pure = true)
+    public static String @NotNull [] noArgs() {
+        return new String[]{};
     }
 
     /**

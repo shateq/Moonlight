@@ -8,13 +8,24 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.dispatcher.api.CommandContext;
 
 /**
  * Guild-message command context
  */
-public record GuildContext(MessageReceivedEvent event, String[] args) {
+public record GuildContext(MessageReceivedEvent event, String[] args) implements CommandContext<Message, MessageReceivedEvent> {
+    @Override
+    public @NotNull JDA jda() {
+        return event.getJDA();
+    }
+
     public @NotNull Guild guild() {
         return event.getGuild();
+    }
+
+    @Override
+    public @NotNull Message source() {
+        return event.getMessage();
     }
 
     public @NotNull User sender() {
@@ -25,15 +36,7 @@ public record GuildContext(MessageReceivedEvent event, String[] args) {
         return event.getMember();
     }
 
-    public @NotNull Message message() {
-        return event.getMessage();
-    }
-
     public @NotNull TextChannel channel() {
         return event.getGuildChannel().asTextChannel();
-    }
-
-    public @NotNull JDA jda() {
-        return event.getJDA();
     }
 }
