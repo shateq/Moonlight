@@ -39,4 +39,9 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     public @NotNull TextChannel channel() {
         return event.getGuildChannel().asTextChannel();
     }
+
+    @Override
+    public void reply(@NotNull String feedback) {
+        source().reply(feedback).queue();
+    }
 }

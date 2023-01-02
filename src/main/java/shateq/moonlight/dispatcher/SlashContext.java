@@ -36,4 +36,9 @@ public record SlashContext(SlashCommandInteractionEvent event) implements Comman
     public @NotNull List<OptionMapping> options() {
         return event.getOptions();
     }
+
+    @Override
+    public void reply(@NotNull String feedback) {
+        source().reply(feedback).queue();
+    }
 }

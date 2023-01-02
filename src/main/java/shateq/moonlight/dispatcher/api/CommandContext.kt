@@ -18,7 +18,7 @@ interface CommandContext<S, E : Event> {
     /**
      * JDA instance
      */
-    fun jda(): JDA = event().jda
+    fun jda(): JDA
     /**
      * A place for the event
      */
@@ -34,4 +34,9 @@ interface CommandContext<S, E : Event> {
      * Invoker, your problem
      */
     fun sender(): User
+
+    /**
+     * Queue a MessageCreateAction
+     */
+    fun reply(feedback: String) {}
 }

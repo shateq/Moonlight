@@ -10,7 +10,7 @@ import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Orbit;
-import shateq.moonlight.util.Reply;
+import shateq.moonlight.util.Embedded;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,26 +25,28 @@ public class HelpCmd implements Command {
     public void execute(@NotNull GuildContext c) {
         if (c.args() == null || c.args().length == 0)
             sortedView(
-                () -> Reply.A.just("Nie zarejestrowano żadnych komend.", c.event()).queue(),
-                embed -> Reply.A.embed(embed, c.event()).queue()
+                () -> c.source().reply("Nie zarejestrowano żadnych komend.").queue(),
+                embed -> c.source().replyEmbeds(embed).queue()
             );
         else
             detailedView( //TODO THIS IS SO BAD
                 c.args()[0],
-                () -> Reply.A.quote("Brak wyników.", c.event()).queue(),
-                embed -> Reply.A.embed(embed, c.event()).queue()
+                () -> c.source().reply("> Brak wyników.").queue(),
+                embed -> c.source().replyEmbeds(embed).queue()
             );
     }
 
     @Override
     public void slash(@NotNull SlashContext c) {
         // TODO IT IS ALSO SO BAD
-        if (c.options().isEmpty() || c.options().size() == 0)
+        if (c.options().isEmpty() || c.options().size() == 0) {
             sortedView(
                 () -> c.event().reply("Nie zarejestrowano żadnych komend.").queue(),
                 embed -> c.event().replyEmbeds(embed).queue()
             );
-        else if (c.event().getOption("search") == null) return;
+            return;
+        } else if (c.event().getOption("search") == null) return;
+
         detailedView(
             c.event().getOption("search").getAsString(),
             () -> c.event().reply("Brak wyników.").queue(),
@@ -71,7 +73,7 @@ public class HelpCmd implements Command {
                 str.append(" /").append(a);
             }
         }
-        var embed = Reply.A.coloredEmbed(true)
+        var embed = Embedded.A.coloredEmbed(true)
             .setTitle("• " + name + str)
             .setDescription(Orbit.code("example") + explanation)
             .setFooter(group)
@@ -86,7 +88,7 @@ public class HelpCmd implements Command {
             noData.run();
             return;
         }
-        var embed = Reply.A.coloredEmbed(true)
+        var embed = Embedded.A.coloredEmbed(true)
             .setTitle("• Pomoc (" + commands.stream().filter(it -> !Command.hidden(it)).toList().size() + ")");
 
         Arrays.stream(Category.values()).forEach(category -> {

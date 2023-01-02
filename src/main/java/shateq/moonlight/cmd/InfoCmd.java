@@ -8,7 +8,7 @@ import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Orbit;
-import shateq.moonlight.util.Reply;
+import shateq.moonlight.util.Embedded;
 
 import java.util.Date;
 
@@ -19,7 +19,7 @@ public class InfoCmd implements Command {
         String data = Orbit.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
 
-        var embed = Reply.A.authoredEmbed(MoonlightBot.jda().getSelfUser(), true)
+        var embed = Embedded.A.authoredEmbed(MoonlightBot.jda().getSelfUser(), true)
             .setDescription("Dzień dobry! Jestem tu by zaimplementować autorskie wymysły. " +
                 "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Const.GITHUB_URL + ")\n\n" +
                 "• Wpisz `" + MoonlightBot.Const.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
@@ -32,7 +32,7 @@ public class InfoCmd implements Command {
 
     @Override
     public void execute(@NotNull GuildContext c) {
-        Reply.A.embed(information(), c.event()).queue();
+        c.source().replyEmbeds(information()).queue();
     }
 
     @Override

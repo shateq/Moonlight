@@ -12,7 +12,9 @@ import shateq.moonlight.dispatcher.api.Order
 @Order.Hidden //usage
 class HejCmd : Command {
     override fun execute(c: GuildContext) {
-        c.event.channel.send(hello(c.guild())).queue()
+        c.channel().send(
+            hello(c.guild())
+        ).queue()
     }
 
     fun hello(guild: Guild): String {
@@ -22,7 +24,7 @@ class HejCmd : Command {
             > Jestli to ${guild.name}?! Życzenia zdrowia i pomyślności.
             Język tego serwera to być może $lang.
             
-            Pewnie się dogadamy, `->modules`.
+            Pewnie się dogadamy, `->modules` to zestaw funkcji dla danego serwera.
             **Czy aplikacja będzie poprawnie działać?** `$perms` (Aplikacja wymaga uprawnień ADMINISTRATORA)"
         """.trimIndent()
     }

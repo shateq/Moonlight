@@ -18,8 +18,8 @@ import shateq.moonlight.dispatcher.api.ArgumentException;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
 import shateq.moonlight.dispatcher.api.Order;
+import shateq.moonlight.util.Embedded;
 import shateq.moonlight.util.Orbit;
-import shateq.moonlight.util.Reply;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -41,7 +41,8 @@ public final class Dispatcher {
             Commands.slash("help", "Peek other commands")
                 .addOption(OptionType.STRING, "search", "Search for a command to be detailed.")
                 .setGuildOnly(true),
-            Commands.slash("info", "Some information.").setGuildOnly(true)
+            Commands.slash("info", "Some information."),
+            Commands.slash("modules", "Are systems operational?").setGuildOnly(true)
         ).complete();
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
     }
@@ -53,22 +54,12 @@ public final class Dispatcher {
      */
     public static void processSlash(@NotNull SlashCommandInteractionEvent event) {
         if (!event.isFromGuild()) return;
-
         var cmd = getCommand(event.getName());
 
-        if (cmd != null)
-            try {
-                SlashContext context = new SlashContext(event);
-                cmd.slash(context);
-            } catch (NotImplementedError ie) {
-                var out = "Operacja nie została zaimplementowana! ";
-                if (ie.getMessage() != null) out += ie.getMessage();
-
-                event.getInteraction().reply(out).queue();
-            } catch (Exception e) {
-                event.getInteraction().reply("💀").queue();
-                log.error(e.toString());
-            }
+        if (cmd != null) {
+            var context = new SlashContext(event);
+            execute(cmd, context);
+        }
     }
 
     /**
@@ -91,7 +82,7 @@ public final class Dispatcher {
             var guildContext = new GuildContext(event, Arrays.copyOfRange(arguments, 1, arguments.length));
             execute(cmd, guildContext);
         } else {
-            Reply.A.just("`" + name + "` : brak wyników. Użyj sobie `->h`.", event).queue();
+            event.getMessage().reply("`" + name + "` : brak wyników. Użyj sobie `->h`.").queue();
         }
     }
 
@@ -104,14 +95,13 @@ public final class Dispatcher {
             }
         } catch (NotImplementedError ie) {
             var out = "Operacja nie została zaimplementowana! ";
-            if (ie.getMessage() != null)
-                out += ie.getMessage();
-            // HOW TO FEEDBACK IF 2 CONTEXT?
-            //Reply.A.reference(out, context.event()).queue();
+            if (ie.getMessage() != null) out += ie.getMessage();
+
+            context.reply(out);
         } catch (ArgumentException ae) {
-            //Reply.A.just(ae.getMessage(), event).queue();
+            context.reply(ae.getMessage());
         } catch (Exception e) {
-            //Reply.A.skull(event);
+            context.reply(Embedded.A.skull());
             log.error(e.toString());
         }
     }

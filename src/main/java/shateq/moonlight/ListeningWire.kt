@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import reactor.core.publisher.Mono
 import shateq.moonlight.cmd.HejCmd
 import shateq.moonlight.dispatcher.Dispatcher
-import shateq.moonlight.util.Reply
+import shateq.moonlight.util.Embedded
 import java.time.Duration
 import java.util.concurrent.ThreadLocalRandom
 
@@ -22,7 +22,7 @@ class ListeningWire : ListenerAdapter() {
         if (message.mentions.users.contains(event.jda.selfUser)) {
             val vowels = charArrayOf('a', 'e', 'i', 'o', 'u', 'y')
             val pong = "P" + vowels[ThreadLocalRandom.current().nextInt(vowels.size)] + "ng!"
-            Reply.reference("$pong Try typing `${MoonlightBot.Const.PREFIX} h`", event).queue()
+            event.message.reply("$pong Try typing `${MoonlightBot.Const.PREFIX} h`").setMessageReference(event.message).queue()
             return
         }
 

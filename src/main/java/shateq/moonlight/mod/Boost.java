@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 import shateq.moonlight.ModuleChute;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.util.Identifier;
-import shateq.moonlight.util.Reply;
 
 public class Boost extends Module {
     public Boost(Identifier id, ModuleStatus status) {
@@ -23,7 +22,7 @@ public class Boost extends Module {
                 ModuleChute.coverage.warn("Boost logs channel incorrectly configured, maybe the module should be disabled?");
                 return;
             }
-            Reply.A.quote(output, channel).queue();
+            channel.sendMessage(output).queue();
         }
     }
 

@@ -4,7 +4,6 @@ import shateq.moonlight.MoonlightBot
 import shateq.moonlight.dispatcher.GuildContext
 import shateq.moonlight.dispatcher.api.Category
 import shateq.moonlight.dispatcher.api.Order
-import shateq.moonlight.util.Reply.A.just
 
 /*
 join [id]v  - Joins a voice channel that has the provided name
@@ -34,7 +33,7 @@ class Play : MusicCommand {
 //            return;
 //        }
         MoonlightBot.jukebox().loadAndPlay(c.channel(), "https://www.youtube.com/watch?v=GHMjD0Lp5DY")
-        just("Fire!", c.event()).queue()
+        c.source().reply("Fire!").queue()
     }
 }
 
