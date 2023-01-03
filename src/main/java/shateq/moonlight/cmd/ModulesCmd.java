@@ -1,8 +1,10 @@
 package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
+import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
@@ -14,6 +16,10 @@ import shateq.moonlight.util.Embedded;
 @Order(value = "modules", note = "List of modules.")
 @Order.Aliases({"module", "mods", "mod"})
 public class ModulesCmd implements Command {
+    public ModulesCmd() {
+        Dispatcher.upsertCommandData(Commands.slash("modules", "Are systems operational?").setGuildOnly(true));
+    }
+
     @Override
     public void execute(@NotNull GuildContext c) {
         c.source().replyEmbeds(systems(c)).queue();

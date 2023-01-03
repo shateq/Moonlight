@@ -1,6 +1,8 @@
 package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Dispatcher;
@@ -9,8 +11,8 @@ import shateq.moonlight.dispatcher.SlashContext;
 import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Orbit;
 import shateq.moonlight.util.Embedded;
+import shateq.moonlight.util.Orbit;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,6 +23,13 @@ import java.util.function.Consumer;
 @Order(value = "help", note = "Peek all of the commands.")
 @Order.Aliases({"h", "pomoc"})
 public class HelpCmd implements Command {
+    public HelpCmd() {
+        Dispatcher.upsertCommandData(Commands.slash("help", "Peek other commands")
+            .addOption(OptionType.STRING, "search", "Search for a command to be detailed.")
+            .setGuildOnly(true)
+        );
+    }
+
     @Override
     public void execute(@NotNull GuildContext c) {
         if (c.args() == null || c.args().length == 0)

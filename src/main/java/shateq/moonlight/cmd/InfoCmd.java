@@ -1,20 +1,26 @@
 package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
+import shateq.moonlight.dispatcher.Dispatcher;
+import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.SlashContext;
 import shateq.moonlight.dispatcher.api.Command;
-import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Orbit;
 import shateq.moonlight.util.Embedded;
+import shateq.moonlight.util.Orbit;
 
 import java.util.Date;
 
 @Order(value = "info", note = "A piece of information.")
 @Order.Aliases("explain")
 public class InfoCmd implements Command {
+    public InfoCmd() {
+        Dispatcher.upsertCommandData(Commands.slash("info", "Some information."));
+    }
+
     public MessageEmbed information() {
         String data = Orbit.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;

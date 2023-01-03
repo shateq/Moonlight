@@ -11,7 +11,7 @@ import shateq.moonlight.dispatcher.SlashContext;
 import java.util.List;
 
 /**
- * Command abstraction
+ * Command abstraction, constructor may be used as other metadata.
  */
 public interface Command {
     @Contract(pure = true)

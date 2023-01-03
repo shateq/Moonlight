@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  */
 public final class Orbit {
     public static final Pattern urlPattern = Pattern.compile("((?:https?:\\/\\/)?(?:www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)");
+    public static final String skull = "\uD83D\uDC80";
 
     /**
      * @param string String to be searched

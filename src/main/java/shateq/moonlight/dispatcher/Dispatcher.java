@@ -3,9 +3,7 @@ package shateq.moonlight.dispatcher;
 import kotlin.NotImplementedError;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +16,6 @@ import shateq.moonlight.dispatcher.api.ArgumentException;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Embedded;
 import shateq.moonlight.util.Orbit;
 
 import java.util.*;
@@ -31,20 +28,20 @@ public final class Dispatcher {
     private static final Logger log = LoggerFactory.getLogger("CommandDispatcher");
     private static final Map<String, Command> COMMANDS = new HashMap<>();
     private static final Map<String, String> aliases = new HashMap<>(); //alias points to name
-    private static final List<CommandData> COMMAND_DATA = new ArrayList<>();
+
+    private static final Map<String, CommandData> COMMAND_DATA = new HashMap<>(); //map for easy filtering for duplicates
 
     public Dispatcher() {
         log.info("Loading COMMANDS...");
         List.of(new PingCmd(), new ModulesCmd(), new HelpCmd(), new InfoCmd(), new HejCmd()).forEach(this::register);
 
-        MoonlightBot.jda().updateCommands().addCommands(COMMAND_DATA).addCommands(
-            Commands.slash("help", "Peek other commands")
-                .addOption(OptionType.STRING, "search", "Search for a command to be detailed.")
-                .setGuildOnly(true),
-            Commands.slash("info", "Some information."),
-            Commands.slash("modules", "Are systems operational?").setGuildOnly(true)
-        ).complete();
+        MoonlightBot.jda().updateCommands().addCommands(COMMAND_DATA.values()).complete(); //register COMMAND_DATA
         log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
+    }
+
+    public static void upsertCommandData(CommandData... commandData) {
+        for (CommandData data : List.of(commandData))
+            COMMAND_DATA.putIfAbsent(data.getName(), data);
     }
 
     /**
@@ -101,7 +98,7 @@ public final class Dispatcher {
         } catch (ArgumentException ae) {
             context.reply(ae.getMessage());
         } catch (Exception e) {
-            context.reply(Embedded.A.skull());
+            context.reply(Orbit.skull);
             log.error(e.toString());
         }
     }
@@ -130,10 +127,6 @@ public final class Dispatcher {
     public <T extends Command> Command getCommand(@NotNull Class<T> clazz) {
         var name = clazz.getDeclaredAnnotation(Order.class);
         return COMMANDS.get(name.value());
-    }
-
-    public @NotNull @UnmodifiableView List<net.dv8tion.jda.api.interactions.commands.Command> interactions() {
-        return MoonlightBot.jda().retrieveCommands().complete();
     }
 
     /**
@@ -167,10 +160,8 @@ public final class Dispatcher {
         var aliasList = clazz.getDeclaredAnnotation(Order.Aliases.class);
 
         COMMANDS.putIfAbsent(name.value(), command);
-        if (aliasList != null) {
-            for (String value : aliasList.value()) {
+        if (aliasList != null)
+            for (String value : aliasList.value())
                 aliases.putIfAbsent(value, name.value());
-            }
-        }
     }
 }
