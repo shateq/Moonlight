@@ -23,7 +23,7 @@ import static net.dv8tion.jda.api.requests.GatewayIntent.*;
 import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public final class MoonlightBot {
-    public static final Logger LOGGER = LoggerFactory.getLogger("Moonlight Main");
+    public static final Logger LOG = LoggerFactory.getLogger("Main");
     private static MoonlightBot inst;
 
     public final JukeboxManager jukeboxManager;
@@ -53,15 +53,15 @@ public final class MoonlightBot {
     }
 
     public static void main(String[] args) {
-        LOGGER.info("Runtime version: {}", Runtime.version().toString());
+        LOG.info("Runtime version: {}", Runtime.version().toString());
         if (Orbit.env("bot_token") != null) System.setProperty("bot_token", Orbit.env("bot_token"));
 
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> LOGGER.error("Uncaught exception in thread {}", t.getName(), e));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> LOG.error("Uncaught exception in thread {}", t.getName(), e));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(0)));
         try {
             new MoonlightBot(new ListeningWire());
         } catch (Exception e) {
-            LOGGER.error(e.toString());
+            LOG.error(e.toString());
         }
     }
 

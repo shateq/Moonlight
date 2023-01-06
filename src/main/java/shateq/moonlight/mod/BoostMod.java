@@ -5,14 +5,14 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
-import shateq.moonlight.ModuleChute;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.mod.api.Identifier;
 import shateq.moonlight.mod.api.Module;
 import shateq.moonlight.mod.api.ModuleStatus;
+import shateq.moonlight.mod.api.Place;
 
-public class Boost extends Module {
-    public Boost(Identifier id, ModuleStatus status) {
+public class BoostMod extends Module {
+    public BoostMod(Identifier id, ModuleStatus status) {
         super(id, status);
     }
 
@@ -21,7 +21,7 @@ public class Boost extends Module {
         if (guild.getRoles().contains(guild.getBoostRole())) {
             var channel = guild.getSystemChannel(); // TODO database
             if (channel == null) {
-                ModuleChute.coverage.warn("Boost logs channel incorrectly configured, maybe the module should be disabled?");
+                MoonlightBot.LOG.warn("BoostMod Log's incorrectly configured for guild " + new Place(guild) + ", maybe the module should be disabled?");
                 return;
             }
             channel.sendMessage(output).queue();

@@ -1,7 +1,7 @@
 package shateq.moonlight.dispatcher.api
 
 /**
- * Command metadata, used to make Command class viable source of feedback and action
+ * Command metadata, used to make Command class viable source of feedback and action.
  */
 @Target(AnnotationTarget.CLASS)
 @MustBeDocumented

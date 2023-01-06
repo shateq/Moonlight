@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.mod.api.Identifier;
 import shateq.moonlight.mod.api.Module;
 import shateq.moonlight.mod.api.ModuleStatus;
@@ -12,9 +13,15 @@ import shateq.moonlight.util.Orbit;
 
 import java.util.regex.Pattern;
 
-public class Detection extends Module {
-    public Detection(Identifier id, ModuleStatus status) {
+public class DetectionMod extends Module {
+    public DetectionMod(Identifier id, ModuleStatus status) {
         super(id, status);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        MoonlightBot.jda().addEventListener(this);
     }
 
     @Override
@@ -30,8 +37,9 @@ public class Detection extends Module {
 
     private @NotNull Site match(String link) {
         for (Site site : Site.values())
-            if (site.getPattern().matcher(link).find())
-                return site;
+            if (!site.equals(Site.Other))
+                if (site.getPattern().matcher(link).find())
+                    return site;
         return Site.Other;
     }
 

@@ -7,10 +7,7 @@ import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.SlashContext;
-import shateq.moonlight.dispatcher.api.Category;
-import shateq.moonlight.dispatcher.api.Command;
-import shateq.moonlight.dispatcher.api.CommandContext;
-import shateq.moonlight.dispatcher.api.Order;
+import shateq.moonlight.dispatcher.api.*;
 import shateq.moonlight.util.Orbit;
 
 import java.util.Arrays;
@@ -29,7 +26,7 @@ public class HelpCmd implements Command {
     }
 
     @Override
-    public void execute(@NotNull GuildContext c) {
+    public void execute(@NotNull GuildContext c) throws ArgumentException {
         if (c.args() == null || c.args().length == 0)
             sortedView(c);
         else
@@ -37,19 +34,17 @@ public class HelpCmd implements Command {
     }
 
     @Override
-    public void slash(@NotNull SlashContext c) {
+    public void slash(@NotNull SlashContext c) throws ArgumentException {
         if (c.options().isEmpty() || c.options().size() == 0) {
             sortedView(c);
         } else
             detailedView(c.event().getOption("search").getAsString(), c);
     }
 
-    private void detailedView(String search, CommandContext<?, ?> c) {
+    private void detailedView(String search, CommandContext<?, ?> c) throws ArgumentException {
         Command cmd = Dispatcher.getCommand(search);
-        if (cmd == null) {
-            c.reply("> Brak wyników.");
-            return;
-        }
+        if (cmd == null) throw new ArgumentException("Brak wyników.");
+
 
         String name = Command.name(cmd),
             explanation = Command.explanation(cmd),
@@ -72,12 +67,10 @@ public class HelpCmd implements Command {
         c.replyEmbeds(embed);
     }
 
-    private void sortedView(CommandContext<?, ?> c) {
+    private void sortedView(CommandContext<?, ?> c) throws ArgumentException {
         var commands = MoonlightBot.dispatcher().commands().values();
-        if (commands.size() == 0) {
-            c.reply("Nie zarejestrowano żadnych komend.");
-            return;
-        }
+        if (commands.size() == 0) throw new ArgumentException("Nie zarejestrowano żadnych komend.");
+
         var embed = Orbit.colourEmbed(true)
             .setTitle("• Pomoc (" + commands.stream().filter(it -> !Command.hidden(it)).toList().size() + ")");
 

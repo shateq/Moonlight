@@ -24,7 +24,7 @@ public class InfoCmd implements Command {
         String data = Orbit.simpleDateFormat(new Date(), "hh:mm:ss - dd.MM.yyyy");
         double memory = (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
 
-        var embed = Orbit.colourEmbed(true)
+        return Orbit.colourEmbed(true)
             .setAuthor(MoonlightBot.jda().getSelfUser().getAsTag())
             .setDescription("Dzień dobry! Jestem tu by zaimplementować autorskie wymysły. " +
                 "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Const.GITHUB_URL + ")\n\n" +
@@ -32,8 +32,7 @@ public class InfoCmd implements Command {
                 "• Użyj `" + MoonlightBot.Const.PREFIX + "modules`, by otrzymać listę modułów.\n\n" +
                 "Zużycie pamięci: " + (int) memory + " MB"
             )
-            .setFooter(data);
-        return embed.build();
+            .setFooter(data).build();
     }
 
     @Override

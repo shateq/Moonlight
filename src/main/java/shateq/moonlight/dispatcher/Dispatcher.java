@@ -83,6 +83,12 @@ public final class Dispatcher {
         }
     }
 
+    /**
+     * Dispatch
+     *
+     * @param cmd     Command instance
+     * @param context Command's context, a viable implementation
+     */
     public static void execute(Command cmd, CommandContext<?, ?> context) {
         try {
             if (context instanceof GuildContext guild) {
@@ -96,7 +102,7 @@ public final class Dispatcher {
 
             context.reply(out);
         } catch (ArgumentException ae) {
-            context.reply(ae.getMessage());
+            context.reply("> " + ae.getMessage());
         } catch (Exception e) {
             context.reply(Orbit.skull);
             log.error(e.toString());

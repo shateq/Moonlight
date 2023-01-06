@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Dispatcher;
 import shateq.moonlight.dispatcher.GuildContext;
+import shateq.moonlight.dispatcher.SlashContext;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
 import shateq.moonlight.dispatcher.api.Order;
@@ -22,6 +23,11 @@ public class ModulesCmd implements Command {
 
     @Override
     public void execute(@NotNull GuildContext c) {
+        c.source().replyEmbeds(systems(c)).queue();
+    }
+
+    @Override
+    public void slash(@NotNull SlashContext c) {
         c.source().replyEmbeds(systems(c)).queue();
     }
 
@@ -42,7 +48,7 @@ public class ModulesCmd implements Command {
             msg.append("`").append(id).append("` ").append(md.status.mark()).append(" ").append(md.name).append("\n");
         }
 
-        var help = Orbit.colourEmbed(true).setAuthor(c.sender().getAsTag())
+        var help = Orbit.colourEmbed(true)
             .setTitle("• Moduły (" + modules.size() + ")")
             .setDescription(msg)
             .addField("Legenda", ModuleStatus.Companion.getNote(), false);

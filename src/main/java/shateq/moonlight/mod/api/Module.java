@@ -2,7 +2,7 @@ package shateq.moonlight.mod.api;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.ModuleChute;
+import shateq.moonlight.MoonlightBot;
 
 /**
  * Module abstraction, ListenerAdapter
@@ -17,12 +17,16 @@ public abstract class Module extends ListenerAdapter {
         this.status = status;
     }
 
-    public void init() {
-        if (!works()) return;
-        ModuleChute.coverage.info(id + " works!");
-    }
-
     public boolean works() {
         return status.equals(ModuleStatus.ON) || status.equals(ModuleStatus.BUILT);
+    }
+
+    public void init() {
+        if (!works()) return;
+        MoonlightBot.LOG.info(id + " works!");
+    }
+
+    public void destroy() {
+        MoonlightBot.jda().removeEventListener(this);
     }
 }
