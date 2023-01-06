@@ -1,4 +1,4 @@
-package shateq.moonlight.util
+package shateq.moonlight.mod.api
 
 /**
  * @param name Key name or description

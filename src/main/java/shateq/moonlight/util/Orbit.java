@@ -1,7 +1,9 @@
 package shateq.moonlight.util;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.MoonlightBot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,5 +76,9 @@ public final class Orbit {
     @Contract(pure = true)
     public static @NotNull String code(String string) {
         return "```" + string + "```\n";
+    }
+
+    public static @NotNull EmbedBuilder colourEmbed(boolean ok) {
+        return new EmbedBuilder().setColor(ok ? MoonlightBot.Const.NORMAL : MoonlightBot.Const.BAD);
     }
 }

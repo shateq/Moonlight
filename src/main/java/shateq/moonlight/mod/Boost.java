@@ -7,7 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
 import shateq.moonlight.ModuleChute;
 import shateq.moonlight.MoonlightBot;
-import shateq.moonlight.util.Identifier;
+import shateq.moonlight.mod.api.Identifier;
+import shateq.moonlight.mod.api.Module;
+import shateq.moonlight.mod.api.ModuleStatus;
 
 public class Boost extends Module {
     public Boost(Identifier id, ModuleStatus status) {

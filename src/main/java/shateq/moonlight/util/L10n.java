@@ -1,4 +1,4 @@
-package shateq.moonlight.locale;
+package shateq.moonlight.util;
 
 
 import net.dv8tion.jda.api.interactions.DiscordLocale;

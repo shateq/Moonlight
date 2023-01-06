@@ -2,6 +2,7 @@ package shateq.moonlight.dispatcher.api
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.Event
 
@@ -39,4 +40,9 @@ interface CommandContext<S, E : Event> {
      * Queue a MessageCreateAction
      */
     fun reply(feedback: String) {}
+
+    /**
+     * Queue a MessageCreateAction featuring embed
+     */
+    fun replyEmbeds(vararg embeds: MessageEmbed) {}
 }

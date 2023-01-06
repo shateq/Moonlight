@@ -1,8 +1,7 @@
-package shateq.moonlight.mod;
+package shateq.moonlight.mod.api;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import shateq.moonlight.util.Identifier;
 
 public final class FakeModule extends Module {
     public FakeModule(Identifier id, ModuleStatus status, @NotNull Runnable arrow) {

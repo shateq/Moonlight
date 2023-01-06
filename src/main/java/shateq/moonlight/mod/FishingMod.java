@@ -7,7 +7,9 @@ import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Category;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.util.Identifier;
+import shateq.moonlight.mod.api.Identifier;
+import shateq.moonlight.mod.api.Module;
+import shateq.moonlight.mod.api.ModuleStatus;
 
 public class FishingMod extends Module {
     public FishingMod(Identifier id, ModuleStatus status) {

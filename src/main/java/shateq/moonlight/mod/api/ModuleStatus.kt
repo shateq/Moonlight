@@ -1,4 +1,4 @@
-package shateq.moonlight.mod
+package shateq.moonlight.mod.api
 
 /**
  * Module orchestration states

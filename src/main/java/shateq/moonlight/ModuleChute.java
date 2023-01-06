@@ -6,14 +6,16 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shateq.moonlight.mod.Module;
+import shateq.moonlight.mod.api.Module;
 import shateq.moonlight.mod.*;
+import shateq.moonlight.mod.api.FakeModule;
+import shateq.moonlight.mod.api.ModuleStatus;
 import shateq.moonlight.music.*;
-import shateq.moonlight.util.Identifier;
+import shateq.moonlight.mod.api.Identifier;
 
 import java.util.*;
 
-import static shateq.moonlight.mod.FakeModule.nothing;
+import static shateq.moonlight.mod.api.FakeModule.nothing;
 
 /**
  * Module registry and accessor

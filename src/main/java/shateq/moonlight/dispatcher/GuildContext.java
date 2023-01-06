@@ -1,14 +1,13 @@
 package shateq.moonlight.dispatcher;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.dispatcher.api.CommandContext;
+
+import java.util.Arrays;
 
 /**
  * Guild-message command context
@@ -43,5 +42,10 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     @Override
     public void reply(@NotNull String feedback) {
         source().reply(feedback).queue();
+    }
+
+    @Override
+    public void replyEmbeds(MessageEmbed @NotNull ...embeds) {
+        source().replyEmbeds(Arrays.asList(embeds)).queue();
     }
 }

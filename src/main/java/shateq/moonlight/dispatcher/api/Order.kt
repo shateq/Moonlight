@@ -19,7 +19,7 @@ annotation class Order(val value: String, val group: Category = Category.General
     annotation class Example(val value: String)
 
     /**
-     * Filtering concept indicator.
+     * Filtering concepts.
      */
     @Target(AnnotationTarget.CLASS)
     annotation class Hidden

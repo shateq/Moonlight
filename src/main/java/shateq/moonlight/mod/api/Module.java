@@ -1,9 +1,8 @@
-package shateq.moonlight.mod;
+package shateq.moonlight.mod.api;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.ModuleChute;
-import shateq.moonlight.util.Identifier;
 
 /**
  * Module abstraction, ListenerAdapter

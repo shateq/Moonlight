@@ -9,9 +9,9 @@ import shateq.moonlight.dispatcher.GuildContext;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
 import shateq.moonlight.dispatcher.api.Order;
-import shateq.moonlight.mod.Module;
-import shateq.moonlight.mod.ModuleStatus;
-import shateq.moonlight.util.Embedded;
+import shateq.moonlight.mod.api.Module;
+import shateq.moonlight.mod.api.ModuleStatus;
+import shateq.moonlight.util.Orbit;
 
 @Order(value = "modules", note = "List of modules.")
 @Order.Aliases({"module", "mods", "mod"})
@@ -42,7 +42,7 @@ public class ModulesCmd implements Command {
             msg.append("`").append(id).append("` ").append(md.status.mark()).append(" ").append(md.name).append("\n");
         }
 
-        var help = Embedded.A.authoredEmbed(c.sender(), true)
+        var help = Orbit.colourEmbed(true).setAuthor(c.sender().getAsTag())
             .setTitle("• Moduły (" + modules.size() + ")")
             .setDescription(msg)
             .addField("Legenda", ModuleStatus.Companion.getNote(), false);
