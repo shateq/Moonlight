@@ -16,6 +16,7 @@ import shateq.moonlight.util.Orbit;
 
 @Order(value = "modules", note = "List of modules.")
 @Order.Aliases({"module", "mods", "mod"})
+@Order.Example("mod")
 public class ModulesCmd implements Command {
     public ModulesCmd() {
         Dispatcher.upsertCommandData(Commands.slash("modules", "Are systems operational?").setGuildOnly(true));

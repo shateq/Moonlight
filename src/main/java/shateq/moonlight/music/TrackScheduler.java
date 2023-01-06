@@ -27,6 +27,7 @@ public class TrackScheduler extends AudioEventAdapter {
      */
     public void queue(AudioTrack track) {
         if (!audioPlayer.startTrack(track, true)) {
+            //noinspection ResultOfMethodCallIgnored
             queue.offer(track);
         }
     }

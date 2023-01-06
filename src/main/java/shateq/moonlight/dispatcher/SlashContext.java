@@ -45,7 +45,7 @@ public record SlashContext(SlashCommandInteractionEvent event) implements Comman
     }
 
     @Override
-    public void replyEmbeds(MessageEmbed @NotNull ...embeds) {
+    public void replyEmbeds(MessageEmbed @NotNull ... embeds) {
         source().replyEmbeds(Arrays.asList(embeds)).queue();
     }
 }

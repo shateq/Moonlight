@@ -15,6 +15,7 @@ import java.util.Date;
 
 @Order(value = "info", note = "A piece of information.")
 @Order.Aliases("explain")
+@Order.Example("info")
 public class InfoCmd implements Command {
     public InfoCmd() {
         Dispatcher.upsertCommandData(Commands.slash("info", "Some information."));

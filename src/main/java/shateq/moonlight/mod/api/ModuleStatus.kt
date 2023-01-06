@@ -11,6 +11,7 @@ enum class ModuleStatus(@get:JvmName("mark") val mark: String, @get:JvmName("leg
 
     companion object {
         var note: String
+
         init {
             val builder = StringBuilder()
             for (status in values()) {

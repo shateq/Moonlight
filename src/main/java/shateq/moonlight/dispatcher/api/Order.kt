@@ -16,7 +16,7 @@ annotation class Order(val value: String, val group: Category = Category.General
      * Example usage of command as a sharing context.
      */
     @Target(AnnotationTarget.CLASS)
-    annotation class Example(val value: String)
+    annotation class Example(val value: Array<String>)
 
     /**
      * Filtering concepts.

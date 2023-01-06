@@ -10,13 +10,11 @@ import shateq.moonlight.dispatcher.SlashContext;
 import shateq.moonlight.dispatcher.api.*;
 import shateq.moonlight.util.Orbit;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Order(value = "help", note = "Peek all of the commands.")
 @Order.Aliases({"h", "pomoc"})
+@Order.Example({"help <name String>", "help mods", "help"})
 public class HelpCmd implements Command {
     public HelpCmd() {
         Dispatcher.upsertCommandData(Commands.slash("help", "Peek other commands")
@@ -38,30 +36,33 @@ public class HelpCmd implements Command {
         if (c.options().isEmpty() || c.options().size() == 0) {
             sortedView(c);
         } else
-            detailedView(c.event().getOption("search").getAsString(), c);
+            detailedView(Objects.requireNonNull(c.event().getOption("search")).getAsString(), c);
     }
 
     private void detailedView(String search, CommandContext<?, ?> c) throws ArgumentException {
         Command cmd = Dispatcher.getCommand(search);
         if (cmd == null) throw new ArgumentException("Brak wyników.");
+        String name = Command.name(cmd);
 
+        StringBuilder aliasEntry = new StringBuilder(),
+            examplesEntry = new StringBuilder();
 
-        String name = Command.name(cmd),
-            explanation = Command.explanation(cmd),
-            group = Objects.requireNonNull(Command.group(cmd)).getTitle();
+        List<String> aliases = Command.aliases(cmd),
+            examples = Command.example(cmd);
 
-        StringBuilder str = new StringBuilder();
-        var aliases = Command.aliases(cmd);
+        if (aliases != null && !aliases.isEmpty())
+            for (String a : aliases)
+                aliasEntry.append(" \\").append(a);
 
-        if (aliases != null && !aliases.isEmpty()) {
-            for (String a : aliases) {
-                str.append(" /").append(a);
-            }
-        }
+        if (examples != null && !examples.isEmpty())
+            for (String e : examples)
+                examplesEntry.append(e).append("\n");
+
+        var ex = !examplesEntry.toString().isBlank() ? Orbit.code(examplesEntry.toString()) : "";
         var embed = Orbit.colourEmbed(true)
-            .setTitle("• " + name + str)
-            .setDescription(Orbit.code("example") + explanation)
-            .setFooter(group)
+            .setTitle("• " + name + aliasEntry)
+            .setDescription(Command.explanation(cmd) + "\n" + ex)
+            .setFooter(Command.group(cmd).getTitle())
             .build();
 
         c.replyEmbeds(embed);

@@ -25,28 +25,28 @@ public interface Command {
         return null;
     }
 
-    static @Nullable Category group(@NotNull Command cmd) {
+    static Category group(@NotNull Command cmd) {
         var order = orders(cmd);
         if (order != null) return order.group();
-        return null;
+        return Category.General;
     }
 
-    static @Nullable String explanation(@NotNull Command cmd) {
+    static String explanation(@NotNull Command cmd) {
         var order = orders(cmd);
         if (order != null) return order.note();
-        return null;
+        return "No data";
     }
 
-    static @Nullable String example(@NotNull Command cmd) {
+    static @Unmodifiable List<String> example(@NotNull Command cmd) {
         var example = cmd.getClass().getDeclaredAnnotation(Order.Example.class);
-        if (example != null) return example.value();
-        return null;
+        if (example != null) return List.of(example.value());
+        return List.of();
     }
 
-    static @Nullable @Unmodifiable List<String> aliases(@NotNull Command cmd) {
+    static @Unmodifiable List<String> aliases(@NotNull Command cmd) {
         var aliases = cmd.getClass().getDeclaredAnnotation(Order.Aliases.class);
         if (aliases != null) return List.of(aliases.value());
-        return null;
+        return List.of();
     }
 
     static boolean hidden(@NotNull Command cmd) {

@@ -60,7 +60,6 @@ class Stop : MusicCommand {
         val member = c.event().member
         val memberVoiceState = member!!.voiceState
 
-        throw Exception("He he he ha")
     }
 }
 

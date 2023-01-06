@@ -29,6 +29,7 @@ public class FishingMod extends Module {
         Nothing("❔");
 
         final String loot;
+
         Fish(String loot) {
             this.loot = loot;
         }

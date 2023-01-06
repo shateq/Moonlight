@@ -20,6 +20,7 @@ interface CommandContext<S, E : Event> {
      * JDA instance
      */
     fun jda(): JDA
+
     /**
      * A place for the event
      */

@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static net.dv8tion.jda.api.interactions.DiscordLocale.*;
+import static net.dv8tion.jda.api.interactions.DiscordLocale.ENGLISH_US;
+import static net.dv8tion.jda.api.interactions.DiscordLocale.UNKNOWN;
 
 
 /**

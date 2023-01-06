@@ -17,7 +17,7 @@ public interface MusicCommand extends Command {
     default boolean selfConnected(@NotNull GuildContext c) {
         var self = c.guild().getSelfMember().getVoiceState();
         if (self != null && !self.inAudioChannel()) {
-            c.source().reply( "Muszę być na kanale głosowym, by to zadziałało!").queue();
+            c.source().reply("Muszę być na kanale głosowym, by to zadziałało!").queue();
             return false;
         }
         return true;

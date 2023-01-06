@@ -45,7 +45,7 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     }
 
     @Override
-    public void replyEmbeds(MessageEmbed @NotNull ...embeds) {
+    public void replyEmbeds(MessageEmbed @NotNull ... embeds) {
         source().replyEmbeds(Arrays.asList(embeds)).queue();
     }
 }

@@ -65,24 +65,27 @@ public final class MoonlightBot {
         }
     }
 
+    /**
+     * @return Gateway!
+     */
     public static MoonlightBot it() {
         return inst;
     }
 
     public static ModuleChute moduleChute() {
-        return inst.moduleChute;
+        return it().moduleChute;
     }
 
     public static Dispatcher dispatcher() {
-        return inst.dispatcher;
+        return it().dispatcher;
     }
 
     public static JDA jda() {
-        return inst.jda;
+        return it().jda;
     }
 
     public static JukeboxManager jukebox() {
-        return inst.jukeboxManager;
+        return it().jukeboxManager;
     }
 
     public static void shutdown(int code) {

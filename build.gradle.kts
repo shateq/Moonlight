@@ -5,7 +5,7 @@ plugins {
 	id("com.github.johnrengelman.shadow")
 }
 
-version = "2.0.1"
+version = "2.2.1"
 group = "shateq.java"
 base.archivesName.set("${project.name}-jdk17")
 description = "Discord bot attempt 2021"

@@ -61,12 +61,12 @@ public class JukeboxManager {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("Nie znaleziono nic dla "+trackUrl).queue();
+                channel.sendMessage("Nie znaleziono nic dla " + trackUrl).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                channel.sendMessage("Wyjątek podczas próby muzycznej: "+exception.getMessage()).queue();
+                channel.sendMessage("Wyjątek podczas próby muzycznej: " + exception.getMessage()).queue();
             }
         });
     }
