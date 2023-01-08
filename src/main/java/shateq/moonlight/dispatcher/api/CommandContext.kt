@@ -4,12 +4,11 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.events.Event
 
 /**
  * Essential context mapping
  */
-interface CommandContext<S, E : Event> {
+interface CommandContext<S, E> {
     /**
      * Type of the event
      * e.g. MessageReceived or SlashCommandInteraction

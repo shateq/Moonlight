@@ -3,4 +3,4 @@ package shateq.moonlight.dispatcher.api
 /**
  * Command-argument errors.
  */
-class ArgumentException(message: String) : Exception(message)
+class ContextualException(message: String) : Exception(message)

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class GuildMusicContainer {
     public final AudioPlayer audioPlayer;
     public final TrackScheduler scheduler;
+    //public final long guildId;
 
     public GuildMusicContainer(@NotNull AudioPlayerManager manager) {
         audioPlayer = manager.createPlayer();

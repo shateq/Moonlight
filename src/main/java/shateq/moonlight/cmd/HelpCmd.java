@@ -2,6 +2,7 @@ package shateq.moonlight.cmd;
 
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.dispatcher.Dispatcher;
@@ -23,8 +24,13 @@ public class HelpCmd implements Command {
         );
     }
 
+    @Contract(pure = true)
+    private @NotNull String code(String string) {
+        return "```" + string + "```\n";
+    }
+
     @Override
-    public void execute(@NotNull GuildContext c) throws ArgumentException {
+    public void execute(@NotNull GuildContext c) throws ContextualException {
         if (c.args() == null || c.args().length == 0)
             sortedView(c);
         else
@@ -32,16 +38,16 @@ public class HelpCmd implements Command {
     }
 
     @Override
-    public void slash(@NotNull SlashContext c) throws ArgumentException {
+    public void slash(@NotNull SlashContext c) throws ContextualException {
         if (c.options().isEmpty() || c.options().size() == 0) {
             sortedView(c);
         } else
             detailedView(Objects.requireNonNull(c.event().getOption("search")).getAsString(), c);
     }
 
-    private void detailedView(String search, CommandContext<?, ?> c) throws ArgumentException {
+    private void detailedView(String search, CommandContext<?, ?> c) throws ContextualException {
         Command cmd = Dispatcher.getCommand(search);
-        if (cmd == null) throw new ArgumentException("Brak wyników.");
+        if (cmd == null) throw new ContextualException("Brak wyników.");
         String name = Command.name(cmd);
 
         StringBuilder aliasEntry = new StringBuilder(),
@@ -58,7 +64,7 @@ public class HelpCmd implements Command {
             for (String e : examples)
                 examplesEntry.append(e).append("\n");
 
-        var ex = !examplesEntry.toString().isBlank() ? Orbit.code(examplesEntry.toString()) : "";
+        var ex = !examplesEntry.toString().isBlank() ? code(examplesEntry.toString()) : "";
         var embed = Orbit.colourEmbed(true)
             .setTitle("• " + name + aliasEntry)
             .setDescription(Command.explanation(cmd) + "\n" + ex)
@@ -68,9 +74,9 @@ public class HelpCmd implements Command {
         c.replyEmbeds(embed);
     }
 
-    private void sortedView(CommandContext<?, ?> c) throws ArgumentException {
+    private void sortedView(CommandContext<?, ?> c) throws ContextualException {
         var commands = MoonlightBot.dispatcher().commands().values();
-        if (commands.size() == 0) throw new ArgumentException("Nie zarejestrowano żadnych komend.");
+        if (commands.size() == 0) throw new ContextualException("Nie zarejestrowano żadnych komend.");
 
         var embed = Orbit.colourEmbed(true)
             .setTitle("• Pomoc (" + commands.stream().filter(it -> !Command.hidden(it)).toList().size() + ")");

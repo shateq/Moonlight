@@ -1,6 +1,7 @@
 package shateq.moonlight.util;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.MoonlightBot;
@@ -25,16 +26,6 @@ public final class Orbit {
     }
 
     /**
-     * Get an environment variable value.
-     *
-     * @param key Variable name
-     * @return Value
-     */
-    public static String env(@NotNull String key) {
-        return System.getenv(key);
-    }
-
-    /**
      * Instantiate a class
      *
      * @param clazz Class with zero-argument constructor
@@ -47,6 +38,24 @@ public final class Orbit {
         } catch (Exception e) {
             throw new IllegalArgumentException("Unable to instantiate " + clazz, e);
         }
+    }
+
+    /**
+     * @param name Argument name
+     * @param type Argument type
+     * @return formatted argument name with option type
+     */
+    @Contract(pure = true)
+    public static @NotNull String typed(String name, @NotNull Class<?> type) {
+        return "<" + name + " " + type.getSimpleName() + ">";
+    }
+
+    /**
+     * See also: {@link Orbit#typed(String, Class)}
+     */
+    public static @NotNull String typed(String name, @NotNull OptionType optionType) {
+        var type = optionType.name().substring(0, 1).toUpperCase() + optionType.name().substring(1).toLowerCase();
+        return "<" + name + " " + type + ">";
     }
 
     /**
@@ -69,16 +78,23 @@ public final class Orbit {
         return format.format(date);
     }
 
-    /**
-     * @param string Content
-     * @return Wrapped String
-     */
-    @Contract(pure = true)
-    public static @NotNull String code(String string) {
-        return "```" + string + "```\n";
+    public static String toTimestamp(long milliseconds)
+    {
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        int hours   = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
+
+        if (hours > 0)
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        else
+            return String.format("%02d:%02d", minutes, seconds);
     }
 
     public static @NotNull EmbedBuilder colourEmbed(boolean ok) {
-        return new EmbedBuilder().setColor(ok ? MoonlightBot.Const.NORMAL : MoonlightBot.Const.BAD);
+        return new EmbedBuilder().setColor(ok ? MoonlightBot.Constant.NORMAL : MoonlightBot.Constant.BAD);
+    }
+
+    public static @NotNull EmbedBuilder colourEmbed(int colour) {
+        return new EmbedBuilder().setColor(colour);
     }
 }

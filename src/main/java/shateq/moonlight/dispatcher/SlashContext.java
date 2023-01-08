@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
@@ -35,10 +36,6 @@ public record SlashContext(SlashCommandInteractionEvent event) implements Comman
         return event.getUser();
     }
 
-    public @NotNull List<OptionMapping> options() {
-        return event.getOptions();
-    }
-
     @Override
     public void reply(@NotNull String feedback) {
         source().reply(feedback).queue();
@@ -47,5 +44,13 @@ public record SlashContext(SlashCommandInteractionEvent event) implements Comman
     @Override
     public void replyEmbeds(MessageEmbed @NotNull ... embeds) {
         source().replyEmbeds(Arrays.asList(embeds)).queue();
+    }
+
+    public @NotNull TextChannel channel() {
+        return event.getChannel().asTextChannel();
+    }
+
+    public @NotNull List<OptionMapping> options() {
+        return event.getOptions();
     }
 }

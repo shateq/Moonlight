@@ -1,6 +1,7 @@
 package shateq.moonlight.dispatcher;
 
 import kotlin.NotImplementedError;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -12,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shateq.moonlight.MoonlightBot;
 import shateq.moonlight.cmd.*;
-import shateq.moonlight.dispatcher.api.ArgumentException;
 import shateq.moonlight.dispatcher.api.Command;
 import shateq.moonlight.dispatcher.api.CommandContext;
+import shateq.moonlight.dispatcher.api.ContextualException;
 import shateq.moonlight.dispatcher.api.Order;
 import shateq.moonlight.util.Orbit;
 
@@ -22,21 +23,26 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Command execution coordination
+ * Static command execution coordination.
  */
 public final class Dispatcher {
-    private static final Logger log = LoggerFactory.getLogger("CommandDispatcher");
+    private static final Logger log = LoggerFactory.getLogger("Dispatcher");
+
     private static final Map<String, Command> COMMANDS = new HashMap<>();
     private static final Map<String, String> aliases = new HashMap<>(); //alias points to name
-
     private static final Map<String, CommandData> COMMAND_DATA = new HashMap<>(); //map for easy filtering for duplicates
 
     public Dispatcher() {
-        log.info("Loading COMMANDS...");
-        List.of(new PingCmd(), new ModulesCmd(), new HelpCmd(), new InfoCmd(), new HejCmd()).forEach(this::register);
+        List.of(new PingCmd(), new ModulesCmd(), new HelpCmd(),
+            new InfoCmd(), new HejCmd()
+        ).forEach(this::register);
 
-        MoonlightBot.jda().updateCommands().addCommands(COMMAND_DATA.values()).complete(); //register COMMAND_DATA
-        log.info("{} is the amount of COMMANDS registered.", COMMANDS.size());
+        log.info("Registering {} COMMANDS...", COMMANDS.size());
+    }
+
+    public void updateCommands(@NotNull JDA jda) {
+        log.info("Updating JDA client's command data!");
+        jda.updateCommands().addCommands(COMMAND_DATA.values()).complete();
     }
 
     public static void upsertCommandData(CommandData... commandData) {
@@ -66,9 +72,9 @@ public final class Dispatcher {
      */
     public static void processText(@NotNull MessageReceivedEvent event) {
         String label = event.getMessage().getContentRaw().trim();
-        if (!label.startsWith(MoonlightBot.Const.PREFIX)) return; //PREFIX FIRST
+        if (!label.startsWith(MoonlightBot.Constant.PREFIX)) return; //PREFIX FIRST
 
-        var quote = Pattern.quote(MoonlightBot.Const.PREFIX);
+        var quote = Pattern.quote(MoonlightBot.Constant.PREFIX);
         String[] arguments = label.replaceFirst("(?i)" + quote, "").trim().split("\\s+");
 
         String name = arguments[0];
@@ -101,7 +107,7 @@ public final class Dispatcher {
             if (ie.getMessage() != null) out += ie.getMessage();
 
             context.reply(out);
-        } catch (ArgumentException ae) {
+        } catch (ContextualException ae) {
             context.reply("> " + ae.getMessage());
         } catch (Exception e) {
             context.reply(Orbit.skull);

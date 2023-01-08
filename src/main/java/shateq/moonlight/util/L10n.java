@@ -13,6 +13,7 @@ import static net.dv8tion.jda.api.interactions.DiscordLocale.UNKNOWN;
 
 
 /**
+ * TODO do it
  * Localization per guild {@see net.dv8tion.jda.api.interactions.DiscordLocale}
  */
 public class L10n {

@@ -18,6 +18,7 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
         return event.getJDA();
     }
 
+    @Override
     public @NotNull Guild guild() {
         return event.getGuild();
     }
@@ -27,16 +28,9 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
         return event.getMessage();
     }
 
+    @Override
     public @NotNull User sender() {
         return event.getAuthor();
-    }
-
-    public Member member() {
-        return event.getMember();
-    }
-
-    public @NotNull TextChannel channel() {
-        return event.getGuildChannel().asTextChannel();
     }
 
     @Override
@@ -47,5 +41,13 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     @Override
     public void replyEmbeds(MessageEmbed @NotNull ... embeds) {
         source().replyEmbeds(Arrays.asList(embeds)).queue();
+    }
+
+    public Member member() {
+        return event.getMember();
+    }
+
+    public @NotNull TextChannel channel() {
+        return event.getGuildChannel().asTextChannel();
     }
 }

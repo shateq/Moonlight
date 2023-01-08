@@ -23,7 +23,6 @@ public abstract class Module extends ListenerAdapter {
 
     public void init() {
         if (!works()) return;
-        MoonlightBot.LOG.info(id + " works!");
     }
 
     public void destroy() {

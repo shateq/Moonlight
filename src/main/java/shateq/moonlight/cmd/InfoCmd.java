@@ -28,9 +28,9 @@ public class InfoCmd implements Command {
         return Orbit.colourEmbed(true)
             .setAuthor(MoonlightBot.jda().getSelfUser().getAsTag())
             .setDescription("Dzień dobry! Jestem tu by zaimplementować autorskie wymysły. " +
-                "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Const.GITHUB_URL + ")\n\n" +
-                "• Wpisz `" + MoonlightBot.Const.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
-                "• Użyj `" + MoonlightBot.Const.PREFIX + "modules`, by otrzymać listę modułów.\n\n" +
+                "szymon9932 napisał mój kod w języku **Java**. Link: [GitHub](" + MoonlightBot.Constant.GITHUB_URL + ")\n\n" +
+                "• Wpisz `" + MoonlightBot.Constant.PREFIX + "pomoc`, by zobaczyć listę komend.\n" +
+                "• Użyj `" + MoonlightBot.Constant.PREFIX + "modules`, by otrzymać listę modułów.\n\n" +
                 "Zużycie pamięci: " + (int) memory + " MB"
             )
             .setFooter(data).build();

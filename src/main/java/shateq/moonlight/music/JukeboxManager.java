@@ -10,15 +10,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.jetbrains.annotations.NotNull;
+import shateq.moonlight.MoonlightBot;
+import shateq.moonlight.util.Orbit;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manager due to every guild having their own GuildContainer.
+ */
 public class JukeboxManager {
     private final Map<Long, GuildMusicContainer> guildContainers;
     private final AudioPlayerManager playerManager;
+    // TODO ScheduledExecutor service for closing inactive-s
 
     public JukeboxManager() {
+        MoonlightBot.GUILDS.info("Jukebox consumed a coin...");
         guildContainers = new HashMap<>();
         playerManager = new DefaultAudioPlayerManager();
 
@@ -35,33 +42,32 @@ public class JukeboxManager {
         });
     }
 
-    public void loadAndPlay(@NotNull TextChannel channel, String trackUrl) {
-        GuildMusicContainer musicContainer = getGuildContainer(channel.getGuild());
-
+    public void loadAndPlay(@NotNull Guild guild, @NotNull TextChannel channel, String trackUrl) {
+        var musicContainer = guildContainers.get(guild.getIdLong());
         playerManager.loadItemOrdered(musicContainer, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 musicContainer.scheduler.queue(track);
 
-                channel.sendMessage("> \uD83D\uDCFB **Dodano do kolejki...**\n`" + track.getInfo().title + "` - `" + track.getInfo().author + "` **(" + track.getInfo().length + ")**").queue();
+                channel.sendMessage("\uD83D\uDCFB Dodano do kolejki...\n*" + track.getInfo().title + "* ~ " + track.getInfo().author +
+                    " `" + Orbit.toTimestamp(track.getInfo().length) + "`").queue();
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 AudioTrack firstTrack = playlist.getSelectedTrack();
 
-                if (firstTrack == null) {
+                if (firstTrack == null)
                     firstTrack = playlist.getTracks().get(0);
-                }
 
                 channel.sendMessage("Dodawanie do kolejki " + firstTrack.getInfo().title + " (pierwszy utwór na liście " + playlist.getName() + ")").queue();
 
-                play(channel.getGuild(), musicContainer, firstTrack);
+                play(guild, firstTrack);
             }
 
             @Override
             public void noMatches() {
-                channel.sendMessage("Nie znaleziono nic dla " + trackUrl).queue();
+                channel.sendMessage("**Nie znaleziono nic dla:** " + trackUrl).queue();
             }
 
             @Override
@@ -71,15 +77,35 @@ public class JukeboxManager {
         });
     }
 
-    public void play(@NotNull Guild guild, @NotNull GuildMusicContainer musicContainer, AudioTrack track) {
+    public void play(@NotNull Guild guild, AudioTrack track) {
         //connectToFirstVoiceChannel(guild.getAudioManager());
-        musicContainer.scheduler.queue(track);
+        guildContainers.get(guild.getIdLong()).scheduler.queue(track);
     }
 
-    public void skipTrack(@NotNull TextChannel channel) {
-        GuildMusicContainer musicManager = getGuildContainer(channel.getGuild());
-        musicManager.scheduler.nextTrack();
+    public void skipTrack(@NotNull TextChannel chan) {
+        guildContainers.get(chan.getGuild().getIdLong()).scheduler.nextTrack();
+        chan.sendMessage("Aktualnie odtwarzany utwór został pominięty.").queue();
+    }
 
-        channel.sendMessage("Pominięto ten utwór.").queue();
+    public void togglePause(@NotNull Guild guild, @NotNull TextChannel chan) {
+        var player = guildContainers.get(guild.getIdLong()).audioPlayer;
+        if (player.getPlayingTrack() == null) {
+            chan.sendMessage("Nie można zatrzymać ani ponowić utworu, ponieważ żaden utwór nie jest załadowany na playliście.").queue();
+            return;
+        }
+        player.setPaused(!player.isPaused());
+
+        if (player.isPaused())
+            chan.sendMessage("Wsztrzymano odgrywanie utworu.").queue();
+        else
+            chan.sendMessage("Ponowiono odgrywanie utworu.").queue();
+    }
+
+    public void closeConnection(@NotNull TextChannel chan) {
+        var g = chan.getGuild();
+        g.getAudioManager().setSendingHandler(null);
+        g.getAudioManager().closeAudioConnection();
+
+        chan.sendMessage("Zamknięto połączenie, jednak playlista pozostaje załadowana dla tego serwera.").queue();
     }
 }

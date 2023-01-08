@@ -10,7 +10,7 @@ enum class ModuleStatus(@get:JvmName("mark") val mark: String, @get:JvmName("leg
     OFF("🔴", "Niedostępne");
 
     companion object {
-        var note: String
+        val note: String
 
         init {
             val builder = StringBuilder()
