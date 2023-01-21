@@ -27,7 +27,7 @@ public final class ModuleChute {
     public ModuleChute() {
         moduleChutes = new HashMap<>();
 
-        //TODO this constructor maps modules to ids so every guild can get "post" module ids to load
+        //TODO this constructor maps modules to ids so every guild can "GET" module ids to load into the modulechutes
         MoonlightBot.LOG.info("Mapping modules...");
 
         var fishing = new FishingMod(new Identifier("Rybactwo", "fishing"), ModuleStatus.ON);

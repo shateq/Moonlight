@@ -5,7 +5,7 @@ plugins {
 	id("com.github.johnrengelman.shadow")
 }
 
-version = "2.2.1"
+version = "2.3.0"
 group = "shateq.java"
 base.archivesName.set("${project.name}-jdk17")
 description = "Discord bot attempt 2021"
@@ -28,8 +28,6 @@ dependencies {
 	implementation("io.projectreactor:reactor-core:3.5.1")
 
 	implementation("org.jetbrains:annotations:23.1.0")
-	//implementation("com.fasterxml.jackson.core:jackson-core:2.14.0")
-	//implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
 	//implementation("redis.clients:jedis:4.3.1")
 	implementation("org.slf4j:slf4j-simple:2.0.5")
 }

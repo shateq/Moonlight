@@ -1,25 +1,24 @@
 package shateq.moonlight.music
 
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.GuildVoiceState
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
 import shateq.moonlight.MoonlightBot
 import shateq.moonlight.dispatcher.GuildContext
 import shateq.moonlight.dispatcher.api.Command
+import shateq.moonlight.dispatcher.api.CommandContext
 
 interface MusicCommand : Command {
-    fun connectionEquals(c: GuildContext): Boolean {
-        val member = c.member().voiceState
-        val self = c.guild().selfMember.voiceState
-        return if (member == null || self == null) false else member.channel!!.id == self.channel!!.id
+    fun selfVoiceState(c: CommandContext<Any, Any>): GuildVoiceState? {
+        return c.guild().selfMember.voiceState
     }
 
-    fun selfConnected(c: GuildContext): Boolean {
-        val self = c.guild().selfMember.voiceState
-        if (self != null && !self.inAudioChannel()) {
-            c.source().reply("Muszę być na kanale głosowym, by to zadziałało!").queue()
-            return false
-        }
-        return true
+    fun senderVoiceState(c: CommandContext<Any, Any>): GuildVoiceState? {
+        return c.member().voiceState
+    }
+
+    fun sameChannel(c: CommandContext<Any, Any>): Boolean {
+        return selfVoiceState(c)?.channel?.id == senderVoiceState(c)?.channel?.id
     }
 
     fun memberConnected(c: GuildContext): Boolean {
@@ -31,7 +30,12 @@ interface MusicCommand : Command {
         return true
     }
 
-    fun voiceChannelEmpty(chan: VoiceChannel): Boolean {
+    fun openTunnel(chan: VoiceChannel) {
+        // TODO checks
+        chan.guild.audioManager.openAudioConnection(chan)
+    }
+
+    fun isEmpty(chan: VoiceChannel): Boolean {
         return chan.members.isEmpty()
     }
 

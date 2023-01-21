@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import shateq.moonlight.dispatcher.api.CommandContext;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Guild-message command context
@@ -21,6 +22,11 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     @Override
     public @NotNull Guild guild() {
         return event.getGuild();
+    }
+
+    @Override
+    public @NotNull Member member() {
+        return Objects.requireNonNull(event.getMember());
     }
 
     @Override
@@ -41,10 +47,6 @@ public record GuildContext(MessageReceivedEvent event, String[] args) implements
     @Override
     public void replyEmbeds(MessageEmbed @NotNull ... embeds) {
         source().replyEmbeds(Arrays.asList(embeds)).queue();
-    }
-
-    public Member member() {
-        return event.getMember();
     }
 
     public @NotNull TextChannel channel() {

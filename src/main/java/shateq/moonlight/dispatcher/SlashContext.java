@@ -2,6 +2,7 @@ package shateq.moonlight.dispatcher;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -24,6 +25,11 @@ public record SlashContext(SlashCommandInteractionEvent event) implements Comman
     @Override
     public @NotNull Guild guild() {
         return Objects.requireNonNull(event.getGuild());
+    }
+
+    @Override
+    public @NotNull Member member() {
+        return Objects.requireNonNull(event.getMember());
     }
 
     @Override

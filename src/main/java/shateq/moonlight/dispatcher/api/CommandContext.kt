@@ -2,6 +2,7 @@ package shateq.moonlight.dispatcher.api
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 
@@ -24,6 +25,11 @@ interface CommandContext<S, E> {
      * A place for the event
      */
     fun guild(): Guild
+
+    /**
+     * Guild certified
+     */
+    fun member(): Member
 
     /**
      * Reason for this event

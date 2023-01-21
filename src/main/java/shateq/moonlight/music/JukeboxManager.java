@@ -94,7 +94,6 @@ public class JukeboxManager {
             return;
         }
         player.setPaused(!player.isPaused());
-
         if (player.isPaused())
             chan.sendMessage("Wsztrzymano odgrywanie utworu.").queue();
         else

@@ -11,8 +11,6 @@ import shateq.moonlight.dispatcher.api.ContextualException
 import shateq.moonlight.dispatcher.api.Order
 import shateq.moonlight.util.Orbit
 
-// TODO interactions
-// Idea - insight of who listens to what music in current guild, with some db.
 @Order("play", group = Category.Music, note = "Start the music player.")
 @Order.Aliases(["join", "p"])
 class Play : MusicCommand {
@@ -39,6 +37,7 @@ class Play : MusicCommand {
         c.source().reply("Odbiór, dodawanie do kolejki!").queue()
     }
 }
+
 
 @Order("playlist", Category.Music, "Playlist of the guild.")
 @Order.Aliases(["tracks", "list"])
@@ -70,7 +69,6 @@ class Playlist : MusicCommand {
     }
 }
 
-// TODO implement subcommands?
 @Order("nowplaying", Category.Music, "The currently playing track.")
 @Order.Aliases(["now"])
 class NowPlaying : MusicCommand {
