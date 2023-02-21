@@ -21,6 +21,7 @@ public abstract class Module extends ListenerAdapter {
         return status.equals(ModuleStatus.ON) || status.equals(ModuleStatus.BUILT);
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     public void init() {
         if (!works()) return;
     }
